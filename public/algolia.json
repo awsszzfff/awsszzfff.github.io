@@ -1,0 +1,28 @@
+
+[
+  
+  
+  {
+    "objectID": "1704067200",
+    "permalink": "/post/demo/demo/",
+    "title": "How to Add LaTeX Support in Hugo",
+    
+    "content": "\rHello World\rhello Math\r$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$\n$$ x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a} $$$$\rx = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}\r$$\rMermaid\r不是哥们\n",
+    
+    "date": "2024-01-01 00:00:00",
+    "updated": "2024-01-01 00:00:00"
+  }
+  
+  , 
+  {
+    "objectID": "1678903200",
+    "permalink": "/post/hello/",
+    "title": "Hello World",
+    
+    "content": "💘 博麗 霊夢 💘\n",
+    
+    "date": "2023-03-15 11:00:00",
+    "updated": "2023-03-15 11:00:00"
+  }
+  
+]
