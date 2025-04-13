@@ -11,7 +11,7 @@ tags:  # 标签
 toc: true   # 目录
 math: true # KaTeX数学公式
 mermaid: true # Mermaid流程图
-copyright: true # 版权
+# copyright: true # 版权
 # cover: https://p0.qhimg.com/bdr/__85/t017621231bafff441f.jpg # 封面图片
 # cover: /images/backcovers/1.jpg
 comments: false  # 评论
