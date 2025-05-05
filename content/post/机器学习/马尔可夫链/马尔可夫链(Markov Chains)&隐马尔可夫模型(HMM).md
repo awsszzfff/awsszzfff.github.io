@@ -1,7 +1,7 @@
 ---
 title: 马尔可夫链(Markov Chains)&隐马尔可夫模型(HMM)
 date: 2025-04-11
-# lastmod: 2025-03-15
+lastmod: 2025-05-05
 author: awsszzfff
 
 # date: 2023-03-15T11:00:00-07:00
@@ -9,7 +9,7 @@ author: awsszzfff
 
 categories:	# 分类
     - 机器学习
-tags:	# 标签
+tags:		# 标签
     - 机器学习
 
 draft: false	# 草稿
@@ -22,6 +22,7 @@ mermaid: true	# Mermaid流程图
 comments: false	# 评论
 sponsor: false	# 赞助
 
+description: "马尔可夫链(Markov Chains)&隐马尔可夫模型(HMM)"
 ---
 
 
