@@ -10,7 +10,7 @@ author: awsszzfff
 categories:	# 分类
     - 文献阅读
 tags:		# 标签
-    - LLM
+    - 利用LLM自动化攻击
 
 draft: false	# 草稿
 toc: true	# 目录

@@ -508,7 +508,7 @@ share:
 home_categories:
   enable: true
   content:
-    - categories: 机器学习 # string (single-layer category) or array (multi-layer category)
+    - categories: AI # string (single-layer category) or array (multi-layer category)
       cover: images/backcovers/19.jpg # empty means random cover
     - categories: 安全
       cover:

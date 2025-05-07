@@ -8,9 +8,9 @@ author: awsszzfff
 # lastmod: 2023-03-15T11:00:00-07:00
 
 categories:	# 分类
-    - 机器学习
+    - AI
 tags:		# 标签
-    - 机器学习
+    - 基础理论
 
 draft: false	# 草稿
 toc: true	# 目录
@@ -49,7 +49,7 @@ description: "马尔可夫链(Markov Chains)&隐马尔可夫模型(HMM)"
 
 假设当天是食物 披萨 ：$\pi_0=\left[\begin{array}{ccc}0&1&0\end{array}\right]$；
 
-通过以下方式可以逐步求出第二、三、四……天的状态概率分布；（即 第一天的状态概率分别 X状态转移矩阵 ^ n = 第 n+1 天的状态概率分布)
+通过以下方式可以逐步求出第二、三、四……天的状态概率分布；（即 第一天的状态概率分别 X 状态转移矩阵 ^ n = 第 n+1 天的状态概率分布)
 
 ![](../attachments/1-2.png)
 
