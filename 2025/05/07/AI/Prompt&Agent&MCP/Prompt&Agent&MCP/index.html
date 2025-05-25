@@ -1,0 +1,219 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Prompt&amp;Agent&amp;MCP | Kyle's Blog</title><meta name="author" content="Kyle"><meta name="copyright" content="Kyle"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Prompt用户和 AI 模型进行交互时，最初是用户提供 User Prompt （理解为用户的问题），模型结合 System Prompt （理解为系统预设的前提 eg：系统以安全的模式进行回答）两者共同来回答用户的问题； Agent若用户期望模型可以利用本地已经写好的工具（Tools，已经写好的函数调用的形式）来自动化的完成指定的任务；eg：（两个工具 list_files 列出目录，read">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Prompt&amp;Agent&amp;MCP">
+<meta property="og:url" content="https://awsszzfff.github.io/2025/05/07/AI/Prompt&Agent&MCP/Prompt&Agent&MCP/index.html">
+<meta property="og:site_name" content="Kyle&#39;s Blog">
+<meta property="og:description" content="Prompt用户和 AI 模型进行交互时，最初是用户提供 User Prompt （理解为用户的问题），模型结合 System Prompt （理解为系统预设的前提 eg：系统以安全的模式进行回答）两者共同来回答用户的问题； Agent若用户期望模型可以利用本地已经写好的工具（Tools，已经写好的函数调用的形式）来自动化的完成指定的任务；eg：（两个工具 list_files 列出目录，read">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://awsszzfff.github.io/img/my_image/27.jpg">
+<meta property="article:published_time" content="2025-05-07T00:00:00.000Z">
+<meta property="article:modified_time" content="2025-05-06T16:00:00.000Z">
+<meta property="article:author" content="Kyle">
+<meta property="article:tag" content="基础理论">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://awsszzfff.github.io/img/my_image/27.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Prompt&Agent&MCP",
+  "url": "https://awsszzfff.github.io/2025/05/07/AI/Prompt&Agent&MCP/Prompt&Agent&MCP/",
+  "image": "https://awsszzfff.github.io/img/my_image/27.jpg",
+  "datePublished": "2025-05-07T00:00:00.000Z",
+  "dateModified": "2025-05-06T16:00:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Kyle",
+      "url": "https://awsszzfff.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/my_image/favicon.png"><link rel="canonical" href="https://awsszzfff.github.io/2025/05/07/AI/Prompt&amp;Agent&amp;MCP/Prompt&amp;Agent&amp;MCP/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Prompt&Agent&MCP',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/my_image/head_portrait.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">8</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/my_image/27.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Kyle's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">Prompt&amp;Agent&amp;MCP</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Prompt&amp;Agent&amp;MCP</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-05-07T00:00:00.000Z" title="发表于 2025-05-07 08:00:00">2025-05-07</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-05-06T16:00:00.000Z" title="更新于 2025-05-07 00:00:00">2025-05-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/AI/">AI</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="Prompt"><a href="#Prompt" class="headerlink" title="Prompt"></a>Prompt</h2><p>用户和 AI 模型进行交互时，最初是用户提供 User Prompt （理解为用户的问题），模型结合 System Prompt （理解为系统预设的前提 eg：系统以安全的模式进行回答）两者共同来回答用户的问题；</p>
+<h2 id="Agent"><a href="#Agent" class="headerlink" title="Agent"></a>Agent</h2><p>若用户期望模型可以利用本地已经写好的工具（Tools，已经写好的函数调用的形式）来自动化的完成指定的任务；eg：（两个工具 list_files 列出目录，read_file 读文件）</p>
+<p><img src="20250507-1.png" alt="Prompt&amp;Agent&amp;MCP"></p>
+<p><img src="20250507-2.png" alt="Prompt&amp;Agent&amp;MCP"></p>
+<p>中间的 AutoGPT 即 AI Agent（在 Agent Tools 、模型、用户之间“传话”的工具）；</p>
+<p>由于生成的 System Prompt 以及模型返回给 Agent 的内容格式等存在差异，模型厂商推出 Function Calling 功能，主要用来规范描述；</p>
+<h2 id="MCP"><a href="#MCP" class="headerlink" title="MCP"></a>MCP</h2><p>MCP 一个通信协议，专门用来规范 Agent 和 Tools 服务之间是怎么交互的，一些交互接口，参数格式等；</p>
+<p>整体的基本流程：</p>
+<p><img src="20250507.png" alt="Prompt&amp;Agent&amp;MCP"></p>
+<p>这里的 MCP Server 可以是 Tools 也可以是数据、Prompt 模版；</p>
+<blockquote>
+<p>学习原文：</p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1aeLqzUE6L/?share_source=copy_web&vd_source=d1fcb62c082f9710827e86fedf96d9f0">https://www.bilibili.com/video/BV1aeLqzUE6L/?share_source=copy_web&amp;vd_source=d1fcb62c082f9710827e86fedf96d9f0</a></p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://awsszzfff.github.io">Kyle</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://awsszzfff.github.io/2025/05/07/AI/Prompt&amp;Agent&amp;MCP/Prompt&amp;Agent&amp;MCP/">https://awsszzfff.github.io/2025/05/07/AI/Prompt&amp;Agent&amp;MCP/Prompt&amp;Agent&amp;MCP/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://awsszzfff.github.io" target="_blank">Kyle's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%9F%BA%E7%A1%80%E7%90%86%E8%AE%BA/">基础理论</a></div><div class="post-share"><div class="social-share" data-image="/img/my_image/27.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/05/13/%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB/JailbreakAttacks/%E7%BB%95%E8%BF%87LLM%E6%8A%A4%E6%A0%8F%E7%9A%84%E6%8F%90%E7%A4%BA%E6%B3%A8%E5%85%A5%E5%92%8C%E8%B6%8A%E7%8B%B1%E6%A3%80%E6%B5%8B/%E7%BB%95%E8%BF%87LLM%E6%8A%A4%E6%A0%8F%E7%9A%84%E6%8F%90%E7%A4%BA%E6%B3%A8%E5%85%A5%E5%92%8C%E8%B6%8A%E7%8B%B1%E6%A3%80%E6%B5%8B/" title="绕过LLM护栏的提示注入和越狱检测"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">绕过LLM护栏的提示注入和越狱检测</div></div><div class="info-2"><div class="info-item-1">绕过LLM护栏的提示注入和越狱检测Based Information   类型 篇名 关键字 作者 年份 链接    对LLM越狱防御机制的绕过 Bypassing Prompt Injection and Jailbreak Detection in LLM Guardrails LLM; Prompt Injection; Jalibreak; William Hackett;…… 2025&#x2F;04&#x2F;16 https://arxiv.org/abs/2504.11168   Important Information通过提示注入和越狱两种攻击方式，通过恶意构造提示来执行未授权指令或绕过 LLM 的安全约束；（针对 LLM...</div></div></div></a><a class="pagination-related" href="/2025/04/22/%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB/AutoPenetrationAttacks/RapidPen%E5%AE%8C%E5%85%A8%E8%87%AA%E5%8A%A8%E5%8C%96%E7%9A%84ip%E5%88%B0shell%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%8E%E5%9F%BA%E4%BA%8Ellm%E7%9A%84%E4%BB%A3%E7%90%86/RapidPen%E5%AE%8C%E5%85%A8%E8%87%AA%E5%8A%A8%E5%8C%96%E7%9A%84ip%E5%88%B0shell%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%8E%E5%9F%BA%E4%BA%8Ellm%E7%9A%84%E4%BB%A3%E7%90%86/" title="RapidPen：完全自动化的ip到shell渗透测试与基于llm的代理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">RapidPen：完全自动化的ip到shell渗透测试与基于llm的代理</div></div><div class="info-2"><div class="info-item-1">RapidPen：完全自动化的ip到shell渗透测试与基于llm的代理Based Information   类型 篇名 关键字 作者 年份 链接    利用LLM来实现自动化渗透; RapidPen: Fully Automated IP-to-Shell Penetration Testing with LLM-based  Agents Penetration Testing;LLM-based  Agents; Sho Nakatani 20250223 https://arxiv.org/abs/2502.16730   Important Information提出一个全自动化的渗透测试框架，从目标 IP 地址开始，无需人工干预即可获取 shell 访问权限（IP-to-Shell）； 结合 LLM 的推理能力与检索增强生成（RAG）技术，实现快速、低成本的自动化渗透测试； ContributionsMethod利用 ReAct 范式进行框架设计；并针对自身框架对 PTT 进行了扩展；（源自 PentestGPT...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关文章</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2025/04/11/AI/%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E9%93%BE(Markov%20Chains)&%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B(HMM)/%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E9%93%BE(Markov%20Chains)&%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B(HMM)/" title="马尔可夫链(Markov Chains)&amp;隐马尔可夫模型(HMM)"><img class="cover" src="/img/my_image/sunset.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-04-11</div><div class="info-item-2">马尔可夫链(Markov Chains)&amp;隐马尔可夫模型(HMM)</div></div><div class="info-2"><div class="info-item-1">马尔可夫链(Markov Chains)&隐马尔可夫模型(HMM)相关介绍</div></div></div></a><a class="pagination-related" href="/2025/03/09/AI/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80&%E5%90%8D%E8%AF%8D%E8%A7%A3%E9%87%8A/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80&%E5%90%8D%E8%AF%8D%E8%A7%A3%E9%87%8A/" title="机器学习基础&amp;名词解释"><img class="cover" src="/img/my_image/mountaon.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-03-09</div><div class="info-item-2">机器学习基础&amp;名词解释</div></div><div class="info-2"><div class="info-item-1">监督学习：有标签的学习；eg：分类、回归（预测）。 无监督学习：无标签的学习；eg：聚类，将相似的内容组织分类。 半监督学习：结合监督学习和无监督学习，使用部分标记的数据。 强化学习：让模型在一个环境中采取最佳行动，获取结果的反馈，从反馈中学习；（在所给定环境中采取最佳行动来最大化奖励或最小化损失；eg：下棋）。 深度学习：机器学习的一种方法，核心在于使用人工神经网络，模仿人脑处理信息的方式。通过层次化的方法提取和表示数据的特征。 泛化：是指一个机器学习算法对于没有见过的样本的识别能力。即举一反三，学以致用的能力。 对齐：其作用就是让 LLM 与人类的价值观保持一致。 提示词工程（Prompt Engineering）：专门针对语言模型进行优化的方法。它的目标是通过设计和调整输入的提示词（prompt），来引导这些模型生成更准确、更有针对性的输出文本。 微调（fine-tune）：针对于某个任务，自己的训练数据不多，那怎么办？...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/my_image/head_portrait.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Kyle</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">8</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Prompt"><span class="toc-number">1.</span> <span class="toc-text">Prompt</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Agent"><span class="toc-number">2.</span> <span class="toc-text">Agent</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MCP"><span class="toc-number">3.</span> <span class="toc-text">MCP</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/20/%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB/JailbreakAttacks/PIG%EF%BC%9A%E5%9F%BA%E4%BA%8E%E6%A2%AF%E5%BA%A6%E8%BF%AD%E4%BB%A3%E4%B8%8A%E4%B8%8B%E6%96%87%E4%BC%98%E5%8C%96%E7%9A%84llm%E9%9A%90%E7%A7%81%E8%B6%8A%E7%8B%B1%E6%94%BB%E5%87%BB/PIG%EF%BC%9A%E5%9F%BA%E4%BA%8E%E6%A2%AF%E5%BA%A6%E8%BF%AD%E4%BB%A3%E4%B8%8A%E4%B8%8B%E6%96%87%E4%BC%98%E5%8C%96%E7%9A%84llm%E9%9A%90%E7%A7%81%E8%B6%8A%E7%8B%B1%E6%94%BB%E5%87%BB/" title="PIG：基于梯度迭代上下文优化的llm隐私越狱攻击">PIG：基于梯度迭代上下文优化的llm隐私越狱攻击</a><time datetime="2025-05-19T16:00:00.000Z" title="发表于 2025-05-20 00:00:00">2025-05-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/05/19/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/Git/Git/" title="Git"><img src="/img/my_image/3.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Git"/></a><div class="content"><a class="title" href="/2025/05/19/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/Git/Git/" title="Git">Git</a><time datetime="2025-05-18T16:00:00.000Z" title="发表于 2025-05-19 00:00:00">2025-05-19</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/13/%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB/JailbreakAttacks/%E7%BB%95%E8%BF%87LLM%E6%8A%A4%E6%A0%8F%E7%9A%84%E6%8F%90%E7%A4%BA%E6%B3%A8%E5%85%A5%E5%92%8C%E8%B6%8A%E7%8B%B1%E6%A3%80%E6%B5%8B/%E7%BB%95%E8%BF%87LLM%E6%8A%A4%E6%A0%8F%E7%9A%84%E6%8F%90%E7%A4%BA%E6%B3%A8%E5%85%A5%E5%92%8C%E8%B6%8A%E7%8B%B1%E6%A3%80%E6%B5%8B/" title="绕过LLM护栏的提示注入和越狱检测">绕过LLM护栏的提示注入和越狱检测</a><time datetime="2025-05-12T16:00:00.000Z" title="发表于 2025-05-13 00:00:00">2025-05-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/05/07/AI/Prompt&amp;Agent&amp;MCP/Prompt&amp;Agent&amp;MCP/" title="Prompt&amp;Agent&amp;MCP"><img src="/img/my_image/27.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Prompt&amp;Agent&amp;MCP"/></a><div class="content"><a class="title" href="/2025/05/07/AI/Prompt&amp;Agent&amp;MCP/Prompt&amp;Agent&amp;MCP/" title="Prompt&amp;Agent&amp;MCP">Prompt&amp;Agent&amp;MCP</a><time datetime="2025-05-07T00:00:00.000Z" title="发表于 2025-05-07 08:00:00">2025-05-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/04/22/%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB/AutoPenetrationAttacks/RapidPen%E5%AE%8C%E5%85%A8%E8%87%AA%E5%8A%A8%E5%8C%96%E7%9A%84ip%E5%88%B0shell%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%8E%E5%9F%BA%E4%BA%8Ellm%E7%9A%84%E4%BB%A3%E7%90%86/RapidPen%E5%AE%8C%E5%85%A8%E8%87%AA%E5%8A%A8%E5%8C%96%E7%9A%84ip%E5%88%B0shell%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%8E%E5%9F%BA%E4%BA%8Ellm%E7%9A%84%E4%BB%A3%E7%90%86/" title="RapidPen：完全自动化的ip到shell渗透测试与基于llm的代理">RapidPen：完全自动化的ip到shell渗透测试与基于llm的代理</a><time datetime="2025-04-21T16:00:00.000Z" title="发表于 2025-04-22 00:00:00">2025-04-22</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2025 By Kyle</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
