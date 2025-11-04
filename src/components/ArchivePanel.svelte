@@ -20,6 +20,7 @@ interface Post {
 		title: string;
 		tags: string[];
 		category?: string;
+		categories?: string[];
 		published: Date;
 	};
 }
@@ -53,13 +54,23 @@ onMount(async () => {
 	}
 
 	if (categories.length > 0) {
-		filteredPosts = filteredPosts.filter(
-			(post) => post.data.category && categories.includes(post.data.category),
-		);
+		filteredPosts = filteredPosts.filter((post) => {
+			// 优先检查categories数组字段
+			if (post.data.categories && post.data.categories.length > 0) {
+				return post.data.categories.some(cat => categories.includes(cat));
+			}
+			// 回退到单个category字段
+			return post.data.category && categories.includes(post.data.category);
+		});
 	}
 
 	if (uncategorized) {
-		filteredPosts = filteredPosts.filter((post) => !post.data.category);
+		filteredPosts = filteredPosts.filter((post) => {
+			// 检查是否没有任何分类
+			const hasCategories = (post.data.categories && post.data.categories.length > 0);
+			const hasCategory = post.data.category;
+			return !hasCategories && !hasCategory;
+		});
 	}
 
 	const grouped = filteredPosts.reduce(

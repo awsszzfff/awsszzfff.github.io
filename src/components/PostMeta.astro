@@ -10,7 +10,8 @@ interface Props {
 	published: Date;
 	updated?: Date;
 	tags: string[];
-	category: string | null;
+	category?: string | null;
+	categories?: string[];
 	hideTagsForMobile?: boolean;
 	hideUpdateDate?: boolean;
 }
@@ -19,9 +20,13 @@ const {
 	updated,
 	tags,
 	category,
+	categories,
 	hideTagsForMobile = false,
 	hideUpdateDate = false,
 } = Astro.props;
+
+// 优先使用categories数组，如果没有则使用单个category
+const displayCategories = categories && categories.length > 0 ? categories : (category ? [category] : []);
 const className = Astro.props.class;
 ---
 
@@ -53,11 +58,22 @@ const className = Astro.props.class;
             <Icon name="material-symbols:book-2-outline-rounded" class="text-xl"></Icon>
         </div>
         <div class="flex flex-row flex-nowrap items-center">
-            <a href={getCategoryUrl(category)} aria-label={`View all posts in the ${category} category`}
-               class="link-lg transition text-50 text-sm font-medium
-                            hover:text-[var(--primary)] dark:hover:text-[var(--primary)] whitespace-nowrap">
-                {category || i18n(I18nKey.uncategorized)}
-            </a>
+            {displayCategories.length > 0 ? displayCategories.map((cat, i) => (
+                <>
+                    {i > 0 && <div class="mx-1.5 text-[var(--meta-divider)] text-sm">/</div>}
+                    <a href={getCategoryUrl(cat)} aria-label={`View all posts in the ${cat} category`}
+                       class="link-lg transition text-50 text-sm font-medium
+                                    hover:text-[var(--primary)] dark:hover:text-[var(--primary)] whitespace-nowrap">
+                        {cat}
+                    </a>
+                </>
+            )) : (
+                <a href={getCategoryUrl(null)} aria-label="View uncategorized posts"
+                   class="link-lg transition text-50 text-sm font-medium
+                                hover:text-[var(--primary)] dark:hover:text-[var(--primary)] whitespace-nowrap">
+                    {i18n(I18nKey.uncategorized)}
+                </a>
+            )}
         </div>
     </div>
 

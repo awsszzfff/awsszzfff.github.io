@@ -23,6 +23,7 @@ import { parseDirectiveNode } from "./src/plugins/remark-directive-rehype.js";
 import { remarkExcerpt } from "./src/plugins/remark-excerpt.js";
 import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
 import { pluginCustomCopyButton } from "./src/plugins/expressive-code/custom-copy-button.js";
+import { remarkObsidianImages } from "./src/plugins/remark-obsidian-images.mjs";
 
 // https://astro.build/config
 export default defineConfig({
@@ -104,6 +105,7 @@ export default defineConfig({
 	],
 	markdown: {
 		remarkPlugins: [
+			remarkObsidianImages, // 添加Obsidian图片转换插件，放在最前面处理
 			remarkMath,
 			remarkReadingTime,
 			remarkExcerpt,

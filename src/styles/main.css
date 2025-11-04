@@ -113,8 +113,22 @@
 }
 
 .custom-md img, #post-cover img {
-    @apply cursor-zoom-in
+    @apply cursor-zoom-in mx-auto block max-w-full h-auto rounded-lg shadow-sm
 }
+
+/* 图片容器样式 - 确保图片居中显示 */
+.custom-md p img {
+    @apply my-4
+}
+
+/* 限制图片最大宽度，保持响应式 */
+.custom-md img {
+    max-width: min(100%, 800px);
+    max-height: 600px;
+    object-fit: contain;
+}
+
+
 
 ::selection {
     background-color: var(--selection-bg)

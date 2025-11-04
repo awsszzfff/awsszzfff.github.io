@@ -29,3 +29,51 @@ yarn.lock
 # ide
 .idea
 *.iml
+
+# Obsidian and posts directory exclusions
+src/content/posts/.obsidian/
+src/content/posts/.trash/
+src/content/posts/.00Dataview/
+src/content/posts/00Dataview/
+src/content/posts/00templates/
+src/content/posts/07生活和其他/
+src/content/posts/09上课/
+src/content/posts/Clippings/
+src/content/posts/Excalidraw/
+src/content/posts/Other/
+src/content/posts/Work/
+src/content/posts/白板/
+src/content/posts/转载/
+src/content/posts/面试/面试经历/
+src/content/posts/.obsidian.zip.bak
+src/content/posts/final_processing_summary.md
+src/content/posts/plugins.zip.bak
+src/content/posts/Welcome.md
+
+# Development and temporary files
+*.tmp
+*.temp
+*.log
+*.bak
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+.vscode
+
+# Obsidian specific files (anywhere in project)
+**/.obsidian/
+**/.trash/
+*.canvas
+*.excalidraw
+*.excalidraw.md
+
+# Personal and sensitive content patterns
+**/demo/
+**/临时*/
+**/草稿*/
+**/测试*/
+**/temp*/
+**/temporary*/

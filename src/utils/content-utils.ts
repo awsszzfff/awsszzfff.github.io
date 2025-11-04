@@ -10,8 +10,8 @@ async function getRawSortedPosts() {
 	});
 
 	const sorted = allBlogPosts.sort((a, b) => {
-		const dateA = new Date(a.data.published);
-		const dateB = new Date(b.data.published);
+		const dateA = new Date(a.data.published || new Date());
+		const dateB = new Date(b.data.published || new Date());
 		return dateA > dateB ? -1 : 1;
 	});
 	return sorted;
@@ -83,19 +83,26 @@ export async function getCategoryList(): Promise<Category[]> {
 		return import.meta.env.PROD ? data.draft !== true : true;
 	});
 	const count: { [key: string]: number } = {};
-	allBlogPosts.forEach((post: { data: { category: string | null } }) => {
-		if (!post.data.category) {
+	allBlogPosts.forEach((post: { data: { category?: string | null; categories?: string[] } }) => {
+		// 优先使用categories字段，如果没有则使用category字段
+		const postCategories = post.data.categories && post.data.categories.length > 0 
+			? post.data.categories 
+			: post.data.category ? [post.data.category] : [];
+
+		if (postCategories.length === 0) {
+			// If no categories, assign to "uncategorized"
 			const ucKey = i18n(I18nKey.uncategorized);
 			count[ucKey] = count[ucKey] ? count[ucKey] + 1 : 1;
 			return;
 		}
 
-		const categoryName =
-			typeof post.data.category === "string"
-				? post.data.category.trim()
-				: String(post.data.category).trim();
-
-		count[categoryName] = count[categoryName] ? count[categoryName] + 1 : 1;
+		// 处理多个分类
+		postCategories.forEach(cat => {
+			const categoryName = typeof cat === "string" ? cat.trim() : String(cat).trim();
+			if (categoryName) {
+				count[categoryName] = count[categoryName] ? count[categoryName] + 1 : 1;
+			}
+		});
 	});
 
 	const lst = Object.keys(count).sort((a, b) => {
