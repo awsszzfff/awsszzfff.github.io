@@ -1,7 +1,7 @@
 # 项目修改记录
 
 ## 修改日期
-2024-11-04
+2025-11-04
 
 ## 修改目标
 支持用户笔记中的YAML头部格式，包括：
@@ -290,3 +290,76 @@ tags:
 - 避免Obsidian配置文件的冲突
 - 防止个人敏感信息（如面试相关）被推送
 - 忽略所有临时文件和开发过程文件
+
+## GitHub Pages 自动部署配置
+
+### 修改日期
+2024-11-05
+
+### 修改目标
+配置 GitHub Actions 自动部署到 GitHub Pages，实现推送代码后自动构建和发布网站。
+
+### 修改文件清单
+
+#### 1. .github/workflows/deploy.yml（新建）
+**文件内容：**
+- 创建专门的 GitHub Pages 部署 workflow
+- 配置在推送到 main 分支时自动触发
+- 支持手动触发部署（workflow_dispatch）
+- 设置正确的权限：contents: read, pages: write, id-token: write
+- 使用并发控制避免多个部署同时进行
+
+**构建步骤：**
+1. 检出代码（actions/checkout@v4）
+2. 设置 Node.js 22 环境
+3. 设置 pnpm 包管理器
+4. 安装依赖（pnpm install --frozen-lockfile）
+5. 配置 GitHub Pages（actions/configure-pages@v4）
+6. 构建 Astro 项目，自动配置 site 和 base 路径
+7. 上传构建产物（actions/upload-pages-artifact@v3）
+
+**部署步骤：**
+1. 部署到 GitHub Pages 环境
+2. 使用 actions/deploy-pages@v4 进行部署
+
+**影响：**
+- 实现自动化部署流程
+- 每次推送到 main 分支后自动更新网站
+- 支持手动触发部署
+- 与现有的代码质量检查 workflow 并行工作
+
+### 配置说明
+
+#### astro.config.mjs 配置解释
+**site 字段：** `"https://awsszzfff.github.io/"`
+- 指定网站的完整 URL
+- 用于生成 sitemap.xml 中的绝对链接
+- 用于 RSS feed 中的链接
+- 用于 Open Graph 和 Twitter Card 的 URL
+
+**base 字段：** 当前注释掉 `// base: "/"`
+- 指定网站的基础路径
+- 对于 GitHub Pages 的用户页面（username.github.io），应该保持为根路径
+- 如果是项目页面（username.github.io/project-name），则需要设置为 "/project-name/"
+
+#### 推荐配置
+对于你的 `awsszzfff.github.io` 仓库：
+- ✅ **保持 base 字段注释掉或设为 "/"**
+- ✅ **site 字段设置为完整域名**
+
+**原因：**
+1. 这是 GitHub Pages 的用户页面，部署在根域名下
+2. 设置 base 为子路径会导致资源路径错误
+3. GitHub Actions 会自动处理路径配置
+
+### 部署流程
+1. 推送代码到 main 分支
+2. GitHub Actions 自动触发 deploy workflow
+3. 构建 Astro 项目
+4. 部署到 GitHub Pages
+5. 网站在 https://awsszzfff.github.io 上线
+
+### 注意事项
+- 需要在 GitHub 仓库设置中启用 GitHub Pages，Source 选择 "GitHub Actions"
+- 首次部署可能需要几分钟时间
+- 后续更新通常在 1-2 分钟内完成

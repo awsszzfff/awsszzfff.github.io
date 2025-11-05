@@ -27,8 +27,8 @@ import { remarkObsidianImages } from "./src/plugins/remark-obsidian-images.mjs";
 
 // https://astro.build/config
 export default defineConfig({
-	site: "https://fuwari.vercel.app/",
-	base: "/",
+	site: "https://awsszzfff.github.io/",
+	// base: "/",
 	trailingSlash: "always",
 	integrations: [
 		tailwind({
