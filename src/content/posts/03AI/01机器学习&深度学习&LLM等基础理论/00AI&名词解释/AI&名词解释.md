@@ -1,10 +1,11 @@
 ---
-title: "AI&名词解释"
+title: AI&名词解释
 date: 2025-03-09
 tags:
   - 基础理论
 categories:
   - AI
+description: AI&名词解释
 ---
 监督学习：有标签的学习；eg：分类、回归（预测）。
 

@@ -1,10 +1,11 @@
 ---
-title: "SQL 注入基础"
+title: SQL 注入基础
 date: 2025-01-12
 tags:
-  - Others
+  - SQL注入
 categories:
-  - Others
+  - 安全相关
+description: SQL 注入基础
 ---
 # SQL 注入基础
 

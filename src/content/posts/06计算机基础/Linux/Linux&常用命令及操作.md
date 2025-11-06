@@ -1,11 +1,11 @@
 ---
-title: "Linux&常用命令及操作"
+title: Linux&常用命令及操作
 date: 2025-08-28
 tags:
-  - Others
+  - Linux
 categories:
-  - Others
-description: None
+  - 计算机基础
+description: Linux&常用命令及操作
 ---
 ## 重要目录及文件
 

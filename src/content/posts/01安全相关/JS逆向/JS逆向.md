@@ -1,11 +1,12 @@
 ---
-title: "JS逆向"
+title: JS逆向
 date: 2025-09-24
+updated: 2025-09-24
 tags:
-  - Others
+  - JS逆向
 categories:
-  - Others
-description: None
+  - 安全相关
+description: JS逆向
 ---
 过滤器筛选数据包，分析调用堆栈（从下向上的顺序），寻找 js 加解密的点。
 
@@ -96,7 +97,60 @@ if (typeof enableDebugProtection === 'function') {
 分析加密代码，找到各个参数对应的值，实现加密代码，并通过 python 发送原始请求，获取最终响应。
 
 ```python
-
+# 以kaoshibao的加密为例
+import requests  
+import hashlib  
+import time  
+import json  
+  
+# ===== 配置参数 =====r = "12b6bb84e093532fb72b4d65fec3f00b"  
+l = "8889896a-478f-4299-80c1-acf4ba6a49b4"  # uu cookie / client-identifier  
+o = "/questions/lists"  # path 去掉 /api  
+# 当前时间戳（毫秒）  
+n = int(time.time() * 1000)  
+  
+# 生成 sign: MD5(r + l + o + n + r)input_str = r + l + o + str(n) + r  
+sign = hashlib.md5(input_str.encode('utf-8')).hexdigest()  
+  
+# 请求 URLurl = "https://www.kaoshibao.com/api/questions/lists"  
+  
+# 请求头（从你提供的数据中提取并更新 sign 和 timestamp）  
+headers = {  
+    "accept": "application/json, text/plain, */*",  
+    "accept-encoding": "gzip, deflate, br, zstd",  
+    "accept-language": "zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7",  
+    "cache-control": "no-cache",  
+    "client-identifier": l,  
+    "content-type": "application/json;charset=UTF-8",  
+    "cookie": "uu=8889896a-478f-4299-80c1-acf4ba6a49b4;",  
+    "origin": "https://www.kaoshibao.com",  
+    "platform": "web",  
+    "pragma": "no-cache",  
+    "priority": "u=1, i",  
+    "referer": "https://www.kaoshibao.com/online/paper/detail/?paperid=16882563",  
+    "request-id": "56d1d85b-ed23-4d92-8246-c871b9039006",  
+    "sec-ch-ua": '"Chromium";v="140", "Not=A?Brand";v="24", "Google Chrome";v="140"',  
+    "sec-ch-ua-mobile": "?0",  
+    "sec-ch-ua-platform": '"Windows"',  
+    "sec-fetch-dest": "empty",  
+    "sec-fetch-mode": "cors",  
+    "sec-fetch-site": "same-origin",  
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",  
+    "version": "2.4.4",  
+    "sign": sign,  
+    "timestamp": str(n),  
+}  
+  
+# 请求体
+payload = {"paperid": "16882563", "type": "all", "size": 10, "page": 1}  
+  
+# 发送请求  
+response = requests.post(url, headers=headers, json=payload)  
+  
+# 输出结果  
+print("Status Code:", response.status_code)  
+print("Response Body:")  
+print(response.text)
 ```
 
 ## 代码混淆
@@ -155,6 +209,8 @@ qc：Literal类型，代表文本内容；
 > https://obfuscator.io/
 > 
 > https://deobfuscate.io/
+> 
+> https://obf-io.deobfuscate.io/
 > 
 > https://webcrack.netlify.app/
 > 
