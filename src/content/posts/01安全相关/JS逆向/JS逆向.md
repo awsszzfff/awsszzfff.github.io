@@ -31,7 +31,7 @@ description: JS逆向
 
 绕过技巧：
 
-禁用所有断点、禁用局部断点、设置条件断点、替换文件执行（修改文件重定向）、通过 bp 修改匹配（流量到 bp 修改替换返回，不过有时会因为修改替换内容，网页无法正常加载使用）、油猴插件配合 HOOK （插件对浏览器执行 JS 删除）
+禁用所有断点（导致自己下的断点也无法执行）、禁用局部断点（在网站设置的 debugger 处设置`一律不在此处暂停`）、设置条件断点（在 debugger 处设置条件 false）、替换文件执行（修改文件重定向）、通过 bp 修改匹配（流量到 bp 修改替换返回，不过有时会因为修改替换内容，网页无法正常加载使用）、油猴插件配合 HOOK （插件对浏览器执行 JS 删除）
 
 ![[attachments/20251030.png]]
 
@@ -225,11 +225,34 @@ qc：Literal类型，代表文本内容；
 
 本地编写代码去调用浏览器的 JS 加密函数，不需要过多的考虑函数的具体逻辑。
 
+> https://github.com/jxhczhl/JsRpc
+
+分析 JS 加密的文件的加密位置，替换并插入 JsRpc 该项目的调用代码，控制台输入调用代码，主机进行监听，重新执行页面加密策略，等待主机上线，随后可通过 py 脚本调用加密或联动 bp；
+
+```js
+// 替换文件并插入代码
+hlc = new Hlclient("ws://127.0.0.1:12080/ws?group=zzz&name=hlg");
+hlc.regAction("hello", function (resolve,param) {
+    var base666 = btoa(param)
+    resolve(base666 + "**" + atob(base666));	// 加密函数替换为当前网站/页面的
+    // 示例：
+    // resolve(l(param));	// 这里的l为断掉调试后发现网页的js加密位置的加密调用函数
+})
+
+// 控制台执行当前项目/resources/JsEnv_Dev.js
+// 本地执行项目程序监听
+
+// 本地调用链接
+http://localhost:12080/go?group=zzz&name=hlg&action=hello&param=xxxx
+```
+
+和 bp 联动，配合 autoDecoder 插件，配置接口加解密，编写脚本访问 本地调用链接加解密。
+
 ## Yakit 热加载
 
 > https://yaklang.com/products/Web%20Fuzzer/fuzz-hotpatch
 
-以数据包发包前和发包后的数据修改功能
+以数据包发包前和发包后的数据修改功能，可配合 JsRpc 使用，重点是需要编写对应的加解密代码以及 JsRpc 调用代码。
 
 ```yak
 // 热加载的模版内容

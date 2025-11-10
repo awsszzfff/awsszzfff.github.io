@@ -1,11 +1,11 @@
 ---
-title: "LLM模型部署&微调&量化基础"
+title: LLM模型部署&微调&量化基础
 date: 2025-08-20
 tags:
   - Others
 categories:
   - Others
-description: None
+description: LLM模型部署&微调&量化基础
 ---
 PS: 具体以官网为主（更新较快）
 

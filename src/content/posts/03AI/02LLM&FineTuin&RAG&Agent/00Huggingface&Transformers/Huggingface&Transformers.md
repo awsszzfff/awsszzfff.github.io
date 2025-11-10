@@ -1,10 +1,10 @@
 ---
-title: "Huggingface&Transformers"
+title: Huggingface&Transformers
 date: 2025-04-14
 tags:
-  - Others
+  - Huggingface
 categories:
-  - Others
+  - AI
 ---
 ## piplines
 

@@ -1,10 +1,11 @@
 ---
-title: "Bert&GPT2模型微调实现下游任务"
+title: Bert&GPT2模型微调实现下游任务
 date: 2025-07-04
 tags:
   - Others
 categories:
-  - Others
+  - AI
+description: Bert&GPT2模型微调实现下游任务
 ---
 基本流程：需求分析，数据（格式转换，数据处理），模型训练（拟合...），模型测试（测试指标），模型部署
 
