@@ -34,6 +34,7 @@ categories:
 	- `$_SESSION`：是一个关联数组，包含当前脚本中所有 session 内容；【在目标服务器存储，存储记录的数据】
 
 案例复现：
+
 1. DuomiCMS 变量覆盖
 
 搭建 DuomiCMS 网站，访问`http://duomicms.com:83/admin/login.php`即后台登录页面

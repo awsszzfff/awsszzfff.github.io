@@ -1,11 +1,11 @@
 ---
-title: "sick0s1.1"
+title: sick0s1.1
 date: 2025-10-24
 tags:
-  - Others
+  - 靶场
 categories:
-  - Others
-description: None
+  - 安全相关
+description: sick0s1.1 靶机
 ---
 > - kali: 192.168.181.129
 > - sick0s1.1: 192.168.181.0/24 ...

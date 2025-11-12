@@ -1,11 +1,11 @@
 ---
-title: "JARBAS-Jenkins"
+title: JARBAS-Jenkins
 date: 2025-10-21
 tags:
-  - Others
+  - 靶场
 categories:
-  - Others
-description: None
+  - 安全相关
+description: JARBAS-Jenkins 靶机
 ---
 ## 环境
 

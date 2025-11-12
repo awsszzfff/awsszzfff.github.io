@@ -1,11 +1,11 @@
 ---
+title: tmux --- Linux终端分割工具
 date: 2001-01-01
 tags:
   - Linux
   - 工具
 categories:
   - 计算机基础
-title: tmux --- Linux终端分割工具
 ---
 ## 常用操作
 
