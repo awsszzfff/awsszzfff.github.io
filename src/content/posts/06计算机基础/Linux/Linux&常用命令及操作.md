@@ -79,4 +79,14 @@ tac /tmp/flag.txt | tac		# 多次逆序（同顺序）
 # more	文件过长，一页一页的查看
 
 # less
+
+nl	# 显示行号
+sort	# 对文本内容进行排序
+uniq	# 去除重复行
+```
+
+## 其他
+
+```bash
+/dev/stdout	# 标准输出	cp /tmp/flag.txt /dev/stdout
 ```

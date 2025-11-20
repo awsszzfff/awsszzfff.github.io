@@ -17,7 +17,7 @@ import socket
 
 ## 简单的通信示例 
 
-### 使用 TCP 连接：
+### 使用 TCP 连接
 
 ```python file:client.py
 import socket  
@@ -89,7 +89,7 @@ conn.close()
 server.close()
 ```
 
-### 使用 UDP 连接：
+### 使用 UDP 连接
 
 ```python file:server.py
 import socket  

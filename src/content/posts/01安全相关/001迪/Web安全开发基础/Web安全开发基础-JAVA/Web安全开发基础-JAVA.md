@@ -7,6 +7,10 @@ categories:
   - 安全相关
 description: Web安全开发基础-JAVA
 ---
+![[attachments/20251113.png]]
+
+> https://mp.weixin.qq.com/s/c_4fOTBKDcByv8MZ9ayaRg
+
 ## Web服务-Servlet
 
 Servlet 生命周期
@@ -21,8 +25,7 @@ Servlet 生命周期
 
 ![[attachments/20250917-2.png]]
 
-> - https://mp.weixin.qq.com/s/c_4fOTBKDcByv8MZ9ayaRg
-> - https://blog.csdn.net/qq_52173163/article/details/121110753
+> https://blog.csdn.net/qq_52173163/article/details/121110753
 
 pom.xml 配置 servlet 依赖
 
@@ -80,15 +83,120 @@ MVC 一种软件框架模式，即模型（Model）处理数据逻辑 、视图�
 
 ![[attachments/20251112-1.png]]
 
-https://pdai.tech/md/spring/spring-x-framework-springmvc.html
+- DispatcherServlet（调度器 Servlet）接收客户端所有请求并将其分派给适当的处理程序（Controller）；
+- HandlerMapping（处理程序映射）将请求映射到相应的处理程序（Controller）；
+- HandlerAdapter（处理程序适配器）负责调用实际的处理程序（Controller）来处理请求，并将处理结果返回给 DispatcherServlet ；
 
-https://pdai.tech/files/kaitao-springMVC.pdf
+
+> https://pdai.tech/md/spring/spring-x-framework-springmvc.html
+> 
+> https://pdai.tech/files/kaitao-springMVC.pdf
 
 Spring,Spring MVC及Spring Boot区别： https://www.jianshu.com/p/42620a0a2c33
+
+> https://juejin.cn/post/6844903912034533383
+> 
+> https://potoyang.gitbook.io/spring-in-action-v5/
+
+## 简单项目层级架构
+
+**Controller → Service → Mapper → Entity** 经典四层结构
+
+```txt
+浏览器
+   ↓ (HTTP GET /user/1)
+Controller（UserController）
+   ↓ 调用 userService.getUserById(1)
+Service（UserServiceImpl）
+   ↓ 调用 userMapper.findById(1)
+Mapper（UserMapper + UserMapper.xml）
+   ↓ 执行 SQL：SELECT * FROM user WHERE id = 1
+数据库（MySQL / PostgreSQL 等）
+   ↑ 返回结果集
+Mapper → 将结果自动映射为 User 对象
+   ↑ 返回 User 对象
+Service → 可能做额外处理（如脱敏、组合数据）
+   ↑ 返回处理后的 User
+Controller → 将 User 转为 JSON 返回
+   ↑
+浏览器（收到 JSON 响应）
+```
 
 ## Spring Boot
 
 
+
+## 文件操作
+
+### 上传
+
+Multipartfile
+
+ServletFileUpload
+
+### 读取
+
+java.nio.file.Files
+
+java.io.FileReader
+
+java.io.BufferedReader
+
+Scanner
+
+RandomAccessFile 断点续传
+
+commons-io
+
+Files.readString
+
+## 命令执行
+
+java.lang.Runtime
+
+java.lang.ProcessBuilder
+
+java.lang.UNIXProcess/ProcessImpl
+
+ProcessImpl 是更为底层的实现，Runtime 和 ProcessBuilder 执行命令实际上也是调用了ProcessImpl 这个类；
+
+```java
+// 方法1
+Process process = Runtime.getRuntime().exec("calc");
+
+// 方法2
+ProcessBuilder builder = new ProcessBuilder("calc");
+Process process = builder.start();
+
+// 方法3
+String[] cmd = {"calc"};
+
+// 1. 获取 ProcessImpl 类
+Class<?> processImplClass = Class.forName("java.lang.ProcessImpl");
+
+// 2. 获取私有的 start 方法（注意参数类型）
+Method startMethod = processImplClass.getDeclaredMethod(
+	"start",
+	String[].class,   // 命令数组
+	Map.class,        // 环境变量（null 表示继承当前环境）
+	String.class,     // 工作目录（如 "."）
+	ProcessBuilder.Redirect[].class, // 重定向（null 表示默认）
+	boolean.class     // 是否 redirectErrorStream（false 即可）
+);
+
+// 3. 设置可访问（绕过 private 限制）
+startMethod.setAccessible(true);
+
+// 4. 调用方法（静态方法，第一个参数为 null）
+Process process = (Process) startMethod.invoke(
+	null,     // 静态方法，实例为 null
+	cmd,      // 命令
+	null,     // 环境变量
+	".",      // 工作目录
+	null,     // 重定向
+	false     // 是否合并错误流
+);
+```
 
 ## 数据库连接
 
@@ -104,22 +212,21 @@ pom.xml 依赖下载与引用 https://mvnrepository.com/
 // 2、注册数据库驱动
 Class.forName("com.mysql.jdbc.Driver");
 // 3、建立数据库连接
-String url ="jdbc:mysql://localhost:3306/phpstudy";
-Connection connection=DriverManager.getConnection(url,"root","123456");
+String url = "jdbc:mysql://localhost:3306/phpstudy";
+Connection connection = DriverManager.getConnection(url,"root","123456");
 // 4、创建Statement执行SQL
 Statement statement= connection.createStatement();
 ResultSet resultSet = statement.executeQuery(sql);
 // 5、结果ResultSet进行提取
 while (resultSet.next()){
-    int id = resultSet.getInt("id");
+    int id = resultSet.getInt("id");	// 获取对应的值
     String page_title = resultSet.getString("page_title");
     .......
 }
 ```
 
-
 - 安全写法(预编译 PreparedStatement)： `"select * from admin where id=?"`
-- 不安全写法(拼接)： `"select * from admin where id="+id`（存在注入漏洞）
+- 不安全写法(拼接)： `"select * from admin where id=" + id`（存在注入漏洞）
 
 ### Hibernate
 
@@ -137,34 +244,85 @@ mybatis，mysql-connector-java
 
 ## 反射&类加载&构造方法等
 
-![[attachments/20250917-3.png]]
-
-![[attachments/20250917-4.png]]
-
-![[attachments/20250917-5.png]]
-
-![[attachments/20250917-6.png]]
-
-java 反射 https://xz.aliyun.com/t/9117
+java 反射 https://xz.aliyun.com/t/9117 https://www.zhihu.com/question/377483107
 
 在**运行时**获得程序或程序集中每一个类型的成员和成员的信息，从而**动态的创建、修改、调用、获取其属性**，而不需要事先知道运行的对象是谁。划重点：在运行时而不是编译时。（不改变原有代码逻辑，自行运行的时候动态创建和编译即可）
 
 - 反射机制开发应用场景
-	- Spring框架的IOC基于反射创建对象和设置依赖属性。
-	- SpringMVC的请求调用对应方法，也是通过反射。
-	- JDBC的 Class#forName(String className) 方法，也是使用反射。
+	- Spring 框架的 IOC 基于反射创建对象和设置依赖属性。
+	- SpringMVC 的请求调用对应方法，也是通过反射。
+	- JDBC 的 Class#forName(String className) 方法，也是使用反射。
 - 安全应用场景
 	- 构造利用链，触发命令执行；
 	- 反序列化中的利用链构造；
 	- 动态获取或执行任意类中的属性或方法；
 	- 动态代理的底层原理是反射技术；
-	- rmi 反序列化也涉及到反射操作；
+	- RMI 反序列化也涉及到反射操作；
+
+![[attachments/20250917-3.png]]
+
+获取成员变量
+
+![[attachments/20250917-4.png]]
+
+获取成员方法
+
+![[attachments/20250917-5.png]]
+
+获取构造方法
+
+![[attachments/20250917-6.png]]
+
+获取对应的方法后，通过 newInstance() 来实例化对象，invoke() 传参并执行。
+
+```java
+// 利用反射进行命令执行
+Class<?> clazz = Class.forName("java.lang.Runtime");  
+Method execMethod = clazz.getMethod("exec", String.class);  
+Method getRuntimeMethod = clazz.getMethod("getRuntime");  
+Object runtime = getRuntimeMethod.invoke(null);  
+execMethod.invoke(runtime, "calc.exe");
+
+
+Class<?> clazz = Class.forName("java.lang.Runtime");  
+Constructor m = clazz.getDeclaredConstructor();  
+System.out.println(m);  
+m.setAccessible(true);  
+Method c1 = clazz.getMethod("exec", String.class);  
+System.out.println(c1);  
+c1.invoke(m.newInstance(), "calc.exe");
+
+
+Class<?> clazz = Class.forName("java.lang.ProcessBuilder");  
+Object object = clazz.getConstructor(List.class).newInstance(Arrays.asList("calc.exe"));  
+clazz.getMethod("start").invoke(object, null);
+// 还有上面命令执行中提到的一种方法
+```
 
 不安全的利用链 https://zhuanlan.zhihu.com/p/165273855
 
 反序列化利用链 https://xz.aliyun.com/t/7031
 
 安全应用案例-内存马技术 https://github.com/pen4uin/java-memshell-generator
+
+## 序列化与反序列化
+
+> https://xz.aliyun.com/news/12113
+
+序列化 ID
+
+transient 关键字
+
+readObject 方法，在反序列化过程中，该方法会在默认的反序列化机制执行之前被调用，允许在对象反序列化时执行一些自定义的逻辑。（重写 readObject 方法）
+
+## RMI
+
+远程方法调用，允许在不同的 JVM 之间通讯。
+
+
+
+## JNDI
+
 
 ---
 
