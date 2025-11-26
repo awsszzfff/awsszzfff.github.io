@@ -9,6 +9,8 @@ description: Web安全开发基础-JAVA
 ---
 ![[attachments/20251113.png]]
 
+> https://www.javasec.org/
+> 
 > https://mp.weixin.qq.com/s/c_4fOTBKDcByv8MZ9ayaRg
 
 ## Web服务-Servlet
@@ -230,7 +232,7 @@ while (resultSet.next()){
 
 ### Hibernate
 
-（依赖 hibernate-core，mysql-connector-java）
+（pom.xml 引用依赖 hibernate-core，mysql-connector-java）
 
 - 安全写法：`String hql = "FROM User WHERE username=:username";`
 - 不安全写法：`String hql = "FROM User WHERE username='"+username+"'";`
@@ -241,6 +243,8 @@ mybatis，mysql-connector-java
 
 - 安全写法： `select * from admin where id = #{id}`
 - 不安全写法：`select * from admin where id = ${id}`
+
+上面两种都是用 xml 和实体类/对象 之间的映射关系来进行数据库操作。
 
 ## 反射&类加载&构造方法等
 
@@ -315,13 +319,85 @@ transient 关键字
 
 readObject 方法，在反序列化过程中，该方法会在默认的反序列化机制执行之前被调用，允许在对象反序列化时执行一些自定义的逻辑。（重写 readObject 方法）
 
+3、常见的创建的序列化和反序列化协议
+
+• JAVA内置的writeObject()/readObject()
+
+• JAVA内置的XMLDecoder()/XMLEncoder
+
+• XStream
+
+• SnakeYaml
+
+• FastJson
+
+• Jackson
+
+4、为什么会出现反序列化安全问题
+
+JAVA内置的writeObject()/readObject()内置原生写法分析：
+
+writeObject():主要用于将 Java 对象序列化为字节流并写入输出流
+
+readObject():主要用于从输入流中读取字节序列反序列化为 Java 对象
+
+FileInputStream：其主要作用是从文件读取字节数据
+
+FileOutputStream：其主要作用是将字节数据写入文件
+
+ObjectInputStream：用于从输入流中读取对象，实现对象的反序列化操作
+
+ObjectOutputStream：用于将对象并写入输出流的类，实现对象的序列化操作
+
+利用看下面：
+
+• 看序列化的对象有没有重写readObject方法（危险代码）
+
+• 看序列化的对象有没有被输出就会调用toString方法（危险代码）
+
+• 其他类的readObject或toString方法（反序列化类可控）
+
+5、反序列化利用链
+
+(1) 入口类的readObject直接调用危险方法
+
+(2) 入口参数中包含可控类，该类有危险方法，readObject时调用
+
+(3) 入口类参数包含可控类，该类又调用其他有危险方法类，readObject调用
+
+(4) 构造函数/静态代码块等类加载时隐式执行
+
+6、反序列化利用条件：
+
+(1) 可控的输入变量进行了反序列化操作
+
+(2) 实现了Serializable或者Externalizable接口的类的对象
+
+(3) 能找到调用方法的危险代码或间接的利用链引发（依赖链）
+
 ## RMI
 
 远程方法调用，允许在不同的 JVM 之间通讯。
 
+https://paper.seebug.org/1012/
+
+![[attachments/20251120.png]]
+
+> https://paper.seebug.org/1091/
+> 
+> https://y4er.com/posts/java-rmi/
+> 
+> https://goodapple.top/archives/321
+> 
+> https://paper.seebug.org/1251/
 
 
 ## JNDI
+
+
+动态代理
+
+
 
 
 ---

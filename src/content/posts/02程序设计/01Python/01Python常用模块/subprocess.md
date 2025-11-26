@@ -1,12 +1,13 @@
 ---
-title: "subprocess"
+title: subprocess
 date: 2025-07-26
 tags:
-  - Others
+  - Python模块
 categories:
-  - Others
+  - 程序设计
+  - Python
 ---
-可以允许我们启动一个新的进程，并连接到它们的输入/输出/作物管道，从而获取返回值
+可以允许启动一个新的进程，并连接到它们的输入/输出/作物管道，从而获取返回值
 
 ```python
 import subprocess

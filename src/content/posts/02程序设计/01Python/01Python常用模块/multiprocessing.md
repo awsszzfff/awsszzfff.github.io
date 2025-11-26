@@ -8,34 +8,40 @@ categories:
 description: None
 ---
 ```python
+# 多进程
 import multiprocessing
 ```
 
 ```python
-p = multiprocessing.Process()
+# 创建子进程对象
+process = multiprocessing.Process()
 
 def __init__(self, group=None, target=None, name=None, args=(), kwargs={}, *, daemon=None):
-	# group : 参数表示一个组，但是我们不用
-	# target: 表示调用的对象 要让子进程完成的任务
-	# name : 子进程的名称
-	# args : 元组类型，子进程完成的任务的函数的参数
-	# kwargs: 调用对象的字典
+	'''
+	group : 当前进程组，默认None，基本不修改
+	target: 表示当前需要创建子进程的函数对象
+	name : 当前子进程的名字，默认不会改
+	args : 在调用上面子进程函数的时候需要传递进去的参数 按照位置传递
+	kwargs: 在调用上面子进程函数的时候需要传递进去的参数 按照关键字传递
+	daemon：守护进程是否开启
+	'''
+	
+# 子进程启动
+process.start()	# 启动子进程，会调用进程中的run()方法
+process.run()		# 启动子进程 --- 启动 start 之后会触发 run 的运行
+process.is_alive()	# 判断当前子进程的存活状态
+process.join()	# 主进程等待所有子进程结束后结束
+process.terminate()	# 强制终止进程process
+process.close()  # 终止当前子进程
 
-# 方法
-p.start()	# 启动进程，会调用进程中的run()方法
-p.run()		# 进程运行时的方法
-p.terminate()	# 强制终止进程p
-p.is_alive()	# p仍运行，返回True
-p.join([timeout])	# 主进程等待所有子进程结束后结束主进程
-
-# 属性
-p.daemon	# 守护进程（主进程结束，会自动结束子进程）
-    # 在进程启动(start)之前为当前子线程添加额外的参数和限制
-    # p.daemon = True
-p.name		# 进程名
-p.pid		# ...
-p.exitcode	# 进程在运行时为None...
-p.authkey	# 进程的身份验证键
+# 子进程的属性
+process.daemon	# 守护进程（主进程结束，会自动结束子进程）
+    # 在进程启动(start)之前为当前子进程添加额外的参数和限制
+    # process.daemon = True
+process.name		# 当前子进程的名字
+process.pid			# ...
+process.exitcode	# 退出状态码，进程在运行时为None...
+process.authkey		# 进程的身份验证键，默认是一串 32位的16进制数
 ```
 
 ```python
@@ -47,7 +53,9 @@ current_process().pid	# 查看进程pid
 
 ```python
 # 制作多进程的启动入口  
-# (1)方式一：通过multiprocessing的对象启动 
+# (1)方式一：直接使用Process类创建 子进程对象然后启动
+
+from multiprocessing import Process
 
 # 创建子进程程序  
 def work(name):  
@@ -59,23 +67,26 @@ def work(name):
  
 def main_object():  
     # （1）实例化得到子进程对象  
-    task_1 = multiprocessing.Process(  
-        # target 就是需要启动的子进程的函数名  
+    process_one = Process(  
+        # target 目标子进程函数 ， 记住给的是内存地址  
         target=work,  
         # args 传入的位置参数，位置参数必须带 , 元组类型  
         args=("work_1",)  
     )  
-    task_2 = multiprocessing.Process(  
+    process_two = Process(  
         target=work,  
         kwargs={'name': 'work_2'}  
     )  
     # （2）启动子进程  
-    task_1.start()  
-    task_2.start()
+    process_one.start()  
+    process_two.start()
 
-=====
+if __name__ = '__main__':
+	main_object()
+```
 
-# 方式二，继承multiprocessing.Process，重写run方法
+```python
+# 方式二，直接继承 父类 Process 重写 run 方法
 class MyProcess(multiprocessing.Process):  
     def __init__(self, name):  
         super().__init__()  
@@ -90,11 +101,14 @@ class MyProcess(multiprocessing.Process):
         
 def main_class():  
     # 创建子进程
-    task_1 = MyProcess(name='work_1')  
-    task_2 = MyProcess(name='work_2')  
+    process_one = MyProcess(name='work_1')  
+    process_two = MyProcess(name='work_2')  
 
-    task_1.start()  
-    task_2.start()
+    process_one.start()  
+    process_two.start()
+    
+if __name__ = '__main__':
+	main_class()
 ```
 
 ## 示例：
@@ -150,3 +164,7 @@ if __name__ == '__main__':
   
 # 并行 且主进程等待所有子进程结束后再结束 耗时是最长的子进程的耗时
 ```
+
+PS：
+
+> 由于Windows没有fork，多处理模块启动一个新的Python进程并导入调用模块。如果在导入时调用Process（），那么这将启动无限继承的新进程（或直到机器耗尽资源）。这是隐藏对Process（）内部调用的原，使用`if __name__ == "__main__"`，这个if语句中的语句将不会在导入时被调用。

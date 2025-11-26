@@ -26,7 +26,8 @@ ln -s 创建快捷方式
 
 ```shell
 top
-kill -9 id
+kill -9 pid
+# 1重新加载 9杀死 15完美停止（默认）
 ```
 
 ```shell
