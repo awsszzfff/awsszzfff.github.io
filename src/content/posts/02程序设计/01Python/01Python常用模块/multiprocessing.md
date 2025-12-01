@@ -1,11 +1,12 @@
 ---
-title: "multiprocessing"
+title: multiprocessing
 date: 2025-08-21
 tags:
-  - Others
+  - Python模块
 categories:
-  - Others
-description: None
+  - 程序设计
+  - Python
+description: multiprocessing 多进程
 ---
 ```python
 # 多进程
@@ -53,7 +54,7 @@ current_process().pid	# 查看进程pid
 
 ```python
 # 制作多进程的启动入口  
-# (1)方式一：直接使用Process类创建 子进程对象然后启动
+# 方式一：直接使用Process类创建 子进程对象然后启动
 
 from multiprocessing import Process
 
@@ -111,59 +112,281 @@ if __name__ = '__main__':
 	main_class()
 ```
 
-## 示例：
+## 示例
+
+### 示例1
+
+模拟 TCP 服务端接收多个客户端请求，可启动多个客户端向服务端发送数据
+
+```python file:server.py
+import multiprocessing  
+from socket import socket, AF_INET, SOCK_STREAM,SOL_SOCKET,SO_REUSEADDR  
+  
+def work(conn,addr):  
+    while True:  
+        data_from_client = conn.recv(1024)  
+        if not data_from_client:  
+            conn.close()  
+            break  
+        print(f"来自于客户端 {addr} 的数据 :>>>> {data_from_client.decode()}")  
+        data_from_client_upper = data_from_client.decode().upper()  
+        conn.send(data_from_client_upper.encode())  
+  
+def main():  
+    server = socket(family=AF_INET, type=SOCK_STREAM)  
+    server.setsockopt(SOL_SOCKET,SO_REUSEADDR,1)  
+    server.bind(('127.0.0.1', 9696))  
+  
+    server.listen(5)  
+  
+    while True:  
+        # 负责接收每一个客户端的链接对象  
+        conn, addr = server.accept()  
+        # 将当前的链接对象创建程一个子进程  
+        task = multiprocessing.Process(  
+            target=work, args=(conn,addr)  
+        )  
+        # 让当前子进程启动  
+        task.start()  
+  
+if __name__ == '__main__':  
+    main()
+```
+
+```python file:client.py
+from socket import socket, AF_INET, SOCK_STREAM  
+  
+client = socket(family=AF_INET, type=SOCK_STREAM)  
+  
+client.connect(('127.0.0.1', 9696))  
+  
+while True:  
+    msg = input('请输入要发送的消息：')  
+    if not msg: continue  
+    client.send(msg.encode('utf-8'))  
+  
+    data_from_server = client.recv(1024)  
+    print(f"服务器返回的数据：{data_from_server.decode('utf-8')}")
+```
+
+### 示例2
+
+模拟并发执行，子进程结束后，主进程才会结束
 
 ```python
-import multiprocessing  
+from multiprocessing import Process
 import random  
 import time  
 
+def timer(func):  
+    def inner(*args, **kwargs):  
+        start_time = time.time( )  
+        res = func(*args, **kwargs)  
+        end_time = time.time()  
+        print(f"函数 {func.__name__} 运行时间：{end_time - start_time} 秒")  
+        return res  
+  
+    return inner
+
 # 创建子进程程序  
 def work(name):  
-    print(f"{name} is starting \n")  
-    sleep_time = random.randint(1, 6)  
-    print(f"{name} is sleeping {sleep_time} s \n")  
-    time.sleep(sleep_time)  
-    print(f"{name} is ending \n")  
+    sleep_time = random.randint(1, 4)  
+	print(f"{name} is starting sleeping {sleep_time}")  
+	time.sleep(sleep_time)  
+	print(f"{name} is ending sleeping {sleep_time}") 
   
 # 通过multiprocessing的对象启动子进程
+@timer
 def main_object():  
-    task_list = []  
-    # 这个生成式在创建多个子进程  
-    for i in range(5):  
-        task = multiprocessing.Process(  
-            # target 就是需要启动的子进程的函数名  
-            target=work,  
-            # args 传入的位置参数，位置参数必须带 , 元组类型  
-            args=(f"work_{i}",)  
-        )
-        '''
-        task = multiprocessing.Process(  
-    		target=work,  
-    		kwargs={'name': 'work_2'}  
-		)
-		'''
-        task.start()  
-        task_list.append(task)  
-    # 启动子进程  
-    for task in task_list:  
-        task.join()  
-  
+
+    # 这个生成式在创建多个子进程   
+	task_list = [Process(  
+		# target 就是需要启动的子进程的函数名  
+		target=work,  
+		# args 传入的位置参数，位置参数必须带 , 元组类型  
+		args=(f"work_{i}",)  
+	) for i in range(5)]
+	'''
+	task = multiprocessing.Process(  
+		target=work,  
+		kwargs={'name': 'work_2'}  
+	)
+	'''
+    [task.start() for task in task_list]	# start 启动子进程
+    [task.join() for task in task_list] 	# join 等待子进程结束
+	    
+	'''  
+	先 start()，后立即 join() (导致 串行)  
+	全部 start()，后全部 join() (实现 并发/并行)  
+	'''
   
 if __name__ == '__main__':  
-    start_time = time.time()  
-    print(f"这是主进程 __main__ 开始 :>>>> \n")  
-    main_object()  
-    print(f"这是主进程 __main__ 结束 :>>>> \n")  
-    end_time = time.time()  
-    print(f'总耗时 :>>>> {end_time - start_time}s')  
+	print(f"main process is starting ")
+    process_work_wait_main()  
+    print(f"main process is ending ")
   
-# 这是主进程 __main__ 开始 :>>>>    
-# 这是主进程 __main__ 结束 :>>>>    
-# 总耗时 :>>>> 5.176285266876221s  
+# main process is starting    
+# ...
+# 函数 main_object 运行时间：2.230956554412842 秒    
+# main process is ending  
   
 # 并行 且主进程等待所有子进程结束后再结束 耗时是最长的子进程的耗时
 ```
+
+## 进程间通信
+
+### 队列实现进程间通信
+
+```python
+from multiprocessing import Process, Queue  
+  
+def producer(queue):  
+    print(f"这是来自主进程的数据 :>>>> {queue.get()}")  
+    # 再向主进程返回一个数据  
+    queue.put("son process")  
+  
+def process_main_to_son():  
+    # 创建队列对象用来存储数据  
+    queue = Queue()  
+    # 向子进程传入数据  
+    queue.put(f"main process")  
+    # 创建子进程  
+    process_son = Process(  
+        target=producer,  
+        args=(queue,)  
+    )  
+    # 启动当前的子进程  
+    process_son.start()  
+    # 等待主进程结束前结束子进程  
+    process_son.join()  
+    print(f"这是来自子进程的数据 :>>>> {queue.get()}")  
+  
+if __name__ == '__main__':  
+    process_main_to_son()
+```
+
+示例：模拟生产者消费者通信
+
+```python
+import random  
+import time  
+from multiprocessing import JoinableQueue, Process  
+  
+  
+def producer(name, food, queue):  
+    for i in range(2):  
+        # 生产数据  
+        data = f"{name}生产了第{i}个{food}"  
+        # 模拟延迟  
+        time.sleep(random.randint(1, 4))  
+        queue.put(data)  
+        print(f"{name}生产了{data}")  
+    # 直接使用 joinablequeue 内置的方法增加结束标志  
+    queue.join()  
+  
+  
+def consumer(name, queue):  
+    while True:  
+        # 获取数据  
+        data = queue.get()  
+        time.sleep(random.randint(1, 4))  
+        print(f"{name}消费了{data}")  
+        queue.task_done()  
+  
+  
+def process_one():  
+    queue = JoinableQueue()  
+    producer_dream = Process(target=producer, args=("dream", "apple", queue))  
+    producer_lucy = Process(target=producer, args=("lucy", "pear", queue))  
+  
+    customer_one = Process(target=consumer, args=("customer_one", queue))  
+    customer_two = Process(target=consumer, args=("customer_two", queue))  
+  
+    customer_one.daemon = True  
+    customer_two.daemon = True  
+  
+    process_list = [producer_dream, producer_lucy, customer_one, customer_two]  
+    [task.start() for task in process_list]  
+  
+    producer_dream.join()  
+    producer_lucy.join()  
+  
+  
+if __name__ == '__main__':  
+    process_one()
+```
+
+### 管道实现进程间通信
+
+```python
+import random  
+import time  
+from multiprocessing import Pipe, Process  
+  
+  
+def producer(name, conn):  
+    left_conn, right_conn = conn  
+    # 把右侧管道关闭  
+    right_conn.close()  
+    for i in range(2):  
+        # 生产数据  
+        data = f"当前大厨 {name} 生产出了第{i}份!"  
+  
+        # 从左侧管道向管道中添加数据  
+        left_conn.send(data)  
+        print(f"生产者 {name} :>>>>  {data}")  
+        # 模拟延迟  
+        time.sleep(random.randint(1, 4))  
+    left_conn.close()  
+  
+  
+def customer(name, conn):  
+    left_conn, right_conn = conn  
+    # 把左侧管道关闭  
+    left_conn.close()  
+    while True:  
+        try:  
+            # 取出数据  
+            food = right_conn.recv()  
+            # 模拟延迟  
+            time.sleep(random.randint(1, 4))  
+            # 打印数据  
+            print(f"消费者 {name} :>>>>  {food}")  
+        except:  
+            right_conn.close()  
+            break  
+  
+  
+def process_one():  
+    # 建立媒介 --- 创建管道  
+    left_conn, _right_conn = Pipe()  
+    
+    '''  
+    (<multiprocessing.connection.Connection object at 0x12533fee0>, <multiprocessing.connection.Connection object at 0x12533feb0>)    
+    '''  
+    
+    # 先启动消费者，后启动生产者（通常情况下都是如此，上面的队列操作也一样（容量有限，防止阻塞））
+    customer_smile = Process(target=customer, args=("smile", (left_conn, _right_conn)))  
+    customer_smile.start()  
+  
+    # 生产数据  
+    producer(name="dream", conn=(left_conn, _right_conn))  
+  
+    left_conn.close()  
+    _right_conn.close()  
+  
+    customer_smile.join()  
+  
+  
+if __name__ == '__main__':  
+    process_one()
+```
+
+## 互斥锁
+
+解决子线程之间对共享资源的访问冲突问题，保证在同一时刻只有一个线程在访问共享资源，但多进程之间也存在这种问题（多个进程共享同一块内存）
+
+
 
 PS：
 

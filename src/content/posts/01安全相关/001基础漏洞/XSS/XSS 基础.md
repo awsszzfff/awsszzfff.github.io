@@ -305,3 +305,7 @@ header("Content-Security-Policy:default-src 'self';script-src http://192.168.1.4
 > https://blog.csdn.net/l2872253606/article/details/125638898
 
 > 许多绕过方式比较鸡肋，需要很多的前提条件且比较老旧，实际情况下很难进行绕过；不如跑路~
+
+> https://mp.weixin.qq.com/s/FfagCmWmDfUKYxNDLqnR-w
+> 
+> https://mp.weixin.qq.com/s/lXk2a3bOIV8HKQBubl-hxg

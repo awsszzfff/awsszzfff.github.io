@@ -126,7 +126,96 @@ Controller → 将 User 转为 JSON 返回
 
 ## Spring Boot
 
+https://springdoc.cn/spring-boot/
 
+## 模版
+
+Thymeleaf 
+
+https://xz.aliyun.com/news/9962
+
+FreeMarker
+
+https://mp.weixin.qq.com/s/TtNxfSYsB4HMEpW_OBniew
+
+Velocity
+
+https://blog.csdn.net/2401_83799022/article/details/141600988
+
+## Actuator 监控依赖
+
+健康检查，审计，指标收集，HTTP跟踪等，帮助监控和管理Spring Boot应用
+
+![[attachments/20251128-1.png]]
+
+安全问题 heapdump 泄露
+
+SpringCloud Gateway RCE
+
+https://www.cnblogs.com/qgg4588/p/18104875
+
+接口依赖-Swagger
+
+https://blog.csdn.net/lsqingfeng/article/details/123678701
+
+自动化测试
+
+应用接口泄露
+
+未授权访问、信息泄露、文件上传等
+
+打包部署 JAR&WAR https://mp.weixin.qq.com/s/HyqVt7EMFcuKXfiejtfleg
+
+> 打包报错解决
+> https://blog.csdn.net/Mrzhuangr/article/details/124731024
+> https://blog.csdn.net/wobenqingfeng/article/details/129914639
+
+war 包
+
+1. pom.xml加入或修改：
+
+`<packaging>war</packaging>`
+
+2. 启动类里面加入配置：
+
+```java
+public class TestSwaggerDemoApplication extends SpringBootServletInitializer
+
+@Override
+protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+
+	return builder.sources(TestSwaggerDemoApplication.class);
+}
+```
+
+maven -> clean -> package
+
+java -jar xxxxxx.jar
+
+war放置tomcat后启动
+
+## 身份验证
+
+身份验证的常见技术：
+
+1. JWT
+2. Shiro
+3. Spring Security
+4. OAuth 2.0
+5. SSO
+6. JAAS
+
+JWT
+
+![[attachments/20251128-2.png]]
+
+https://mp.weixin.qq.com/s/xH_v825bNqDszwmMOe8CBw
+
+SpringSecurity
+
+https://mp.weixin.qq.com/s/5tj6O4TA04QWyWnsd-EmEA
+
+https://mp.weixin.qq.com/s/M1FiPKJRAWgwaKCtyNW8eQ
 
 ## 文件操作
 
@@ -248,7 +337,7 @@ mybatis，mysql-connector-java
 
 ## 反射&类加载&构造方法等
 
-java 反射 https://xz.aliyun.com/t/9117 https://www.zhihu.com/question/377483107
+java 反射 https://xz.aliyun.com/t/9117 、 https://www.zhihu.com/question/377483107
 
 在**运行时**获得程序或程序集中每一个类型的成员和成员的信息，从而**动态的创建、修改、调用、获取其属性**，而不需要事先知道运行的对象是谁。划重点：在运行时而不是编译时。（不改变原有代码逻辑，自行运行的时候动态创建和编译即可）
 
@@ -319,61 +408,52 @@ transient 关键字
 
 readObject 方法，在反序列化过程中，该方法会在默认的反序列化机制执行之前被调用，允许在对象反序列化时执行一些自定义的逻辑。（重写 readObject 方法）
 
-3、常见的创建的序列化和反序列化协议
+1. 常见的创建的序列化和反序列化协议
 
 • JAVA内置的writeObject()/readObject()
-
 • JAVA内置的XMLDecoder()/XMLEncoder
-
 • XStream
-
 • SnakeYaml
-
 • FastJson
-
 • Jackson
 
-4、为什么会出现反序列化安全问题
+2. 反序列化安全问题
 
-JAVA内置的writeObject()/readObject()内置原生写法分析：
+JAVA 内置 writeObject()/readObject() 内置原生写法：
 
-writeObject():主要用于将 Java 对象序列化为字节流并写入输出流
-
-readObject():主要用于从输入流中读取字节序列反序列化为 Java 对象
-
-FileInputStream：其主要作用是从文件读取字节数据
-
-FileOutputStream：其主要作用是将字节数据写入文件
-
-ObjectInputStream：用于从输入流中读取对象，实现对象的反序列化操作
-
-ObjectOutputStream：用于将对象并写入输出流的类，实现对象的序列化操作
+- writeObject()：主要用于将 Java 对象序列化为字节流并写入输出流
+- readObject()：主要用于从输入流中读取字节序列反序列化为 Java 对象
+- FileInputStream：其主要作用是从文件读取字节数据
+- FileOutputStream：其主要作用是将字节数据写入文件
+- ObjectInputStream：用于从输入流中读取对象，实现对象的反序列化操作
+- ObjectOutputStream：用于将对象并写入输出流的类，实现对象的序列化操作
 
 利用看下面：
 
-• 看序列化的对象有没有重写readObject方法（危险代码）
+• 看序列化的对象有没有重写 readObject 方法（危险代码）
+• 看序列化的对象有没有被输出就会调用 toString 方法（危险代码）
+• 其他类的 readObject 或 toString 方法（反序列化类可控）
 
-• 看序列化的对象有没有被输出就会调用toString方法（危险代码）
+3. 反序列化利用链
 
-• 其他类的readObject或toString方法（反序列化类可控）
+- 入口类的readObject直接调用危险方法
+- 入口参数中包含可控类，该类有危险方法，readObject时调用
+- 入口类参数包含可控类，该类又调用其他有危险方法类，readObject调用
+- 构造函数/静态代码块等类加载时隐式执行
 
-5、反序列化利用链
+4. 反序列化利用条件：
 
-(1) 入口类的readObject直接调用危险方法
+- 可控的输入变量进行了反序列化操作
+- 实现了 Serializable 或者 Externalizable 接口的类的对象
+- 能找到调用方法的危险代码或间接的利用链引发（依赖链）
 
-(2) 入口参数中包含可控类，该类有危险方法，readObject时调用
+![[attachments/20251128.png]]
 
-(3) 入口类参数包含可控类，该类又调用其他有危险方法类，readObject调用
+> https://mp.weixin.qq.com/s/R3c5538ZML2yCF9pYUky6g
+> 
+> https://mp.weixin.qq.com/s/t8sjv0Zg8_KMjuW4t-bE-w
 
-(4) 构造函数/静态代码块等类加载时隐式执行
-
-6、反序列化利用条件：
-
-(1) 可控的输入变量进行了反序列化操作
-
-(2) 实现了Serializable或者Externalizable接口的类的对象
-
-(3) 能找到调用方法的危险代码或间接的利用链引发（依赖链）
+搞清楚入口类，需要修改的值，需要传递的值
 
 ## RMI
 
@@ -394,11 +474,136 @@ https://paper.seebug.org/1012/
 
 ## JNDI
 
+JNDI 提供了一套标准接口，让Java程序可以通过一个**名称**（Name），来查找并获取到实际的**资源**（Object）。主要目的是实现**解耦**（Decoupling）。它将资源的**配置细节**（例如，数据库的URL、用户名、密码）从应用程序的**核心代码**中分离出来。
 
-动态代理
+> https://blog.csdn.net/dupei/article/details/120534024
 
+JNDI 不仅可以查找本地资源，还可以查找远程服务，例如使用 **LDAP**（轻量级目录访问协议）或 **RMI**（远程方法调用）协议。
 
+> - Log4j https://mp.weixin.qq.com/s/95Jxj3R9q95CFhCn86IiYA
+> - Fastjson https://mp.weixin.qq.com/s/EPdNElXPcZd5wEmQqAhFiQ
+> - XStream https://mp.weixin.qq.com/s/M_oQyZYQEFu0nbG-IpJt_A
+> - Shiro https://mp.weixin.qq.com/s/kmGcrVmaLi0Db_jwKKNXag
+> - SnakeYaml https://www.cnblogs.com/F12-blog/p/18151239
 
+## 动态代理
+
+在程序运行时，自动生成一个**代理对象**，这个代理对象会“拦截”你对目标对象的调用，并在调用前后或调用过程中添加额外的逻辑。
+
+```java file:Calculator.java
+public interface Calculator {  
+    int add(int a, int b);  
+    int sub(int a, int b);  
+}
+```
+
+```java file:RealCalculator.java
+public class RealCalculator implements Calculator {  
+    @Override  
+    public int add(int a, int b) {  
+        // 这是核心业务逻辑  
+        return a + b;  
+    }  
+  
+    @Override  
+    public int sub(int a, int b) {  
+        // 这是核心业务逻辑  
+        return a - b;  
+    }  
+}
+```
+
+```java file:LogHandler.java
+import java.lang.reflect.InvocationHandler;  
+import java.lang.reflect.Method;  
+  
+public class LogHandler implements InvocationHandler {  
+  
+    // 持有目标对象（RealCalculator）的引用  
+    private Object target;  
+  
+    public LogHandler(Object target) {  
+        this.target = target;  
+    }  
+  
+    /**  
+     * @param proxy  自动生成的代理对象实例 (一般不直接使用)  
+     * @param method 正在被调用的方法 (如 add, sub)  
+     * @param args   方法的参数 (如 a, b)  
+     * @return 方法的返回值  
+     */  
+    @Override  
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {  
+  
+        // --- 增强逻辑 (前置处理) ---  
+        // 在调用目标方法前，先记录日志  
+        System.out.println(">>> [Log] 开始调用方法: " + method.getName());  
+        System.out.print(">>> [Log] 参数是: ");  
+        for (Object arg : args) {  
+            System.out.print(arg + " ");  
+        }  
+        System.out.println();  
+  
+        // --- 调用目标对象方法 (核心业务) ---  
+        // 真正调用 RealCalculator 里的 add 或 sub 方法  
+        Object result = method.invoke(target, args);  
+  
+        // --- 增强逻辑 (后置处理) ---  
+        // 在调用目标方法后，再记录日志  
+        System.out.println(">>> [Log] 方法执行完毕，结果是: " + result);  
+        System.out.println("---");  
+  
+        return result; // 返回计算结果  
+    }  
+}
+```
+
+```java file:ProxyDemo.java
+import java.lang.reflect.Proxy;  
+  
+public class ProxyDemo {  
+    public static void main(String[] args) {  
+        // 1. 创建目标对象  
+        Calculator realCalculator = new RealCalculator();  
+  
+        // 2. 创建 InvocationHandler (传入目标对象)  
+        LogHandler handler = new LogHandler(realCalculator);  
+  
+        // 3. 核心步骤：使用 Proxy 类动态生成代理对象  
+        Calculator proxyCalculator = (Calculator) Proxy.newProxyInstance(  
+                realCalculator.getClass().getClassLoader(), // 类加载器  
+                realCalculator.getClass().getInterfaces(),  // 目标对象实现的接口 (代理要实现的接口)  
+                handler                                     // 代理逻辑处理器  
+        );  
+  
+        // 4. 使用代理对象调用方法  
+        System.out.println("使用动态代理对象调用 add 方法:");  
+        int sum = proxyCalculator.add(10, 5);  
+        System.out.println("最终结果: " + sum); // 15  
+  
+        // 5. 调用 sub 方法  
+        System.out.println("\n使用动态代理对象调用 sub 方法:");  
+        int diff = proxyCalculator.sub(20, 8);  
+        System.out.println("最终结果: " + diff); // 12  
+    }  
+}
+```
+
+```txt
+使用动态代理对象调用 add 方法: 
+>>> [Log] 开始调用方法: add 
+>>> [Log] 参数是: 10 5 
+>>> [Log] 方法执行完毕，结果是: 15 
+--- 
+最终结果: 15 
+
+使用动态代理对象调用 sub 方法: 
+>>> [Log] 开始调用方法: sub 
+>>> [Log] 参数是: 20 8 
+>>> [Log] 方法执行完毕，结果是: 12 
+--- 
+最终结果: 12
+```
 
 ---
 

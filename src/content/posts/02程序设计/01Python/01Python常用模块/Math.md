@@ -6,4 +6,4 @@ tags:
 categories:
   - Others
 ---
-factorial()求阶乘
+factorial() 求阶乘
