@@ -1,10 +1,10 @@
 ---
-date: 2001-01-01
+title: Zotero
+date: 2024-08-21
 tags:
   - Others
 categories:
   - Others
-title: "Zotero"
 ---
 
 

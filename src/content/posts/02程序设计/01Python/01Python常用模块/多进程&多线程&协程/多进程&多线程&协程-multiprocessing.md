@@ -1,5 +1,5 @@
 ---
-title: multiprocessing
+title: 多进程&多线程&协程-multiprocessing
 date: 2025-08-21
 tags:
   - Python模块
@@ -114,7 +114,7 @@ if __name__ = '__main__':
 
 ## 示例
 
-### 示例1
+### 示例 1 模拟 TCP 服务
 
 模拟 TCP 服务端接收多个客户端请求，可启动多个客户端向服务端发送数据
 
@@ -169,7 +169,7 @@ while True:
     print(f"服务器返回的数据：{data_from_server.decode('utf-8')}")
 ```
 
-### 示例2
+### 示例 2 模拟并发
 
 模拟并发执行，子进程结束后，主进程才会结束
 
@@ -384,10 +384,126 @@ if __name__ == '__main__':
 
 ## 互斥锁
 
-解决子线程之间对共享资源的访问冲突问题，保证在同一时刻只有一个线程在访问共享资源，但多进程之间也存在这种问题（多个进程共享同一块内存）
+[[多进程&多线程&协程-threading#互斥锁|多线程互斥锁]] 多进程的内存地址空间是相互隔离的，通常不需要锁。但在以下情况必须使用：
 
+- **共享内存 (Shared Memory)**：如 `Value` 或 `Array`；    
+- **外部共享资源**：如多个进程同时往同一个日志文件里写数据，如果不加锁，行与行之间可能会交织错乱。
 
+```python
+import multiprocessing  
+import time  
+  
+  
+def task(shared_val, lock):  
+    for _ in range(50):  
+        time.sleep(0.01)  
+        # 多进程环境下的加锁  
+        with lock:  
+            shared_val.value += 1  
+            print(f"子进程{multiprocessing.current_process().name}正在运行，当前共享变量值为{shared_val.value}")  
+  
+  
+if __name__ == '__main__':  
+    # 使用Value 创建共享变量  
+    counter = multiprocessing.Value('i', 0)  
+    # 创建锁  
+    lock = multiprocessing.Lock()  
+  
+    processes = []  
+    for i in range(3):  
+        p = multiprocessing.Process(target=task, args=(counter, lock))  
+        processes.append(p)  
+        p.start()  
+  
+    for p in processes:  
+        p.join()  
+  
+    print(f"主进程运行结束，共享变量值为{counter.value}")
+```
+
+> **计算密集型**任务使用**多进程**可以充分利用多核 CPU 的优势，而 **IO 密集型**任务使用**多线程**能够更好地处理 IO 操作，避免频繁的进程切换开销。根据任务的特性选择合适的并发方式可以有效提高任务的执行效率。
+
+## 信号量
+
+```python
+import multiprocessing
+import time
+import os
+
+# 模拟一个对系统硬件资源（如网卡或专用加速卡）的访问
+def hardware_access_task(sem, i):
+    print(f"进程 {os.getpid()} (任务{i}) 正在排队...")
+    
+    with sem:  # 多进程信号量同样支持 with 语法
+        print(f"==> 进程 {os.getpid()} 成功抢占硬件访问权！")
+        time.sleep(2)
+        print(f"<== 进程 {os.getpid()} 任务完成，退出。")
+
+if __name__ == "__main__":
+    # 创建多进程信号量，限制并发数为 2
+    sem = multiprocessing.Semaphore(2)
+    
+    processes = []
+    for i in range(5):
+        p = multiprocessing.Process(target=hardware_access_task, args=(sem, i))
+        processes.append(p)
+        p.start()
+
+    for p in processes:
+        p.join()
+```
+
+## 进程池
+
+[[多进程&多线程&协程-threading#线程池|池化技术]]
+
+适用场景：CPU 密集型任务，如大规模数据加密、密码哈希爆破、流量包特征深度解析。
+
+> 由于 Python 存在 **GIL（全局解释器锁）**，在同一个进程内，同一时间只有一个线程能执行字节码。因此，对于需要消耗大量计算资源的任务，必须使用**多进程**来利用多核 CPU。
+
+```python
+import os
+import time
+from concurrent.futures import ProcessPoolExecutor
+
+# 模拟高强度计算任务：哈希碰撞或暴力破解
+def heavy_computation(data):
+    # 获取当前进程 ID (PID)，证明任务在不同进程中运行
+    pid = os.getpid()
+    print(f"进程 {pid} 正在计算数据: {data}")
+    
+    start_time = time.time()
+    # 模拟耗时计算
+    count = 0
+    for i in range(10**7):
+        count += i
+    
+    return f"PID {pid} 计算完成，耗时 {time.time() - start_time:.2f}s"
+
+def process_pool_demo():
+    tasks = ["Task_A", "Task_B", "Task_C", "Task_D"]
+    
+    # 1. 初始化进程池
+    # 对于计算密集型，max_workers 建议设为 CPU 核心数 (os.cpu_count())
+    with ProcessPoolExecutor(max_workers=os.cpu_count()) as executor:
+        
+        # 提交任务
+        print(f"主进程 ID: {os.getpid()}，准备分发任务...")
+        
+        # 使用 map 提交并直接获取结果
+        # 注意：进程池中的函数必须是可序列化的（picklable）
+        results = executor.map(heavy_computation, tasks)
+        
+        print("\n--- 计算结果 ---")
+        for res in results:
+            print(res)
+
+if __name__ == "__main__":
+    # 在 Windows 系统中使用进程池，必须放在 if __name__ == "__main__": 块下
+    # 否则会递归创建子进程导致崩溃
+    process_pool_demo()
+```
 
 PS：
 
-> 由于Windows没有fork，多处理模块启动一个新的Python进程并导入调用模块。如果在导入时调用Process（），那么这将启动无限继承的新进程（或直到机器耗尽资源）。这是隐藏对Process（）内部调用的原，使用`if __name__ == "__main__"`，这个if语句中的语句将不会在导入时被调用。
+> 由于 Windows 没有 fork，多处理模块启动一个新的 Python 进程并导入调用模块。如果在导入时调用 Process（），那么这将启动无限继承的新进程（或直到机器耗尽资源）。这是隐藏对 Process（）内部调用的原，使用 `if __name__ == "__main__"`，这个 if 语句中的语句将不会在导入时被调用。

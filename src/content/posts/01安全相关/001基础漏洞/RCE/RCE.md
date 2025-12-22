@@ -1,10 +1,10 @@
 ---
-title: "RCE"
+title: RCE
 date: 2001-01-01
 tags:
-  - Others
+  - 基础漏洞
 categories:
-  - Others
+  - 安全相关
 ---
 RCE（remote code execute / remote command execute）
 

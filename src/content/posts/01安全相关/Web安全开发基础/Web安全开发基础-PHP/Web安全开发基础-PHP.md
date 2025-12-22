@@ -337,12 +337,12 @@ pcntl_exec()
 PHP.INI 配置
 
 - 安全模式 safe_mode 命令执行函数会被禁用
-- \*路径访问 open_basedir 限制文件操作安全（遍历等）
-- \*禁用函数 disable_function 升级版安全模式，自定义限制函数
-- \*魔术引号转义 magic_quotes_gpc 同理下面的sql过滤第一个函数
+- 路径访问 open_basedir 限制文件操作安全（遍历等）
+- 禁用函数 disable_function 升级版安全模式，自定义限制函数
+- 魔术引号转义 magic_quotes_gpc 同理下面的 sql 过滤第一个函数
 - 数据库访问次数 max_connections 防止数据库爆破
 - 禁用远程执行 allow_url_include allow_url_fopen 远程包含开关等
-- \*安全会话管理 session.cookie_httponly session.cookie_secure
+- 安全会话管理 session.cookie_httponly session.cookie_secure
 - 防止跨站脚本攻击（XSS）和中间人攻击（MITM）
 
 代码-内置函数来过滤

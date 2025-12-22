@@ -16,7 +16,7 @@ description: sick0s1.1 靶机
 
 ```bash
 nmap --min-rate 10000 -p- 192.168.181.140
-nmap -sT -sV -O -p22,3128,8080 192.168.181.140
+nmap-sT -sV -O -p22,3128,8080 192.168.181.140
 ```
 
 ![[attachments/20251024.png]]

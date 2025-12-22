@@ -1,10 +1,10 @@
 ---
-title: "AI安全"
+title: AI安全
 date: 2025-10-16
 tags:
-  - Others
+  - AI安全
 categories:
-  - 编程相关
+  - 安全相关
 description: None
 ---
 提示词注入
