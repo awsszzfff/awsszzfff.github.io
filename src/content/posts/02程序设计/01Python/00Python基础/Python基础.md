@@ -1,10 +1,10 @@
 ---
-title: "Python基础"
+title: Python基础
 date: 2025-06-15
 tags:
   - Python基础
 categories:
-  - 编程相关
+  - 程序设计
 ---
 > 官方文档 https://docs.python.org/zh-cn/3/index.html
 

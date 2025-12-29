@@ -1,10 +1,10 @@
 ---
-title: "XXE"
-date: 2001-01-01
+title: XXE
+date: 2024-06-06
 tags:
-  - Others
+  - 基础漏洞
 categories:
-  - Others
+  - 安全相关
 ---
 XXE（XML External Entity Injection），xml 外部实体注入漏洞；其发生在应用程序解析 XML 输入时，没禁止外部实体的加载，导致用户可以控制外部加载的文件，造成文件读取、命令执行、内网扫描、攻击内网等危害；
 
