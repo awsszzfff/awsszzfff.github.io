@@ -25,6 +25,7 @@ server = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
 ip = '127.0.0.1'  # 本地回环地址  
 port = 8001  # 端口号  
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # 若端口被占用，强制停止占用进程
+
 # 将套接字绑定到指定的IP地址和端口  
 server.bind((ip, port))  
 
@@ -42,10 +43,11 @@ while True:
 			# 接收客户端发送的数据，参数1024表示最大接收字节数  
 			from_client_to_server_recv_data = conn.recv(1024)  # 等待client.send
 			# 判断客户端是否已经断开连接 如果客户端断开连接则这里接收到的数据是 空 就会一直循环
-			if not  from_client_to_server_recv_data:
+			if not from_client_to_server_recv_data:
 				break
 				
 			result = from_client_to_server_recv_data.decode()
+			
 			if result == 'q':
 				break
 			print(f"data_from_client :>>>> {result}") 
