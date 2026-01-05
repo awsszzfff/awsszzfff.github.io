@@ -7,7 +7,7 @@ categories:
   - Others
 ---
 （base 为在 anaconda shell 中）
-查看 cond 中存在的 python 环境（带`*`的表示当前环境）
+查看 cond 中存在的 python 环境（带 `*` 的表示当前环境）
 
 ```shell
 conda info --env
@@ -26,7 +26,7 @@ conda create --name py35 python=3.5 
 conda activate py35
 ```
 
-【切换到对应环境后再进行pip安装，即给对应的环境安装对应的包】
+【切换到对应环境后再进行 pip 安装，即给对应的环境安装对应的包】
 
 退出当前环境
 
@@ -84,3 +84,7 @@ where jupyter
 import sys  
 print(sys.executable)
 ```
+
+ps:
+
+VS Code 等需要 `ipykernel` 这个库才能把你的虚拟环境挂载到 Jupyter 上。所以： `pip install ipykernel`
