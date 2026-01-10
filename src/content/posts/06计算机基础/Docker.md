@@ -92,16 +92,20 @@ graph LR
 ### 镜像操作
 
 ```shell
+docker search mysql
+
 # 列出本地docker镜像
 docker image ls -a
 docker images -a
 
 # 拉取镜像
 docker image pull docker.io/library/hello-world:latest	# [指定仓库地址]
+docker pull mysql:latest	# mysql:x.x
 
 # 删除镜像
 docker image rm hello-world	# 指定镜像名
 docker rmi feb5d9fea6a5		# 指定镜像ID
+docker rmi mysql:5.7
 ```
 
 ### 容器操作
@@ -109,6 +113,8 @@ docker rmi feb5d9fea6a5		# 指定镜像ID
 ```shell
 # 创建并运行容器
 docker run [option] image_name [command]	# 可选参数、镜像名、启动时执行的命令
+docker run -id --name=centos7 centos:centos7
+# 运行，若没镜像会去远程拉取
 
 # 创建交互式容器
 docker run -it --name=mycentos centos /bin/bash
@@ -122,6 +128,8 @@ docker run -dit --name=mycentos centos
 # 进入正在运行的容器
 docker exec -it container_name_or_id command
 # exec 在已运行的容器中执行命令 容器名或ID  进入后执行的第一个命令
+docker exec -it mycentos /bin/bash
+docker exec my_container ls /var/www/html
 
 # 指定端口运行
 docker run -d -p 80:80 medicean/vulapps:t_thinkphp_2
@@ -134,12 +142,18 @@ docker container ls
 docker container ls --all
 
 # （简洁命令）
-docker ps
+docker ps	# 查看存在的容器
 docker ps -a
+
+docker run -id --name=demo centos:centos7 sleep 20
+# 当20s过后，这个容器就会停止
 
 # 停止正在运行的容器
 docker container stop name_or_id
 docker stop name_or_id
+
+docker rm `docker ps -a -q` -f	# 强制删除所有容器（后门指令作为前面指令的参数）
+# -q 静默模式
 
 # 启动已停止的容器
 docker container start name_or_id

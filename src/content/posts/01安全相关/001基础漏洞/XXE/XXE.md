@@ -14,6 +14,7 @@ XXE（XML External Entity Injection），xml 外部实体注入漏洞；其发�
 
 - 获取到 Content-Type 或数据类型为 xml 时，尝试 xml 语言 payload 进行测试；或是不论是否为 xml ，都将他修改为 xml 来测试；
 - 在文件上传引用插件解析或预览功能处可能会造成文件中 XXE Payload 被执行；
+
 ## 示例
 
 （部分内容以 Burp 的靶场为例 https://portswigger.net/web-security/all-labs ）
@@ -36,7 +37,7 @@ XXE（XML External Entity Injection），xml 外部实体注入漏洞；其发�
 
 ![[attachments/20250510-1.png]]
 
-- SSRF及云上元数据
+- SSRF 及云上元数据
 
 （云上的元数据：描述云资源属性、配置等信息，作为云平台管理和自动化运维的核心，通常以键值对的形式存储；）
 
@@ -116,7 +117,7 @@ fclose($myfile);
 ?>
 ```
 
-通过执行外部实体，`remote -> test.dtd -> all -> send -> get.php?file -> file:///c:/c.txt`，`http://www.test.com/get.php?file=读取的内网数据`，最终生成`file.txt`文件中包含读取到的内容；
+通过执行外部实体，`remote -> test.dtd -> all -> send -> get.php?file -> file:///c:/c.txt`，`http://www.test.com/get.php?file=读取的内网数据`，最终生成 `file.txt` 文件中包含读取到的内容；
 
 - 利用报错回显来获取信息
 
@@ -170,9 +171,9 @@ eg：svg 图片文件，在里面写入这样的内容，以 svg 的格式进行
 - 导入/导出功能： 任何以 XML 格式传输数据的进出口；
 - RSS/Atom 订阅处理器： 订阅功能也可能隐藏着 XXE 漏洞；
 - 文档查看器/转换器： 处理 DOCX、XLSX 等 XML 格式文档的功能；
-- 文件上传处理 XML： 比如SVG图像处理器，上传图片；
+- 文件上传处理 XML： 比如 SVG 图像处理器，上传图片；
 
-XML 处理函数 `simplexml_load_string` 用于 将 XML 格式的字符串转换为 SimpleXML 对象，从而可以轻松遍历或操作 XML 数据，操作处理不当会导致 XXE 漏洞；
+XML 处理函数 `simplexml_load_string` 用于将 XML 格式的字符串转换为 SimpleXML 对象，从而可以轻松遍历或操作 XML 数据，操作处理不当会导致 XXE 漏洞；
 
 ![[attachments/20250510-5.png]]
 
@@ -225,8 +226,8 @@ XML 等同于 JSON ，被用来传输和存储数据；其文档结构包括 XML
 
 XML 中主要的两种数据类型：（主要区别在于它们如何解析特殊字符）
 
-- PCDATA：会被 XML 解析器解析的文本内容；特殊字符需要转义，如`&lt;`代替`<`；
-- CDATA：不会被解析；需使用`<![CDATA[...]]>`包裹；
+- PCDATA：会被 XML 解析器解析的文本内容；特殊字符需要转义，如 `&lt;` 代替 `<`；
+- CDATA：不会被解析；需使用 `<![CDATA[...]]>` 包裹；
 
 ### DTD
 
@@ -245,7 +246,7 @@ URL 中常见的协议：
 |  内部  |      `<!ENTITY 实体名 "文本内容">`       |       `<!ENTITY % 实体名 "文本内容"`       |
 |  外部  | `<!ENTITY 实体名 SYSTEM "外部文件/URL">` | `<!ENTITY % 实体名 SYSTEM "外部文件/URL">` |
 | 引用方式 |              `&实体名;`              |               `%实体名;`               |
-| 使用场合 |         用在 XML 文档中（包括DTD）         |           只用在DTD的元素和属性声明中           |
+| 使用场合 |         用在 XML 文档中（包括 DTD）         |           只用在 DTD 的元素和属性声明中           |
  
 > [XML 教程](https://www.w3school.com.cn/xml/index.asp)
 > 
