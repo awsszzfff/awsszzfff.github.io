@@ -22,7 +22,7 @@ https://wiki.bafangwy.com/doc/642/
 > https://www.cnblogs.com/ag-chen/p/18677273
 > https://u.sb/debian-install-docker/
 
-在Ubuntu中安装Docker，添加Docker官方 GPG key 失败，解决方案
+在 Ubuntu 中安装 Docker，添加 Docker 官方 GPG key 失败，解决方案
 
 > https://blog.csdn.net/sunchaoyiA/article/details/81231000
 
@@ -154,6 +154,7 @@ docker stop name_or_id
 
 docker rm `docker ps -a -q` -f	# 强制删除所有容器（后门指令作为前面指令的参数）
 # -q 静默模式
+docker rmi `docker images -q` -f
 
 # 启动已停止的容器
 docker container start name_or_id
@@ -166,6 +167,9 @@ docker kill name_or_id
 # 删除容器（需先停止）
 docker container rm name_or_id
 docker rm name_or_id
+
+docker run -id --name centos7 -v /root/tmp:/tmp centos:7
+# -v 容器文件夹和宿主机文件夹做映射，-v可以写多个，可以是文件或文件夹
 ```
 
 ### 容器保存为镜像
@@ -175,28 +179,202 @@ docker rm name_or_id
 docker commit container_name image_name
 ```
 
-### 镜像备份
-
-```shell
-# 将镜像保存为一个文件
-docker save -o 保存的文件名 镜像名
-# 这将创建一个包含镜像及其所有层的归档文件
-```
-
 ### 镜像迁移
 
-备份的镜像文件可以被拷贝到其他机器上
-
 ```shell
-# 在目标机器上，使用docker load 来加载镜像
-docker load -i 文件名
+# 给镜像打标签
+docker tag 镜像id 镜像新名字（账号名/镜像名）
+docker tag xxxxxxxxx userdemo/mycentos
+
+# 推镜像到远程
+docker push 镜像名
+
+# 镜像备份与恢复
+docker save -o 保存的文件名 镜像名
+# 这将创建一个包含镜像及其所有层的归档文件
+docker save -o mycentos.tar mycentos
+
+# 加载与恢复
+docker load -i mycentos.tar
 ```
 
-docker-compose 定义和运行多容器 Docker 应用程序
+## dockerfile
+
+```dockerfile
+FROM 基础镜像		# 基于哪个基础镜像来构建
+MAINTAINER userDemo		# 声明镜像的创建者
+ENV key value			# 设置环境变量 (可以写多条)
+ENV key value			# 设置环境变量 (可以写多条)
+RUN command 	     		# 说明你想干什么，在命令前加RUN即可，Dockerfile 的核心部分(可以写多条)
+ADD source_dir/file dest_dir/file 	# 将宿主机的文件复制到镜像内，如果是一个压缩文件，将会在复制后自动解压，能将URL作为要拷贝的文件
+COPY source_dir/file dest_dir/file 	# 和ADD相似，但是如果有压缩文件并不能解压
+WORKDIR / 	# 设置工作目录 类似于cd
+EXPOSE		# 对外端口
+CMD   # 设置容器的启动命令，多条只有最后一条生效。可以在启动容器时被覆盖和修改
+ENTRYPOINT	# 同CMD，但这个一定会被执行，不会被覆盖修改
+LABEL	# 表明镜像的作者。MAINTAINER将被遗弃，被LABEL代替
+ARG		# 设置只在构建过程中使用的环境变量，构建完成后，将消失
+VOLUME	# 添加数据卷
+USER	# 指定以哪个用户的名义执行RUN, CMD 和ENTRYPOINT等命令
+```
+
+### 示例
+
+构建一个带 vim 的 centos:centos7 镜像,根路径下有 `/hello/ss.py` -> `ss.py` 中写 `print('hello')`
+
+```dockerfile
+FROM centos:centos7
+MAINTAINER hello
+ENV name hello
+RUN curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+RUN yum install vim -y
+RUN mkdir /hello
+RUN touch /hello/ss.py
+RUN echo 'print("hello")' > /hello/ss.py
+RUN echo $name
+WORKDIR /hello
+```
+
+构建运行
 
 ```shell
-docker-compose up/down -d
-# up 启动服务，根据docker-compose.yml文件中定义的服务创建启动容器
-# down 停止并移除服务，停止多有由docker-compose.yml文件定义的服务的容器
-# -d 后台运行
+docker build -t="mycentos" .	# 基于dockerfile构建镜像
+docker run -id --name mycentos mycentos
+docker run -it mycentos /bin/bash
+```
+
+### 镜像分层
+
+dockerfile 中每执行一条命令都会保留一层，若本地有某一层，这一层就不用下载了
+
+```shell
+docker history 镜像名	# 查看镜像分层
+```
+
+### 项目部署 dockerfile 示例
+
+```dockerfile
+FROM python:3.10
+MAINTAINER hello
+WORKDIR /soft
+COPY ./requirements.txt /soft/requirements.txt
+RUN pip install -r requirements.txt -i https://pypi.doubanio.com/simple
+CMD ["python","manage.py","runserver","0.0.0.0:8080"]
+```
+
+```shell
+git clone xxxxxx...
+docker build -t='django_books' .
+docker run -id --name=books -v /root/books:/soft -p 8080:8080 django_books:latest
+```
+
+### Ubuntu&Redis
+
+```dockerfile
+FROM ubuntu:lunar-20230415
+MAINTAINER hello
+WORKDIR /soft
+RUN apt-get update && apt-get install wget make build-essential -y
+RUN wget https://github.com/redis/redis/archive/7.0.11.tar.gz && tar -xzvf 7.0.11.tar.gz
+WORKDIR /soft/redis-7.0.11
+RUN make && make install
+EXPOSE 6379
+CMD ["redis-server","./redis.conf"]
+```
+
+## docker-compose
+
+定义和运行多容器 Docker 应用程序，批量管理
+
+```shell
+docker-compose up		# 会自动搜索当前路径下的 docker-compose.yml文件
+docker-compose -f 指定文件 up
+docker-compose up -d  	# 后台执行，一般我们看日志输出，不用这个
+
+docker-compose stop  	# 停止，不会删除容器和镜像
+docker-compose down 	# 停止，并删除关联的容器
+docker-compose start  	# 启动yml文件管理的容器
+docker-compose ps    	# 正在运行的容器
+docker-compose images 	# docker-compose管理的镜像
+
+docker-compose exec yml文件中写的service /bin/bash  # 进入到容器内
+
+docker-compose up -d --build # 启动容器但是重新构建镜像，基于重新构建的镜像启动
+```
+
+### 示例
+
+docker-compose 部署flask
+
+```python
+from flask import Flask
+from redis import Redis
+import os
+
+app = Flask(__name__)
+# redis = Redis(host=os.environ.get('REDIS_HOST', '127.0.0.1'), port=6379)
+redis = Redis(host='redis', port=6379, decode_responses=True) 
+# 容器的主机名，flask容器和redis容器是能ping通的，可以通过ip ping 也可以通过主机名ping
+
+@app.route('/')
+def hello():
+    redis.incr('hits')
+    return '你好! 查看 %s 次\n' % (redis.get('hits'))
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
+```
+
+```dockerfile
+FROM python:3.11
+WORKDIR /app
+COPY . /app
+RUN pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+EXPOSE 5000
+CMD [ "python", "app.py" ]
+```
+
+```yaml
+version: "3"
+services:
+  redis:
+    image: redis
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:5000
+    environment:
+      REDIS_HOST: redis
+```
+
+```shell
+docker-compose up -d
+```
+
+## 其他
+
+```shell
+docker inspect mycentos	# 容器的详细描述
+docker inspect mycentos --format='{{.NetworkSettings.Networks.bridge.IPAddress}}'	# 查看指定容器的ip地址
+
+docker login	# 登录账号
+
+docker log 容器名/id		# 查看镜像运行成容器时的日志
+```
+
+daemon.json 文件中添加私有仓库地址，并推送
+
+```shell
+vi /etc/docker/daemon.json
+{
+	"insecure-registries":["xx.xx.xx.xx:xxxx"]
+} 
+
+# 把某个镜像tag成私有仓库的镜像
+docker tag 镜像名字/id xx.xx.xx.xx:xxxx/django_books:v1
+docker push xx.xx.xx.xx:xxxx/django_books:v1
+docker pull xx.xx.xx.xx:xxxx/django_books:v1
 ```
