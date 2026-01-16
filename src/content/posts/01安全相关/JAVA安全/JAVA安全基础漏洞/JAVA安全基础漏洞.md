@@ -82,21 +82,80 @@ RestTemplate
 
 ## URL 跳转
 
-可能存在跳转的参数
+可能存在跳转的参数：`sendRedirect`、`setHeader `
 
-```java
-sendRedirect
-setHeader
-```
-
-> 代码审计SINK点：
+> 代码审计 SINK 点：
 > 
 > redirect、url、redirectUrl、callback、return_url、toUrl、ReturnUrl、fromUrl、redUrl、request、redirect_to、redirect_url、jump、jump_to、target、to、goto、link、linkto、domain、oauth_callback
 
-## 任意文件上传
+## SpEL 表达式注入
+
+如果一个 Web 应用允许用户输入字符串，并直接把这个字符串丢进 `parser.parseExpression()` 里去执行，攻击者就可以构造特殊的字符串来执行系统命令 `T(java.lang.Runtime).getRuntime().exec('calc')`。
+
+## SSTI
+
+> https://www.cnblogs.com/bmjoker/p/13508538.html
+
+Thymeleaf、Velocity、FreeMarker
+
+模版文件参数可控
+
+## Swagger UI API 框架接口泄露
+
+接口泄露，未正确配置访问控制或未实施安全措施。
+
+## Actuator 泄露
+
+- heapdump 堆转储文件，java 进程在某一时刻的内存快照，包含该时刻 jvm 中所有对象信息、类信息和变量值
+	- 数据库连接字符串、未加密用户的 Session、配置文件中的明文密码、以及刚被处理的用户卡号及个人信息
+- druid 数据库连接池，自带监控控制台，用于查看 SQL 执行效率、并发量等
+	- 系统所有 SQL 语句、数据库连接地址、Session 以及正在访问的用户 ip
+- jolokia 通过 http 访问 jmx（Java Management Extensions）的桥接器
+	- RCE，利用 logback 的配置加载功能、通过 jndi 注入
+- gateway（spring cloud 生态系统中的网关）
+	- CVE-2022-22947 (SpEL 表达式注入)
+
+## 反序列化
+
+![[attachments/20260113.png]]
+
+![[attachments/20260116.png]]
+
+> 关注：入口点，链，执行点
+
+- 原生类的反序列化（`ObjectInputStream.readObject()`、`SnakeYaml`、`XMLDecoder` 等）
+- 第三方组件的反序列化（Fastjson、Jackson、Xstream 等）
+
+### JNDI 注入
+
+> https://tttang.com/archive/1405/
+
+![[attachments/20260113-1.png]]
 
 
+> - JNDI 支持的服务主要有：DNS、LDAP、CORBA、RMI 等。
+> - RMI：远程方法调用注册表
+> - LDAP：轻量级目录访问协议
 
-```txt
+- RMI 限制：
 
-```
+`com.sun.jndi.rmi.object.trustURLCodebase`、`com.sun.jndi.cosnaming.object.trustURLCodebase` 的默认值变为 false，即不允许从远程的 `Codebase` 加载 Reference 工厂类，不过没限制本地加载类文件。
+
+- LDAP 限制：
+
+`com.sun.jndi.ldap.object.trustURLCodebase` 属性的默认值被调整为 false，导致 LDAP 远程代码攻击方式开始失效。这里可以利用 `javaSerializedData` 属性，当 `javaSerializedData` 属性 `value` 值不为空时，本地存在反序列化利用链时触发。
+
+触发模式：
+
+- 远程 Reference 链，通过远程加载攻击工具中的 class 文件中的代码，从而执行操作；
+- 本地 Reference 链，通过利用本地服务器项目中原始依赖来执行操作；
+- 反序列化链
+	- jdk 版本不同的 jndi 注入
+	- 中间件不同的 jndi 注入
+	- jar 包依赖不同的 jndi 注入
+
+
+> DNSlog 链
+> 
+> https://mp.weixin.qq.com/s/9rS6iPMkxLHECgGDdyGXsQ
+> https://mp.weixin.qq.com/s/synx7l2JjZAtd9UHtXVqng

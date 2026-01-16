@@ -13,7 +13,7 @@ description: Web安全开发基础-JAVA
 > 
 > https://mp.weixin.qq.com/s/c_4fOTBKDcByv8MZ9ayaRg
 
-## Web服务-Servlet
+## Web 服务-Servlet
 
 Servlet 生命周期
 
@@ -65,7 +65,7 @@ servlet 中需根据 URL 路径匹配映射到对应的 servlet 。web.xml 中�
 
 - 内存马 https://mp.weixin.qq.com/s/hev4G1FivLtqKjt0VhHKmw
 
-同样的需要在 web.xml 文件中配置过滤器、监听器等映射关系从而使其生效（或用`@WebFilter()` 注解的方式进行注册）。（程序执行访问 web.xml 文件从上到下，所以过滤器、监听器一般放在前面）
+同样的需要在 web.xml 文件中配置过滤器、监听器等映射关系从而使其生效（或用 `@WebFilter()` 注解的方式进行注册）。（程序执行访问 web.xml 文件从上到下，所以过滤器、监听器一般放在前面）
 
 ## JSP
 
@@ -77,7 +77,7 @@ servlet 中需根据 URL 路径匹配映射到对应的 servlet 。web.xml 中�
 
 ## Spring MVC
 
-MVC 一种软件框架模式，即模型（Model）处理数据逻辑 、视图（View）信息显示、控制器（Controller）控制数据与用户交互。
+MVC 一种软件框架模式，即模型（Model）处理数据逻辑、视图（View）信息显示、控制器（Controller）控制数据与用户交互。
 
 控制器通常负责从视图读取数据，处理用户输入，并向模型发送数据，也可以从模型中读取数据，再发送给视图，由视图显示。
 
@@ -94,7 +94,7 @@ MVC 一种软件框架模式，即模型（Model）处理数据逻辑 、视图�
 > 
 > https://pdai.tech/files/kaitao-springMVC.pdf
 
-Spring,Spring MVC及Spring Boot区别： https://www.jianshu.com/p/42620a0a2c33
+Spring,Spring MVC 及 Spring Boot 区别： https://www.jianshu.com/p/42620a0a2c33
 
 > https://juejin.cn/post/6844903912034533383
 > 
@@ -128,23 +128,23 @@ Controller → 将 User 转为 JSON 返回
 
 https://springdoc.cn/spring-boot/
 
-## 模版
+## 模版引擎
 
-Thymeleaf 
+### Thymeleaf
 
 https://xz.aliyun.com/news/9962
 
-FreeMarker
+### FreeMarker
 
 https://mp.weixin.qq.com/s/TtNxfSYsB4HMEpW_OBniew
 
-Velocity
+### Velocity
 
 https://blog.csdn.net/2401_83799022/article/details/141600988
 
 ## Actuator 监控依赖
 
-健康检查，审计，指标收集，HTTP跟踪等，帮助监控和管理Spring Boot应用
+健康检查，审计，指标收集，HTTP 跟踪等，帮助监控和管理 Spring Boot 应用
 
 ![[attachments/20251128-1.png]]
 
@@ -167,12 +167,13 @@ https://blog.csdn.net/lsqingfeng/article/details/123678701
 打包部署 JAR&WAR https://mp.weixin.qq.com/s/HyqVt7EMFcuKXfiejtfleg
 
 > 打包报错解决
+> 
 > https://blog.csdn.net/Mrzhuangr/article/details/124731024
 > https://blog.csdn.net/wobenqingfeng/article/details/129914639
 
 war 包
 
-1. pom.xml加入或修改：
+1. pom.xml 加入或修改：
 
 `<packaging>war</packaging>`
 
@@ -192,7 +193,7 @@ maven -> clean -> package
 
 java -jar xxxxxx.jar
 
-war放置tomcat后启动
+war 放置 tomcat 后启动
 
 ## 身份验证
 
@@ -249,7 +250,7 @@ java.lang.ProcessBuilder
 
 java.lang.UNIXProcess/ProcessImpl
 
-ProcessImpl 是更为底层的实现，Runtime 和 ProcessBuilder 执行命令实际上也是调用了ProcessImpl 这个类；
+ProcessImpl 是更为底层的实现，Runtime 和 ProcessBuilder 执行命令实际上也是调用了 ProcessImpl 这个类；
 
 ```java
 // 方法1
@@ -291,7 +292,7 @@ Process process = (Process) startMethod.invoke(
 
 ## 数据库连接
 
-Maven配置 https://blog.csdn.net/cxy2002cxy/article/details/144809310
+Maven 配置 https://blog.csdn.net/cxy2002cxy/article/details/144809310
 
 ### JDBC 
 
@@ -333,7 +334,7 @@ mybatis，mysql-connector-java
 - 安全写法： `select * from admin where id = #{id}`
 - 不安全写法：`select * from admin where id = ${id}`
 
-上面两种都是用 xml 和实体类/对象 之间的映射关系来进行数据库操作。
+上面两种都是用 xml 和实体类/对象之间的映射关系来进行数据库操作。
 
 ## 反射&类加载&构造方法等
 
@@ -344,7 +345,7 @@ java 反射 https://xz.aliyun.com/t/9117 、 https://www.zhihu.com/question/3774
 - 反射机制开发应用场景
 	- Spring 框架的 IOC 基于反射创建对象和设置依赖属性。
 	- SpringMVC 的请求调用对应方法，也是通过反射。
-	- JDBC 的 Class#forName(String className) 方法，也是使用反射。
+	- JDBC 的 Class #forName (String className) 方法，也是使用反射。
 - 安全应用场景
 	- 构造利用链，触发命令执行；
 	- 反序列化中的利用链构造；
@@ -410,8 +411,8 @@ readObject 方法，在反序列化过程中，该方法会在默认的反序列
 
 1. 常见的创建的序列化和反序列化协议
 
-• JAVA内置的writeObject()/readObject()
-• JAVA内置的XMLDecoder()/XMLEncoder
+• JAVA 内置的 writeObject()/readObject()
+• JAVA 内置的 XMLDecoder()/XMLEncoder
 • XStream
 • SnakeYaml
 • FastJson
@@ -436,9 +437,9 @@ JAVA 内置 writeObject()/readObject() 内置原生写法：
 
 3. 反序列化利用链
 
-- 入口类的readObject直接调用危险方法
-- 入口参数中包含可控类，该类有危险方法，readObject时调用
-- 入口类参数包含可控类，该类又调用其他有危险方法类，readObject调用
+- 入口类的 readObject 直接调用危险方法
+- 入口参数中包含可控类，该类有危险方法，readObject 时调用
+- 入口类参数包含可控类，该类又调用其他有危险方法类，readObject 调用
 - 构造函数/静态代码块等类加载时隐式执行
 
 4. 反序列化利用条件：
@@ -474,7 +475,9 @@ https://paper.seebug.org/1012/
 
 ## JNDI
 
-JNDI 提供了一套标准接口，让Java程序可以通过一个**名称**（Name），来查找并获取到实际的**资源**（Object）。主要目的是实现**解耦**（Decoupling）。它将资源的**配置细节**（例如，数据库的URL、用户名、密码）从应用程序的**核心代码**中分离出来。
+![[attachments/20260113.png]]
+
+JNDI 提供了一套标准接口，让 Java 程序可以通过一个**名称**（Name），来查找并获取到实际的**资源**（Object）。主要目的是实现**解耦**（Decoupling）。它将资源的**配置细节**（例如，数据库的 URL、用户名、密码）从应用程序的**核心代码**中分离出来。
 
 > https://blog.csdn.net/dupei/article/details/120534024
 
