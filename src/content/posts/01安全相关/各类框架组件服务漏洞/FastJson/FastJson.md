@@ -106,4 +106,5 @@ BCEL 提供一个特殊类加载器 ClassLoader，可以识别 `$$BCEL$$` 开头
 > - <= 1.2.47 可利用 JDK 自带的链可实现 RCE；
 > - 1.2.47 - 1.2.80 利用链为依赖包或本地代码；（依赖包还需要开启 autoType）
 
+> 常见总结 https://mp.weixin.qq.com/s/yMQPyzYa9YSD-pq2dWEZrA?scene=1
 

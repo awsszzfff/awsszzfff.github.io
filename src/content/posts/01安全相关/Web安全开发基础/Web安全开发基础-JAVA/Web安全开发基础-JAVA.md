@@ -422,12 +422,12 @@ readObject 方法，在反序列化过程中，该方法会在默认的反序列
 
 JAVA 内置 writeObject()/readObject() 内置原生写法：
 
-- writeObject()：主要用于将 Java 对象序列化为字节流并写入输出流
-- readObject()：主要用于从输入流中读取字节序列反序列化为 Java 对象
-- FileInputStream：其主要作用是从文件读取字节数据
-- FileOutputStream：其主要作用是将字节数据写入文件
-- ObjectInputStream：用于从输入流中读取对象，实现对象的反序列化操作
-- ObjectOutputStream：用于将对象并写入输出流的类，实现对象的序列化操作
+- `writeObject()`：主要用于将 Java 对象序列化为字节流并写入输出流
+- `readObject()`：主要用于从输入流中读取字节序列反序列化为 Java 对象
+- `FileInputStream`：其主要作用是从文件读取字节数据
+- `FileOutputStream`：其主要作用是将字节数据写入文件
+- `ObjectInputStream`：用于从输入流中读取对象，实现对象的反序列化操作
+- `ObjectOutputStream`：用于将对象并写入输出流的类，实现对象的序列化操作
 
 利用看下面：
 
