@@ -117,6 +117,8 @@ Thymeleaf、Velocity、FreeMarker
 
 ## 反序列化
 
+> **ClassLoader（类加载器）** 的作用：**把编译好的 `.class` 文件（字节码）加载到 Java 虚拟机（JVM）中，并将其转换成内存中的 `java.lang.Class` 对象。**
+
 ![[attachments/20260113.png]]
 
 ![[attachments/20260116.png]]
@@ -160,6 +162,16 @@ Thymeleaf、Velocity、FreeMarker
 
 ![[attachments/20260122.png]]
 
+```txt
+HashMap 实现了 Serializable 接口
+HashMap::readObject -> putVal() -> hash()
+					-> key.hashCode
+					-> 
+					URL::hashCode -> handler.hashCode
+					=>
+					URLStreamHandler::hashCode -> getHostAddress
+```
+
 ```java
 public static void main(String[] args) throws MalformedURLException {
 
@@ -183,7 +195,7 @@ public static void main(String[] args) throws IOException, ClassNotFoundExceptio
     hashCode.set(url, 0);
     hashMap.put(url, 1); // put 进去时, hashCode 为 0, 在里面调用 hashCode 方法, 不会发送DNSLOG请求.
     hashCode.set(url, -1); // put 完了, 再改回 -1, 以免我们序列化的 hashCode 被替换为 0. 下一次反序列化时就会发送 DNSLOG 请求.
-    serialize(hashMap); // 运行后 D:/heihu577.ser 将生成出来
+    serialize(hashMap); // 运行后将dns.txt生成出来
 }
 
 public static void serialize(Object o) throws IOException {
@@ -210,12 +222,76 @@ public static Map unserialize() throws IOException, ClassNotFoundException {
 > https://mp.weixin.qq.com/s/9rS6iPMkxLHECgGDdyGXsQ
 > https://mp.weixin.qq.com/s/synx7l2JjZAtd9UHtXVqng
 
-### CB1 链
+### CC 链
+
+> https://mp.weixin.qq.com/s/J_YeNkLN6KYTCVDYFh1dvQ
+
+![[attachments/20260125.png]]
+
+CC1
+
+```txt
+InvokerTransformer 实现了 Serializable 接口
+
+InvokerTransformer::transform()/ConstantTransformer::transform()/ConstantTransformer::transform()
+								-> TransformedMap::checkSetValue()
+								-> AbstractInputCheckedMapDecorator::MapEntry::setValue()
+								-> AnnotationInvocationHandler::readObject()
+								
+
+```
+
+CC2
+
+```txt
+PriorityQueue::readObject() -> heapify() -> siftDown() -> siftDownUsingComparator()
+							-> comparator.compare()
+							-> TransformingComparator::compare()
+							-> InvokerTransformer::transform()
+
+TemplatesImpl::getOutputProperties() -> newTransformer() -> getTransletInstance() -> defineTransletClasses()
+									 -> loader.defineClass()
+```
+
+CC4
+
+```txt
+PriorityQueue::readObject() -> heapify() -> siftDown() -> siftDownUsingComparator()
+							-> comparator.compare()
+							-> TransformingComparator::compare()
+							
+							-> ConstantTransformer::transform()
+
+```
+
+
+### CB 链
 
 > https://www.freebuf.com/articles/web/319397.html
 
+```java
+PropertyUtils.getProperty(new User("Bob","man",31),"age");
+// 会调用getage方法
+```
+
 ![[attachments/20260122-1.png]]
 
-## CC1 链
+```txt
+BeanComparator 实现了 Serializable 接口
+PropertyUtils.getProperty()	会通过 get 获取类中方法的内容
 
-> https://mp.weixin.qq.com/s/J_YeNkLN6KYTCVDYFh1dvQ
+PriorityQueue::readObject() -> heapify() -> siftDown() -> siftDownUsingComparator()
+							-> BeanComparator::compare()
+							-> PropertyUtils::getProperty()
+							-> PropertyUtilsBean::getProperty() -> getNestedProperty() -> getSimpleProperty() -> invokeMethod()
+							
+所以可通过 PropertyUtils.getProperty() 获取 TemplatesImpl.getOutputProperties() 
+TemplatesImpl 实现了 Serializable 接口
+
+TemplatesImpl::getOutputProperties() -> newTransformer() -> getTransletInstance() -> defineTransletClasses()
+									 -> loader.defineClass()
+
+取出 TemplatesImpl 对象中存储的字节码（_bytecodes 属性），并调用 ClassLoader.defineClass 将其加载进内存并实例化
+
+字节码加载 (RCE)
+```

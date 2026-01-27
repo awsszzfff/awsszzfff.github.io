@@ -1,5 +1,5 @@
 ---
-title: sick0s1.1
+title: 红队笔记-sick0s1.1
 date: 2025-10-24
 tags:
   - 靶场

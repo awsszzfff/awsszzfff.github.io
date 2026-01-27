@@ -355,19 +355,45 @@ java 反射 https://xz.aliyun.com/t/9117 、 https://www.zhihu.com/question/3774
 
 ![[attachments/20250917-3.png]]
 
-获取成员变量
+### 利用反射获取对应类的几种方式
+
+```java
+import com.user.User;
+
+public class GetClass {
+    public static void main(String[] args) throws ClassNotFoundException {
+        Class<?> aClass = Class.forName("com.user.User");
+        System.out.println(aClass);
+
+        User user = new User();
+        Class<? extends User> aClass1 = user.getClass();
+        System.out.println(aClass1);
+
+        Class userClass = User.class;
+        System.out.println(userClass);
+
+        ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
+        Class<?> aClass2 = systemClassLoader.loadClass("com.user.User");
+        System.out.println(aClass2);
+    }
+}
+```
+
+### 获取成员变量
 
 ![[attachments/20250917-4.png]]
 
-获取成员方法
+### 获取成员方法
 
 ![[attachments/20250917-5.png]]
 
-获取构造方法
+### 获取构造方法
 
 ![[attachments/20250917-6.png]]
 
 获取对应的方法后，通过 newInstance() 来实例化对象，invoke() 传参并执行。
+
+### 利用反射进行命令执行
 
 ```java
 // 利用反射进行命令执行
@@ -405,11 +431,11 @@ clazz.getMethod("start").invoke(object, null);
 
 序列化 ID
 
-transient 关键字
+transient 关键字阻止指定字段序列化
 
 readObject 方法，在反序列化过程中，该方法会在默认的反序列化机制执行之前被调用，允许在对象反序列化时执行一些自定义的逻辑。（重写 readObject 方法）
 
-1. 常见的创建的序列化和反序列化协议
+### 1. 常见的创建的序列化和反序列化协议
 
 • JAVA 内置的 writeObject()/readObject()
 • JAVA 内置的 XMLDecoder()/XMLEncoder
@@ -418,7 +444,7 @@ readObject 方法，在反序列化过程中，该方法会在默认的反序列
 • FastJson
 • Jackson
 
-2. 反序列化安全问题
+### 2. 反序列化安全问题
 
 JAVA 内置 writeObject()/readObject() 内置原生写法：
 
@@ -429,20 +455,20 @@ JAVA 内置 writeObject()/readObject() 内置原生写法：
 - `ObjectInputStream`：用于从输入流中读取对象，实现对象的反序列化操作
 - `ObjectOutputStream`：用于将对象并写入输出流的类，实现对象的序列化操作
 
-利用看下面：
+利用：
 
-• 看序列化的对象有没有重写 readObject 方法（危险代码）
-• 看序列化的对象有没有被输出就会调用 toString 方法（危险代码）
+• 序列化的对象有没有重写 readObject 方法（危险代码）
+• 序列化的对象有没有被输出就会调用 toString 方法（危险代码）
 • 其他类的 readObject 或 toString 方法（反序列化类可控）
 
-3. 反序列化利用链
+### 3. 反序列化利用链
 
 - 入口类的 readObject 直接调用危险方法
 - 入口参数中包含可控类，该类有危险方法，readObject 时调用
 - 入口类参数包含可控类，该类又调用其他有危险方法类，readObject 调用
 - 构造函数/静态代码块等类加载时隐式执行
 
-4. 反序列化利用条件：
+### 4. 反序列化利用条件：
 
 - 可控的输入变量进行了反序列化操作
 - 实现了 Serializable 或者 Externalizable 接口的类的对象
@@ -471,7 +497,6 @@ https://paper.seebug.org/1012/
 > https://goodapple.top/archives/321
 > 
 > https://paper.seebug.org/1251/
-
 
 ## JNDI
 
