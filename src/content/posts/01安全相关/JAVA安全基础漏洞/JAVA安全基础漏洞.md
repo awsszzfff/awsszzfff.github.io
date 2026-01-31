@@ -261,7 +261,6 @@ PriorityQueue::readObject() -> heapify() -> siftDown() -> siftDownUsingComparato
 							-> TransformingComparator::compare()
 							
 							-> ConstantTransformer::transform()
-
 ```
 
 
@@ -295,3 +294,11 @@ TemplatesImpl::getOutputProperties() -> newTransformer() -> getTransletInstance(
 
 字节码加载 (RCE)
 ```
+
+## 内存码
+
+无文件的 webshell，一种存在于内存当中的后门。
+
+
+
+

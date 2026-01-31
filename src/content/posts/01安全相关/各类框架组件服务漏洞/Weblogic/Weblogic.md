@@ -7,7 +7,12 @@ categories:
   - Others
 description: None
 ---
-7001
+默认端口：7001
 
-war 部署时会自动的在对应的 web 目录下解压
+部署 war 包，修改访问路由，访问...
+
+```bash
+# 制作 war 包
+jar cvf 1.war 1.jsp
+```
 
