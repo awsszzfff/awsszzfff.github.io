@@ -295,10 +295,30 @@ TemplatesImpl::getOutputProperties() -> newTransformer() -> getTransletInstance(
 字节码加载 (RCE)
 ```
 
-## 内存码
+## 内存马
 
 无文件的 webshell，一种存在于内存当中的后门。
 
+基本原理：在 web 组件或应用程序中，注册一层访问路由，访问者通过这层路由，来执行控制器中的代码。动态地在内存中注册一个新的服务组件，一旦注册成功，该组件就会像正常的系统功能一样，拦截并处理发往服务器的请求。
 
+![[attachments/20260201.png]]
 
+> https://mp.weixin.qq.com/s/hev4G1FivLtqKjt0VhHKmw
+> 
+> https://cloud.tencent.com/developer/article/2130045
 
+### Lisent
+
+关键在于让 web 应用中的 web.xml 正确配置 java 监听器对应的类，在执行/访问指定路由的时候触发监听器，监听器内部写入命令执行等木马内容，从而触发。利用反射机制，编写代码手动调用 web.xml 和 java 类对应的映射关系从而实现这一点。
+
+相当于利用反射机制添加一个服务。
+
+### Filter
+
+基本同上
+
+### Servlet
+
+编写代码在进行 get/post 请求时触发。
+
+防御：获取所有的监听器、过滤器等，进行筛选删除。
