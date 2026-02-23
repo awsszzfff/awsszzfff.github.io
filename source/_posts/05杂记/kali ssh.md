@@ -1,10 +1,12 @@
 ---
-title: "kali ssh"
-date: 2001-01-01
+title: kali ssh
+date: 2023-10-22
+updated: 2023-10-22
 tags:
-  - Others
+  - 杂记
 categories:
-  - Others
+  - 杂记
+description: kali ssh
 ---
 `systemctl enable ssh`或`systemctl start ssh`
 

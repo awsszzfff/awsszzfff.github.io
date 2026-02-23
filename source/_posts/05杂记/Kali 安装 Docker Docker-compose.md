@@ -1,10 +1,12 @@
 ---
-date: 2001-01-01
+title: Kali 安装 Docker Docker-compose
+date: 2023-11-05
+updated: 2023-11-05
 tags:
-  - Others
+  - 杂记
 categories:
-  - Others
-title: "Kali 安装 Docker Docker-compose"
+  - 杂记
+description: Kali 安装 Docker Docker-compose
 ---
 
 https://wiki.bafangwy.com/doc/642/

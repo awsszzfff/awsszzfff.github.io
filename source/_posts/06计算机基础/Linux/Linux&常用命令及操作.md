@@ -1,6 +1,7 @@
 ---
 title: Linux&常用命令及操作
-date: 2025-08-28
+date: 2023-06-01
+updated: 2023-06-05
 tags:
   - Linux
 categories:

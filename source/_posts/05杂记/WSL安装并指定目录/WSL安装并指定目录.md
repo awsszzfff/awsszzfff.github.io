@@ -1,12 +1,12 @@
 ---
-title: "WSL安装并指定目录"
-date: 2025-11-20
-updated: 2025-11-20
+title: WSL安装并指定目录
+date: 2025-03-20
+updated: 2025-03-20
 tags:
-  - Others
+  - 杂记
 categories:
-  - Others
-description: None
+  - 杂记
+description: WSL安装并指定目录
 ---
 https://blog.csdn.net/Natsuago/article/details/145594631
 

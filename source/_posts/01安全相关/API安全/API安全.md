@@ -1,12 +1,12 @@
 ---
-title: "API安全"
-date: 2026-01-22
-updated: 2026-01-22
+title: API安全
+date: 2023-03-28
+updated: 2024-08-09
 tags:
-  - Others
+  - 安全基础
 categories:
-  - Others
-description: None
+  - 安全相关
+description: API安全
 ---
 > https://github.com/arainho/awesome-api-security
 

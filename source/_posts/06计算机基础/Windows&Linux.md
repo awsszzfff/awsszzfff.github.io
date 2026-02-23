@@ -1,10 +1,12 @@
 ---
-title: "Windows&Linux"
-date: 2025-02-24
+title: Windows&Linux
+date: 2022-02-24
+updated: 2022-02-24
 tags:
-  - Others
+  - 操作系统
 categories:
-  - Others
+  - 计算机基础
+description: Windows&Linux基础
 ---
 # Windows
 

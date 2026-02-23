@@ -1,12 +1,12 @@
 ---
-title: 红队笔记-vulhub-Prime_Series_Level-1
+title: vulhub-Prime_Series_Level-1
 date: 2026-01-25
 updated: 2026-01-25
 tags:
-  - Others
+  - vulhub
 categories:
-  - Others
-description: None
+  - 安全相关
+description: vulhub-Prime_Series_Level-1
 ---
 > - kali: 192.168.181.129
 > - Prime_Series_Level-1: 192.168.181.0/24 ...

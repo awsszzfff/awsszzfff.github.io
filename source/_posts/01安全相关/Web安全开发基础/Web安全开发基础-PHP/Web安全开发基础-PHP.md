@@ -1,10 +1,12 @@
 ---
-title: "Web安全开发基础-PHP"
-date: 2025-01-14
+title: Web安全开发基础-PHP
+date: 2022-09-16
+updated: 2024-03-11
 tags:
-  - Others
+  - 安全开发基础
 categories:
-  - Others
+  - 安全相关
+description: Web安全开发基础-PHP
 ---
 ## PHP 超级全局变量
 

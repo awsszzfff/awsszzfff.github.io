@@ -1,8 +1,9 @@
 ---
-title: 红队笔记-sick0s1.1
+title: vulhub-sick0s1.1
 date: 2025-10-24
+updated: 2025-10-24
 tags:
-  - 靶场
+  - vulhub
 categories:
   - 安全相关
 description: sick0s1.1 靶机

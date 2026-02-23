@@ -1,10 +1,12 @@
 ---
-title: "Git基础"
-date: 2001-01-01
+title: Git基础
+date: 2023-04-11
+updated: 2023-04-11
 tags:
-  - Others
+  - Git
 categories:
   - 计算机基础
+description: Git基础
 ---
 ## 配置 Git
 

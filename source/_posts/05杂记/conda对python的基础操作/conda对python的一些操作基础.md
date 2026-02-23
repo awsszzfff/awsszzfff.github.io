@@ -1,10 +1,12 @@
 ---
-title: "conda对python的一些操作基础"
-date: 2024-11-11
+title: conda对python的一些操作基础
+date: 2023-10-26
+updated: 2023-10-26
 tags:
-  - Others
+  - 杂记
 categories:
-  - Others
+  - 杂记
+description: conda对python的一些操作基础
 ---
 （base 为在 anaconda shell 中）
 查看 cond 中存在的 python 环境（带 `*` 的表示当前环境）

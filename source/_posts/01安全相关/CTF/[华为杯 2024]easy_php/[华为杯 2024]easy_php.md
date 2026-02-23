@@ -79,31 +79,31 @@ hint:435059035
 ```
 
 
-![[attachments/Pasted image 20241009155534.png]]
+![[attachments/20241009155534.png]]
 
 找到碰撞的 md5 并绕过正则，满足`week1=true`。
 
-![[attachments/Pasted image 20241009155604.png]]
+![[attachments/20241009155604.png]]
 
 这里将原代码复制，在本地跑一下输出 100 轮后的值。
 
-![[attachments/Pasted image 20241009155733.png]]
+![[attachments/20241009155733.png]]
 
-![[attachments/Pasted image 20241009155804.png]]
+![[attachments/20241009155804.png]]
 
 POST 请求输入 c 和 d 的值来满足`week2 = true`。
 
-![[attachments/Pasted image 20241009155930.png]]
+![[attachments/20241009155930.png]]
 
-![[attachments/Pasted image 20241009160000.png]]
+![[attachments/20241009160000.png]]
 
 `\`可以绕过第二个正则判断`/[a-z0-9_]/isD`，但对于后面的值`$f('', $e);`=>`system('',cat /flag)`（应该是这样吧，不太确定），应该是没有什么执行结果的。system 是执行引号里面的命令，将返回值保存在后面的变量中去。
 
-![[attachments/Pasted image 20241009160054.png]]
+![[attachments/20241009160054.png]]
 
 `create_function`创建一个匿名函数。这块是类似于注入的一个方式，闭合+注释，执行中间的函数。
 
-![[attachments/Pasted image 20241009160123.png]]
+![[attachments/20241009160123.png]]
 
 ```payload
 http://192.168.18.22/?a=QNKCDZO&b=240610708&/@

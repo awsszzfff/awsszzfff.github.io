@@ -11,7 +11,7 @@ title: "[HCTF 2018]WarmUp"
 【文件包含】
 
 进入题目链接看到一张“猥琐”的笑脸，果断F12查看一下源码，可以发现下面有一个提示的php文件，于是直接在原链接上加上`/source.php`访问一下该文件。
-![在这里插入图片描述](img/832ba5657f30406a9cea0ec14fd1257f.png)
+![在这里插入图片描述](attachments/832ba5657f30406a9cea0ec14fd1257f.png)
 
 打开后可以看到php源码，显然是一道代码审计的题目，随后开始分析。
 其中不认识的函数可以直接在网上搜索。
@@ -71,13 +71,13 @@ title: "[HCTF 2018]WarmUp"
 
 根据页面显示代码，尝试直接访问`hint.php`页面，或通过`soucre.php`页面传递参数`file=hint.php`来访问提示页面。
 
-![在这里插入图片描述](img/6c3bb9931acf4dd0864c2ce4458991c1.png)
+![在这里插入图片描述](attachments/6c3bb9931acf4dd0864c2ce4458991c1.png)
 
 代码中有两处会返回`true`，因此先不考虑解码的问题，先考虑使函数返回值为`true`，判断语句直接构造payload：`?file=source.php?ffffllllaaaagggg`，此时页面中的笑脸不见了，但是依旧没有`flag`。
 再次考虑到提示信息，`ffffllllaaaagggg`这么多层的`flag`猜测文件相对于当前文件可能的位置，因此尝试比当前的上四级文件。
 最终 payload：`?file=source.php?../../../../../ffffllllaaaagggg`
 
-![在这里插入图片描述](img/b1fc721141f44c84a5a2588812b7c736.png)
+![在这里插入图片描述](attachments/b1fc721141f44c84a5a2588812b7c736.png)
 
 #### 补充：
 

@@ -1,10 +1,12 @@
 ---
-title: "Web安全开发基础-JS"
+title: Web安全开发基础-JS
 date: 2025-08-06
+updated: 2023-04-22
 tags:
-  - Others
+  - 安全开发基础
 categories:
-  - Others
+  - 安全相关
+description: Web安全开发基础-JS
 ---
 > 学习文档：
 > 
@@ -572,7 +574,7 @@ export default {
 
 ## 微信小程序
 
-[[../../002信息收集问题#^7ec163|微信小程序]]
+[[../../信息收集问题#^7ec163|微信小程序]]
 
 > 案例：
 > 

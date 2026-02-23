@@ -1,6 +1,7 @@
 ---
 title: Web安全开发基础-JAVA
-date: 2025-09-17
+date: 2023-03-28
+updated: 2025-09-17
 tags:
   - 安全开发基础
 categories:

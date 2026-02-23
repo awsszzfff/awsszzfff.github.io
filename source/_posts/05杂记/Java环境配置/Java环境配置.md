@@ -1,10 +1,12 @@
 ---
-title: "Java环境配置"
-date: 2024-11-20
+title: Java环境配置
+date: 2023-11-20
+updated: 2023-11-20
 tags:
-  - Others
+  - 杂记
 categories:
-  - Others
+  - 杂记
+description: Java环境配置
 ---
 系统环境变量配置：
 
@@ -59,4 +61,6 @@ pause
 ```
 
 
-快速切换 java 环境：https://blog.csdn.net/qq_37875329/article/details/128028194
+快速切换 java 环境：
+
+https://blog.csdn.net/qq_37875329/article/details/128028194

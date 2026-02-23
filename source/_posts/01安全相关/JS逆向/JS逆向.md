@@ -1,9 +1,9 @@
 ---
 title: JS逆向
-date: 2025-09-24
+date: 2025-05-24
 updated: 2025-09-24
 tags:
-  - JS逆向
+  - 安全基础
 categories:
   - 安全相关
 description: JS逆向

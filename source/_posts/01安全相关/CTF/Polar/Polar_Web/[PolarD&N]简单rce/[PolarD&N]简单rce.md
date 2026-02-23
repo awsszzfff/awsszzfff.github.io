@@ -32,7 +32,7 @@ if(isset($_GET['sys'])&&$yyds=='666'){  # GET参数sys必须有值，POST参数y
 ?> nonono
 ```
 
-![[attachments/Pasted image 20241008215328.png]]
+![[attachments/20241008215328.png]]
 
 ```
 # 另一个payload，\t php执行过程中被转义成制表符，但是不会转义\a

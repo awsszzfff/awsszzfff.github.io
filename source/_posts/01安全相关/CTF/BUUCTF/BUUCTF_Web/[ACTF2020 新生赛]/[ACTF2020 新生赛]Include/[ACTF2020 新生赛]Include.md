@@ -12,7 +12,7 @@ title: "[ACTF2020 新生赛]Include"
 
 打开题目页面显示一个 tips 的超链接。点击进入，页面有所显示但并不是 flag ，通过观察可以发现，这个超链接所进入的页面为原题目页面提交`/?file=flag.php`参数。
 
-![在这里插入图片描述](img/d0effaf93ef54c6f942a071ac8f25f57.png)
+![在这里插入图片描述](attachments/d0effaf93ef54c6f942a071ac8f25f57.png)
 
 所提交的参数`flag.php`，猜测应该不仅仅是打印这一句话这么简单，由于参数为`file`并且此题目为`Include`，应该是文件包含的题目。
 
@@ -22,11 +22,11 @@ title: "[ACTF2020 新生赛]Include"
 ?file=php://filter/read=convert.base64-encode/resource=flag.php
 ```
 
-![在这里插入图片描述](img/30257c6ad15849c8b697640e78775acb.png)
+![在这里插入图片描述](attachments/30257c6ad15849c8b697640e78775acb.png)
 
 成功得到一串 base64 编码的字符串，再用工具进行解码得到 flag。
 
-![在这里插入图片描述](img/797a08cebc564eee893506359d04aae1.png)
+![在这里插入图片描述](attachments/797a08cebc564eee893506359d04aae1.png)
 
 #### 补充
 

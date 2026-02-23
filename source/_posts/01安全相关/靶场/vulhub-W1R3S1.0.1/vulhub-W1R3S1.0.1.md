@@ -1,8 +1,9 @@
 ---
-title: 红队笔记-W1R3S1.0.1
+title: vulhub-W1R3S1.0.1
 date: 2025-10-13
+updated: 2025-10-13
 tags:
-  - 靶场
+  - vulhub
 categories:
   - 安全相关
 description: W1R3S1.0.1 靶机

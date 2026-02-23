@@ -1,10 +1,12 @@
 ---
-date: 2001-01-01
+title: Docker 镜像拉取失败
+date: 2024-12-20
+updated: 2024-12-20
 tags:
-  - Others
+  - 杂记
 categories:
-  - Others
-title: "Docker 镜像拉取失败"
+  - 杂记
+description: Docker 镜像拉取失败
 ---
 
 在docker拉取镜像过程中,总是拉取不下来,这时候要考虑一下是不是镜像源有问题了,有没有配置可用的镜像源

@@ -12,22 +12,22 @@ title: "[ACTF2020 新生赛]Exec"
 
 打开题目链接，先根据题目描述尝试ping一下本地127.0.0.1。
 
-![在这里插入图片描述](img/46335b81135d4b02abd21f4ebf6795ee.png)
+![在这里插入图片描述](attachments/46335b81135d4b02abd21f4ebf6795ee.png)
 
 可以看到下方是有回显的，由于当前页面输入，当前页面输出且仅发现这一个可输入的地方，因此直接尝试在该地址后方添加其他的Linux命令。
 
 这里直接尝试通过几个Linux中的连接命令操作来连接两个命令，从而观察回显。
 
-![在这里插入图片描述](img/889f6550147b44ba9cd02ef42bd79948.png)
+![在这里插入图片描述](attachments/889f6550147b44ba9cd02ef42bd79948.png)
 
 查看当前所在目录文件仅有这一个文件，且应该就是页面所显示的样式，因此尝试依次查看上级文件目录是否存在flag。
 
-![在这里插入图片描述](img/b728eef9abca409dbef2d70f521cdad3.png)
+![在这里插入图片描述](attachments/b728eef9abca409dbef2d70f521cdad3.png)
 
 通过多次尝试最终得到flag。
 
-![在这里插入图片描述](img/0366a1322c7e489fb679c97b439a12a4.png)
-![在这里插入图片描述](img/7719e6b2288d47aebf217e63ba3ceeac.png)
+![在这里插入图片描述](attachments/0366a1322c7e489fb679c97b439a12a4.png)
+![在这里插入图片描述](attachments/7719e6b2288d47aebf217e63ba3ceeac.png)
 当然这里可以有多种命令来得出结果：
 
 ```shell

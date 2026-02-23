@@ -1,10 +1,12 @@
 ---
-title: "CtenOS版本说明"
-date: 2025-03-12
+title: CtenOS版本说明
+date: 2023-01-04
+updated: 2023-01-04
 tags:
-  - Others
+  - 杂记
 categories:
-  - Others
+  - 杂记
+description: CtenOS版本说明
 ---
-![[attachments/Pasted image 20250312114946.png]]
+![[attachments/20250312114946.png]]
 

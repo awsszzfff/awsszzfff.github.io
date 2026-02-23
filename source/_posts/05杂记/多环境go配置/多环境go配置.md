@@ -1,10 +1,12 @@
 ---
-date: 2001-01-01
+title: 多环境go配置
+date: 2024-10-05
+updated: 2024-10-05
 tags:
-  - Others
+  - 杂记
 categories:
-  - Others
-title: "多环境go配置"
+  - 杂记
+description: 多环境go配置
 ---
 
 https://github.com/voidint/g

@@ -1,12 +1,12 @@
 ---
 title: JAVA安全基础漏洞
-date: 2025-12-28
+date: 2024-12-11
 updated: 2025-12-28
 tags:
   - Java安全
 categories:
   - 安全相关
-description: None
+description: JAVA安全基础漏洞
 ---
 ## SQL 注入
 

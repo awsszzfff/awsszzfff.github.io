@@ -1,10 +1,12 @@
 ---
-date: 2001-01-01
+title: jupyter_notebook基础操作
+date: 2022-10-19
+updated: 2022-10-27
 tags:
-  - Others
+  - 杂记
 categories:
-  - Others
-title: "jupyter_notebook基础操作"
+  - 杂记
+description: jupyter_notebook基础操作
 ---
 启动 JupyterLab：
 

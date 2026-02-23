@@ -1,26 +1,28 @@
 ---
-title: "HTTP相关"
-date: 2025-02-22
+title: HTTP相关
+date: 2022-02-22
+updated: 2022-02-22
 tags:
-  - Others
+  - 基础理论
 categories:
-  - Others
+  - 计算机基础
+description: HTTP相关
 ---
 请求及返回头的一些字段含义：
 
-![[attachments/Pasted image 20250222193518.png]]
+![[attachments/20250222193518.png]]
 
-![[attachments/Pasted image 20250222193527.png]]
+![[attachments/20250222193527.png]]
 
-![[attachments/Pasted image 20250222193541.png]]
+![[attachments/20250222193541.png]]
 
 请求头
 
-![[attachments/Pasted image 20250222193546.png]]
+![[attachments/20250222193546.png]]
 
 返回头
 
-![[attachments/Pasted image 20250222193550.png]]
+![[attachments/20250222193550.png]]
 
 Request 有 8 种不同的请求方法；
 

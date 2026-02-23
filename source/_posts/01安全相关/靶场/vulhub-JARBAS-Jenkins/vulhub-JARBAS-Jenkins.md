@@ -1,8 +1,9 @@
 ---
-title: 红队笔记-JARBAS-Jenkins
+title: vulhub-JARBAS-Jenkins
 date: 2025-10-21
+updated: 2025-10-21
 tags:
-  - 靶场
+  - vulhub
 categories:
   - 安全相关
 description: JARBAS-Jenkins 靶机

@@ -12,19 +12,19 @@ title: "[MRCTF2020]Hello_ misc"
 
 于是对图片进行分析，用 010 打开没有发现什么有价值的东西，再用 Stegsolve 打开，可以发现在 Red 处有不同的地方，应该会是提示信息，进行数据提取。
 
-![image-20220919112816996](img/image-20220919112816996.png)
+![image-20220919112816996](attachments/image-20220919112816996.png)
 
 可以发现是一个  png 图片，保存为 png 图片后打开可以看到提示信息。
 
-![image-20220919112838881](img/image-20220919112838881.png)
+![image-20220919112838881](attachments/image-20220919112838881.png)
 
 根据提示，有一个 zip 文件的密码为`!@#$%67*()-+`，于是对 try to restore it.png 文件进行分析。binwalk 扫描发现 zip 文件，foremost 分离文件。
 
-![image-20220919114009296](img/image-20220919114009296.png)
+![image-20220919114009296](attachments/image-20220919114009296.png)
 
 解压分离出来的 zip 文件后，打开发现一些十进制数
 
-![image-20220920160150242](img/image-20220920160150242.png)
+![image-20220920160150242](attachments/image-20220920160150242.png)
 
 将其转换为二进制，可以发现除了前两外有不同外，后面六位都相同，应该是前两位有文章。
 
@@ -52,11 +52,11 @@ print(flag)
 
 解压后得到一个 zip 文件，（这里我对其再进行解压没有发现什么东西），网上说很明显这是一个 word 文档？？？没有搜到相关 word 文档变 zip 格式后的特征，可能是因为看到里面那些文件夹就可以判断是 word 文档了吧！？
 
-![image-20220919231057185](img/image-20220919231057185.png)
+![image-20220919231057185](attachments/image-20220919231057185.png)
 
 将后缀名改为 docx ，打开后里面就一句话 Where is the flag ? ，八成是隐藏了吧！全选，将文字改为其他颜色看到下面出现一些字符串。
 
-![image-20220919231332018](img/image-20220919231332018.png)
+![image-20220919231332018](attachments/image-20220919231332018.png)
 
 看 wp 说是 base64 解码，用脚本将每一行分别解码并输出：
 
@@ -70,7 +70,7 @@ for i in range(len(content)):
     print(str(base64.b64decode(content[i]),'utf8'))
 ```
 
-![image-20220920152400459](img/image-20220920152400459.png)
+![image-20220920152400459](attachments/image-20220920152400459.png)
 
 将解码出来的结果所有的`1`替换为`空格`。
 
@@ -83,7 +83,7 @@ with open('flag.txt','r') as flag_file:
         print(line.replace('1', ' '))
 ```
 
-![image-20220920153001925](img/image-20220920153001925.png)
+![image-20220920153001925](attachments/image-20220920153001925.png)
 
 得到 flag ：`flag{He1Lo_mi5c~}`
 
