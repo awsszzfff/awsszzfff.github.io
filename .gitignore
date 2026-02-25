@@ -48,12 +48,31 @@ source/_posts/Other/
 source/_posts/Work/
 source/_posts/白板/
 source/_posts/转载/
-source/_posts/面试/面试经历/
+source/_posts/面试/
 source/_posts/文献阅读old/
 source/_posts/.obsidian.zip.bak
 source/_posts/final_processing_summary.md
 source/_posts/plugins.zip.bak
 source/_posts/Welcome.md
+
+# Drafts
+source/_posts/01安全相关/基础漏洞练习总结/
+source/_posts/01安全相关/CTF/
+source/_posts/02程序设计/Java/Java基础/
+source/_posts/02程序设计/Python/设计模式/
+source/_posts/02程序设计/Python/pytochdemonode/
+source/_posts/02程序设计/Python/02StartPyTorch/
+source/_posts/02程序设计/Python/PythonReview.md
+source/_posts/03学术科研/
+source/_posts/03AI/机器学习简记/
+source/_posts/03AI/LangChain/
+source/_posts/03AI/LHY-HW/
+source/_posts/04数学基础/
+source/_posts/06计算机基础/计算机网络/
+source/_posts/06计算机基础/Linux/Linux&常用命令及操作.md
+source/_posts/06计算机基础/SQL&Databases/
+source/_posts/06计算机基础/Windows/
+source/_posts/06计算机基础/Windows&Linux.md
 
 # Personal and sensitive content patterns
 **/demo/
