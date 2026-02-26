@@ -236,7 +236,20 @@ class Solution:
 #### 单调栈
 
 ```python
-
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        ans = 0
+        st = []
+        for i, h in enumerate(height):
+            while st and h >= height[st[-1]]:
+                bottom_h = height[st.pop()]
+                if not st:
+                    break
+                left = st[-1]
+                dh = min(height[left], h) - bottom_h
+                ans += (i - left - 1) * dh
+            st.append(i)
+        return ans
 ```
 
 ## 滑动窗口
@@ -286,15 +299,74 @@ class Solution:
         return ans
 ```
 
-找到字符串中所有字母异位词
+### [438. 找到字符串中所有字母异位词](https://leetcode.cn/problems/find-all-anagrams-in-a-string/description/)
+
+```python
+
+```
 
 ## 子串
 
+### [560. 和为 K 的子数组](https://leetcode.cn/problems/subarray-sum-equals-k/)
+
+```python
+
+```
+
+### [239. 滑动窗口最大值](https://leetcode.cn/problems/sliding-window-maximum/)
+
+```python
+class Solution:
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        # 单调队列，队列记录下标
+        ans = []
+        q = deque()
+        for i, x in enumerate(nums):  # x = nums[i]
+            # 入队
+            while q and nums[q[-1]] <= x:
+                q.pop()  # 保证单调性
+            q.append(i)
+            # 出队
+            left = i - k + 1  # 窗口左端点
+            if q[0] < left:  # 队首离开窗口
+                q.popleft()
+            # 保存结果
+            if left >= 0:
+                ans.append(nums[q[0]])
+        return ans
+```
+
+### [76. 最小覆盖子串](https://leetcode.cn/problems/minimum-window-substring/)
+
+```python
+
+```
+
 ## 普通数组
+
+### [53. 最大子数组和](https://leetcode.cn/problems/maximum-subarray/)
+
+### [56. 合并区间](https://leetcode.cn/problems/merge-intervals/)
+
+### [189. 轮转数组](https://leetcode.cn/problems/rotate-array/)
+
+### [238. 除了自身以外数组的乘积](https://leetcode.cn/problems/product-of-array-except-self/)
+
+### [41. 缺失的第一个正数](https://leetcode.cn/problems/first-missing-positive/)
 
 ## 矩阵
 
+### [73. 矩阵置零](https://leetcode.cn/problems/set-matrix-zeroes/)
+
+### [54. 螺旋矩阵](https://leetcode.cn/problems/spiral-matrix/)
+
+### [48. 旋转图像](https://leetcode.cn/problems/rotate-image/)
+
+### [240. 搜索二维矩阵 II](https://leetcode.cn/problems/search-a-2d-matrix-ii/)
+
 ## 链表
+
+### [160. 相交链表](https://leetcode.cn/problems/intersection-of-two-linked-lists/)
 
 ### [206. 反转链表](https://leetcode.cn/problems/reverse-linked-list/)
 
@@ -311,6 +383,16 @@ class Solution:
         return pre
 ```
 
+### [234. 回文链表](https://leetcode.cn/problems/palindrome-linked-list/)
+
+### [141. 环形链表](https://leetcode.cn/problems/linked-list-cycle/)
+
+### [142. 环形链表 II](https://leetcode.cn/problems/linked-list-cycle-ii/)
+
+### [21. 合并两个有序链表](https://leetcode.cn/problems/merge-two-sorted-lists/)
+
+### [2. 两数相加](https://leetcode.cn/problems/add-two-numbers/)
+
 ### [19. 删除链表的倒数第 N 个结点](https://leetcode.cn/problems/remove-nth-node-from-end-of-list/)
 
 ```python
@@ -325,6 +407,8 @@ class Solution:
         left.next = left.next.next
         return dummy_head.next
 ```
+
+### [24. 两两交换链表中的节点](https://leetcode.cn/problems/swap-nodes-in-pairs/)
 
 ### [25. K 个一组翻转链表](https://leetcode.cn/problems/reverse-nodes-in-k-group/)
 
@@ -359,7 +443,17 @@ class Solution:
         return dummy.next
 ```
 
+### [138. 随机链表的复制](https://leetcode.cn/problems/copy-list-with-random-pointer/)
+
+### [148. 排序链表](https://leetcode.cn/problems/sort-list/)
+
+### [23. 合并 K 个升序链表](https://leetcode.cn/problems/merge-k-sorted-lists/)
+
+### [146. LRU 缓存](https://leetcode.cn/problems/lru-cache/)
+
 ## 二叉树
+
+### [94. 二叉树的中序遍历](https://leetcode.cn/problems/binary-tree-inorder-traversal/)
 
 ### [104. 二叉树的最大深度](https://leetcode.cn/problems/maximum-depth-of-binary-tree/)
 
@@ -414,6 +508,31 @@ class Solution:
 # 另一种方式是先交换左右儿子再递归翻转对应的左右子树
 ```
 
+### [101. 对称二叉树](https://leetcode.cn/problems/symmetric-tree/)
+
+### [543. 二叉树的直径](https://leetcode.cn/problems/diameter-of-binary-tree/)
+
+```python
+class Solution:
+    def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        ans = 0
+
+        def dfs(node):
+            if node is None:
+                return -1
+            l_len = dfs(node.left)
+            r_len = dfs(node.right)
+            nonlocal ans
+            ans = max(ans, l_len + r_len + 2)
+            return max(l_len, r_len) + 1
+
+        dfs(root)
+        return ans
+```
+
+### [102. 二叉树的层序遍历](https://leetcode.cn/problems/binary-tree-level-order-traversal/)
+
+### [108. 将有序数组转换为二叉搜索树](https://leetcode.cn/problems/convert-sorted-array-to-binary-search-tree/)
 
 ### [98. 验证二叉搜索树](https://leetcode.cn/problems/validate-binary-search-tree/)
 
@@ -473,6 +592,8 @@ class Solution:
         return dfs(root)[1] != inf
 ```
 
+### [230. 二叉搜索树中第 K 小的元素](https://leetcode.cn/problems/kth-smallest-element-in-a-bst/)
+
 ### [199. 二叉树的右视图](https://leetcode.cn/problems/binary-tree-right-side-view/)
 
 > 先遍历右子树，两个问题：
@@ -498,7 +619,13 @@ class Solution:
         return ans
 ```
 
-### [236. 二叉树的最近公共祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/) @
+### [114. 二叉树展开为链表](https://leetcode.cn/problems/flatten-binary-tree-to-linked-list/)
+
+### [105. 从前序与中序遍历序列构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
+
+### [437. 路径总和 III](https://leetcode.cn/problems/path-sum-iii/)
+
+### [236. 二叉树的最近公共祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/)
 
 ![[attachments/20260111.png]]
 
@@ -516,12 +643,21 @@ class Solution:
         return right
 ```
 
+### [124. 二叉树中的最大路径和](https://leetcode.cn/problems/binary-tree-maximum-path-sum/)
+
 ## 图论
+
+### [200. 岛屿数量](https://leetcode.cn/problems/number-of-islands/)
+
+### [994. 腐烂的橘子](https://leetcode.cn/problems/rotting-oranges/)
+
+### [207. 课程表](https://leetcode.cn/problems/course-schedule/)
+
+### [208. 实现 Trie (前缀树)](https://leetcode.cn/problems/implement-trie-prefix-tree/)
 
 ## 回溯
 
 > for 循环是对每个数作为开头的遍历，dfs 递归是对当前数和剩余数组合的搜索，pop 弹出使当前数可以分别和剩余数进行组合。
-
 
 ### [46. 全排列](https://leetcode.cn/problems/permutations/)
 
@@ -647,6 +783,12 @@ class Solution:
         return ans
 ```
 
+### [39. 组合总和](https://leetcode.cn/problems/combination-sum/)
+
+### [22. 括号生成](https://leetcode.cn/problems/generate-parentheses/)
+
+### [79. 单词搜索](https://leetcode.cn/problems/word-search/)
+
 ### [131. 分割回文串](https://leetcode.cn/problems/palindrome-partitioning/)
 
 ![[attachments/20260123.png]]
@@ -748,6 +890,10 @@ class Solution:
 ## 二分查找
 
 > 区间内的数（下标）都是还未确定与 target 的大小关系的，有的是 < target，有的是 ≥ target；区间外的数（下标）都是确定与 target 的大小关系的。
+
+### [35. 搜索插入位置](https://leetcode.cn/problems/search-insert-position/)
+
+### [74. 搜索二维矩阵](https://leetcode.cn/problems/search-a-2d-matrix/)
 
 ### [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/)
 
@@ -940,13 +1086,75 @@ class Solution:
         return nums[left]
 ```
 
+### [4. 寻找两个正序数组的中位数](https://leetcode.cn/problems/median-of-two-sorted-arrays/)
+
 ## 栈
+
+### [20. 有效的括号](https://leetcode.cn/problems/valid-parentheses/)
+
+### [155. 最小栈](https://leetcode.cn/problems/min-stack/)
+
+### [394. 字符串解码](https://leetcode.cn/problems/decode-string/)
+
+### [739. 每日温度](https://leetcode.cn/problems/daily-temperatures/)
+
+> 去掉无用数据从而保证栈中数据有序
+
+```python
+class Solution:
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+        n = len(temperatures)
+        ans = [0] * n
+        st = []
+        for i in range(n - 1, -1, -1):
+            t = temperatures[i]
+            while st and t >= temperatures[st[-1]]:
+                st.pop()
+            if st:
+                ans[i] = st[-1] - i
+            st.append(i)
+        return ans
+```
+
+```python
+class Solution:
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+        n = len(temperatures)
+        ans = [0] * n
+        st = []
+        for i, t in enumerate(temperatures):
+            while st and t > temperatures[st[-1]]:
+                j = st.pop()
+                ans[j] = i - j
+            st.append(i)
+        return ans
+```
+
+### [84. 柱状图中最大的矩形](https://leetcode.cn/problems/largest-rectangle-in-histogram/)
 
 ## 堆
 
+### [215. 数组中的第K个最大元素](https://leetcode.cn/problems/kth-largest-element-in-an-array/)
+
+### [347. 前 K 个高频元素](https://leetcode.cn/problems/top-k-frequent-elements/)
+
+### [295. 数据流的中位数](https://leetcode.cn/problems/find-median-from-data-stream/)
+
 ## 贪心算法
 
+### [121. 买卖股票的最佳时机](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/)
+
+### [55. 跳跃游戏](https://leetcode.cn/problems/jump-game/)
+
+### [45. 跳跃游戏 II](https://leetcode.cn/problems/jump-game-ii/)
+
+### [763. 划分字母区间](https://leetcode.cn/problems/partition-labels/)
+
 ## 动态规划
+
+### [70. 爬楼梯](https://leetcode.cn/problems/climbing-stairs/)
+
+### [118. 杨辉三角](https://leetcode.cn/problems/pascals-triangle/)
 
 ### [198. 打家劫舍](https://leetcode.cn/problems/house-robber/)
 
@@ -991,6 +1199,8 @@ class Solution:
         return f1
 ```
 
+### [279. 完全平方数](https://leetcode.cn/problems/perfect-squares/)
+
 ### [322. 零钱兑换](https://leetcode.cn/problems/coin-change/)
 
 ```python
@@ -1029,8 +1239,149 @@ class Solution:
         return ans if ans < inf else -1
 ```
 
+### [139. 单词拆分](https://leetcode.cn/problems/word-break/)
+
+### [300. 最长递增子序列](https://leetcode.cn/problems/longest-increasing-subsequence/)
+
+```python
+class Solution:
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        n = len(nums)
+
+        @cache
+        def dfs(i):
+            res = 0
+            for j in range(i):
+                if nums[j] < nums[i]:
+                    res = max(res, dfs(j))
+            return res + 1
+
+        ans = 0
+        for i in range(n):
+            ans = max(ans, dfs(i))
+        return ans
+        # return max(dfs(i) for i in range(n))
+```
+
+```python
+class Solution:
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        n = len(nums)
+
+        f = [0] * n
+        for i in range(n):
+            for j in range(i):
+                if nums[j] < nums[i]:
+                    f[i] = max(f[i], f[j])
+            f[i] += 1
+        return max(f)
+```
+
+### [152. 乘积最大子数组](https://leetcode.cn/problems/maximum-product-subarray/)
+
+### [416. 分割等和子集](https://leetcode.cn/problems/partition-equal-subset-sum/)
+
+### [32. 最长有效括号](https://leetcode.cn/problems/longest-valid-parentheses/)
+
 ## 多维动态规划
 
+### [62. 不同路径](https://leetcode.cn/problems/unique-paths/)
 
+### [64. 最小路径和](https://leetcode.cn/problems/minimum-path-sum/)
+
+### [5. 最长回文子串](https://leetcode.cn/problems/longest-palindromic-substring/)
+
+### [1143. 最长公共子序列](https://leetcode.cn/problems/longest-common-subsequence/)
+
+```python
+class Solution:
+    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+        n = len(text1)
+        m = len(text2)
+
+        @cache
+        def dfs(i, j):
+            if i < 0 or j < 0:
+                return 0
+            if text1[i] == text2[j]:
+                return dfs(i - 1, j - 1) + 1
+            return max(dfs(i - 1, j), dfs(i, j - 1))
+
+        return dfs(n - 1, m - 1)
+```
+
+```python
+class Solution:
+    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+        n = len(text1)
+        m = len(text2)
+
+        # f = [[0] * (m + 1) for _ in range(n + 1)]
+        f = [[0] * (m + 1) for _ in range(2)]
+        for i in range(n):
+            for j in range(m):
+                if text1[i] == text2[j]:
+                    # f[i + 1][j + 1] = f[i][j] + 1
+                    f[(i + 1) % 2][j + 1] = f[i % 2][j] + 1
+                else:
+                    # f[i + 1][j + 1] = max(f[i][j + 1], f[i + 1][j])
+                    f[(i + 1) % 2][j + 1] = max(f[i % 2][j + 1], f[(i + 1) % 2][j])
+
+        return f[n % 2][m]
+```
+
+### [72. 编辑距离](https://leetcode.cn/problems/edit-distance/)
+
+```python
+class Solution:
+    def minDistance(self, word1: str, word2: str) -> int:
+        n = len(word1)
+        m = len(word2)
+
+        @cache
+        def dfs(i, j):
+            if i < 0:
+                return j + 1
+            if j < 0:
+                return i + 1
+            if word1[i] == word2[j]:
+                return dfs(i - 1, j - 1)
+            # 这三种情况分别代表 插入，删除，替换
+            return min(dfs(i, j - 1), dfs(i - 1, j), dfs(i - 1, j - 1)) + 1
+
+        return dfs(n - 1, m - 1)
+```
+
+```python
+class Solution:
+    def minDistance(self, word1: str, word2: str) -> int:
+        n = len(word1)
+        m = len(word2)
+
+        # f = [[0] * (m + 1) for _ in range(n + 1)]
+        f = [[0] * (m + 1) for _ in range(2)]
+        f[0] = list(range(m + 1))
+        for i in range(n):
+            # f[i + 1][0] = i + 1
+            f[(i + 1) % 2][0] = i + 1
+            for j in range(m):
+                if word1[i] == word2[j]:
+                    # f[i + 1][j + 1] = f[i][j]
+                    f[(i + 1) % 2][j + 1] = f[i % 2][j]
+                else:
+                    # f[i + 1][j + 1] = min(f[i][j + 1], f[i + 1][j], f[i][j]) + 1
+                    f[(i + 1) % 2][j + 1] = min(f[i % 2][j + 1], f[(i + 1) % 2][j], f[i % 2][j]) + 1
+        return f[n % 2][m]
+```
 
 ## 技巧
+
+### [136. 只出现一次的数字](https://leetcode.cn/problems/single-number/)
+
+### [169. 多数元素](https://leetcode.cn/problems/majority-element/)
+
+### [75. 颜色分类](https://leetcode.cn/problems/sort-colors/)
+
+### [31. 下一个排列](https://leetcode.cn/problems/next-permutation/)
+
+### [287. 寻找重复数](https://leetcode.cn/problems/find-the-duplicate-number/)
