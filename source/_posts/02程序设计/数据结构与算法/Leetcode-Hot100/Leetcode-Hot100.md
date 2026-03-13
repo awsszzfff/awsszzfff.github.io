@@ -451,6 +451,102 @@ class Solution:
 
 ### [146. LRU 缓存](https://leetcode.cn/problems/lru-cache/)
 
+> - get：把一本书（key）抽出来，放在最上面。
+> - put：放入一本新书。
+> 	- 如果已经有这本书 （key），就把它抽出来放在最上面，并替换它的 value。（例如把一本书的第二版替换成第三版）
+> 	- 如果没有这本书（key），就放在最上面。
+> 	- 如果超过 capacity 本书，就把最下面的书移除。
+
+库函数写法
+
+```python
+class LRUCache:
+
+    def __init__(self, capacity: int):
+        self.capacity = capacity
+        from collections import OrderedDict
+        # OrderedDict = dict + 双链表
+        self.cache = OrderedDict()
+
+    def get(self, key: int) -> int:
+        if key not in self.cache:
+            return -1
+        # last=False 移到链表头
+        self.cache.move_to_end(key, last=False)
+        return self.cache[key]
+
+    def put(self, key: int, value: int) -> None:
+        self.cache[key] = value  # 添加 key value 或更新 value
+        # 移到链表头
+        self.cache.move_to_end(key, last=False)
+        if len(self.cache) > self.capacity:  # 超出容量
+            self.cache.popitem()  # 去掉最后一个
+```
+
+双向链表，O(1) 时间复杂度
+
+```python
+class Node:
+    __slots__ = 'prev', 'next', 'key', 'value'
+
+    def __init__(self, key=0, value=0):
+        self.key = key
+        self.value = value
+
+    # def __init__(self, key=0, value=0):
+    #     self.key = key
+    #     self.value = value
+    #     self.prev = None
+    #     self.next = None
+
+
+class LRUCache:
+
+    def __init__(self, capacity: int):
+        self.capacity = capacity
+        self.dummy = Node()  # 哨兵节点
+        self.dummy.prev = self.dummy
+        self.dummy.next = self.dummy
+        self.key_to_node = {}
+
+    # 获取 key 对应的节点，同时吧节点移动到链表头
+    def get_node(self, key: int) -> Optional[Node]:
+        if key not in self.key_to_node:  # 没有
+            return None
+        node = self.key_to_node[key]  # 有
+        self.remove(node)  # 抽出来
+        self.push_front(node)  # 放到最上面
+        return node
+
+    def get(self, key: int) -> int:
+        node = self.get_node(key)  # 获取并移至头
+        return node.value if node else -1
+
+    def put(self, key: int, value: int) -> None:
+        node = self.get_node(key)  # 获取并移至头
+        if node:  # 有
+            node.value = value  # 更新 value
+            return
+        self.key_to_node[key] = node = Node(key, value)  # 没有，新
+        self.push_front(node)  # 移至头
+        if len(self.key_to_node) > self.capacity:  # 超出范围
+            back_node = self.dummy.prev
+            del self.key_to_node[back_node.key]
+            self.remove(back_node)  # 移除最后一个
+
+    # 删除一个节点
+    def remove(self, x: Node) -> None:
+        x.prev.next = x.next
+        x.next.prev = x.prev
+
+    # 链表头添加一个节点
+    def push_front(self, x: Node) -> None:
+        x.next = self.dummy.next
+        x.prev = self.dummy
+        self.dummy.next = x
+        x.next.prev = x
+```
+
 ## 二叉树
 
 ### [94. 二叉树的中序遍历](https://leetcode.cn/problems/binary-tree-inorder-traversal/)

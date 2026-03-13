@@ -240,8 +240,45 @@ WORKDIR /hello
 
 ```shell
 docker build -t="mycentos" .	# 基于dockerfile构建镜像
-docker run -id --name mycentos mycentos
-docker run -it mycentos /bin/bash
+docker run -id --name mycentos mycentos	# 后台静默启动
+docker run -it mycentos /bin/bash	# 前台交互启动
+```
+
+### 示例 2
+
+```dockerfile
+FROM ubuntu:22.04
+
+# 安装必要的软件包
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip python3-venv && \
+    rm -rf /var/lib/apt/lists/*
+
+# 创建虚拟环境
+RUN python3 -m venv /opt/venv
+
+# 使用虚拟环境的pip安装依赖
+COPY requirements.txt .
+RUN /opt/venv/bin/pip install --no-cache-dir -r requirements.txt
+
+# 复制应用代码
+COPY app.py /opt/app.py
+
+# 设置环境变量
+ENV FLASK_APP=/opt/app.py
+ENV FLASK_ENV=production
+
+EXPOSE 500
+
+# 设置虚拟环境的Python作为入口
+ENTRYPOINT ["/opt/venv/bin/python", "-m", "flask", "run", "--host=0.0.0.0"]
+```
+
+构建并运行
+
+```shell
+docker build . -t mywebsample
+docker run -p 80:5000 mywebsample
 ```
 
 ### 镜像分层
