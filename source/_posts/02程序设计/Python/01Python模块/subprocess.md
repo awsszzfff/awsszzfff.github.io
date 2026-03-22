@@ -6,6 +6,7 @@ tags:
 categories:
   - 程序设计
   - Python
+draft: false
 ---
 可以允许启动一个新的进程，并连接到它们的输入/输出/作物管道，从而获取返回值
 

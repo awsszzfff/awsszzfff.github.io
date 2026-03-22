@@ -7,6 +7,7 @@ tags:
 categories:
   - 安全相关
 description: JAVA安全基础漏洞
+draft: false
 ---
 ## SQL 注入
 
@@ -115,9 +116,11 @@ Thymeleaf、Velocity、FreeMarker
 - gateway（spring cloud 生态系统中的网关）
 	- CVE-2022-22947 (SpEL 表达式注入)
 
-## 反序列化
+## 反序列化漏洞
 
-> **ClassLoader（类加载器）** 的作用：**把编译好的 `.class` 文件（字节码）加载到 Java 虚拟机（JVM）中，并将其转换成内存中的 `java.lang.Class` 对象。**
+反序列化利用本质是根据序列化数据里的“类信息”，动态调用对应类的反序列化逻辑。
+
+> ClassLoader（类加载器） 的作用：把编译好的 `.class` 文件（字节码）加载到 Java 虚拟机（JVM）中，并将其转换成内存中的 `java.lang.Class` 对象。
 
 ![[attachments/20260113.png]]
 
@@ -127,6 +130,38 @@ Thymeleaf、Velocity、FreeMarker
 
 - 原生类的反序列化（`ObjectInputStream.readObject()`、`SnakeYaml`、`XMLDecoder` 等）
 - 第三方组件的反序列化（Fastjson、Jackson、Xstream 等）
+
+### 以 URLDNS 链为例
+
+`ObjectInputStream.readObject()` 本身只是“入口”，真正执行逻辑的是被反序列化对象自己的 `readObject` 方法。
+
+就像 URLDNS 链，序列化时写入的是 `HashMap<URL, Integer> map`
+
+```
+从入口开始
+ObjectInputStream.readObject()
+    ↓
+判断传入的是数组、字符串、普通对象...=>
+readObject0()
+    ↓
+若是普通对象=>
+readOrdinaryObject()
+    ↓
+desc.invokeReadObject()
+这里会反射调用：目标类的 readObject()
+        ↓
+HashMap.readObject()
+```
+
+```java
+// desc.invokeReadObject() 逻辑
+if (类定义了 readObject)
+    → 调用它
+else
+    → 默认反序列化
+```
+
+因为 `java.util.HashMap` 重写了 readObject，序列化时写的是 `ObjectOutputStream.writeObject(map);`，map 是 HashMap，所以反序列化一定会进 `HashMap.readObject()`。
 
 ### JNDI 注入
 
@@ -155,6 +190,10 @@ Thymeleaf、Velocity、FreeMarker
 	- jdk 版本不同的 jndi 注入
 	- 中间件不同的 jndi 注入
 	- jar 包依赖不同的 jndi 注入
+
+---
+
+## 待补充待研究
 
 ### URLDNSlog 链
 

@@ -7,6 +7,7 @@ tags:
 categories:
   - Others
 description: Linux提权
+draft: false
 ---
 
 ```bash

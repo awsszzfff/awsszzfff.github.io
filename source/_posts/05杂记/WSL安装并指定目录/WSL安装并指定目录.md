@@ -7,6 +7,7 @@ tags:
 categories:
   - 杂记
 description: WSL安装并指定目录
+draft: false
 ---
 https://blog.csdn.net/Natsuago/article/details/145594631
 

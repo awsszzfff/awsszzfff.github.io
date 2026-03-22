@@ -7,6 +7,7 @@ tags:
 categories:
   - AI
 description: Huggingface&Transformers
+draft: false
 ---
 ## piplines
 

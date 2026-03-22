@@ -7,6 +7,7 @@ tags:
 categories:
   - 安全相关
 description: Web安全开发基础-PHP
+draft: false
 ---
 ## PHP 超级全局变量
 
@@ -141,7 +142,7 @@ if ($data['user'] == 'root' && $data['pass']=='123456')
    print_r(' 登录失败！ '."\n");
 }
 
-// 预期：a:2:{s:4:"user";s:4:"root";s:4:"pass";s:6:"xiaodi";}
+// 预期：a:2:{s:4:"user";s:4:"root";s:4:"pass";s:6:"demo01";}
 // 绕过：$str = 'a:2:{s:4:"user";b:1;s:4:"pass";b:1;}';
 $str=$_GET['s'];
 $data = unserialize($str);

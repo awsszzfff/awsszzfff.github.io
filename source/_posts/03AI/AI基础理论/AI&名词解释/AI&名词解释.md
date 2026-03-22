@@ -7,6 +7,7 @@ tags:
 categories:
   - AI
 description: AI&名词解释
+draft: false
 ---
 监督学习：有标签的学习；eg：分类、回归（预测）。
 

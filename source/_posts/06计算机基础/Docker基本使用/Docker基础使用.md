@@ -7,6 +7,7 @@ tags:
 categories:
   - 计算机基础
 description: Docker基础使用
+draft: false
 ---
 ## 安装配置
 
@@ -27,7 +28,7 @@ https://wiki.bafangwy.com/doc/642/
 
 > https://blog.csdn.net/sunchaoyiA/article/details/81231000
 
-### 蚁景提供的脚本
+### 脚本安装
 
 https://gitee.com/yijingsec/LinuxEnvConfig
 
@@ -66,6 +67,8 @@ systemctl restart docker
 给 docker 配置网络代理 https://edu.yijinglab.com/post/270
 
 ## 基础介绍
+
+![[attachments/20260313-1.png]]
 
 - Docker Daemon（守护进程）
 	- 宿主机上运行的后台服务，负责构建、运行和分发容器；

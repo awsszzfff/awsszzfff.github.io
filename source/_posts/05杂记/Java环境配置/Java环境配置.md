@@ -7,6 +7,7 @@ tags:
 categories:
   - 杂记
 description: Java环境配置
+draft: false
 ---
 系统环境变量配置：
 

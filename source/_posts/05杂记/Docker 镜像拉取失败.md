@@ -7,6 +7,7 @@ tags:
 categories:
   - 杂记
 description: Docker 镜像拉取失败
+draft: false
 ---
 
 在docker拉取镜像过程中,总是拉取不下来,这时候要考虑一下是不是镜像源有问题了,有没有配置可用的镜像源

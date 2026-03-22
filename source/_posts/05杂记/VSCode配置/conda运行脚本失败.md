@@ -7,6 +7,7 @@ tags:
 categories:
   - 杂记
 description: conda运行脚本失败
+draft: false
 ---
 ```shell
 Powershell一般初始化情况下都会禁止脚本执行。只有管理员才有权限更改该策略，非管理员会报错。以管理员身份打开powershell： 

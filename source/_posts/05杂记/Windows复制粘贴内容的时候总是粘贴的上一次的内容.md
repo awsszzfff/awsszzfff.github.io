@@ -5,5 +5,6 @@ tags:
   - Others
 categories:
   - Others
+draft: false
 ---
 Windows+x，打开命令提示符（管理员），执行命令`Sfc /scannow`。

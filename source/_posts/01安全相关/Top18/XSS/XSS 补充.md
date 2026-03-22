@@ -7,6 +7,7 @@ tags:
 categories:
   - 安全相关
 description: XSS 补充-新型XSS触发点，文件类型、网页功能、MXSS、UXSS
+draft: false
 ---
 # XSS 补充
 

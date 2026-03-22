@@ -7,6 +7,7 @@ tags:
 categories:
   - 杂记
 description: VSCode配置C++
+draft: false
 ---
 下载MinGW
 

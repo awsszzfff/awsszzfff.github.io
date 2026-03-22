@@ -8,6 +8,7 @@ categories:
   - Python
   - 程序设计
 description: asynio 协程
+draft: false
 ---
 协程，单线程的，**事件循环 (Event Loop)**：`asyncio` 内部有一个死循环。它不断检查任务列表
 

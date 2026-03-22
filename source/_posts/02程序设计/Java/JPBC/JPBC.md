@@ -8,6 +8,7 @@ categories:
   - 程序设计
   - Java
 description: JPBC Java 密码学计算库
+draft: false
 ---
 JPBC 中，双线性群的使用都通过叫 Pairing 的对象来实现。双线性群的初始化在 JPBC 中就是对Pairing 对象的初始化。双线性群有两种初始化方法：通过代码动态产生双线性群；从文件中读取参数而产生群。
 

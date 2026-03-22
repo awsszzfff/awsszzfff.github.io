@@ -7,6 +7,7 @@ tags:
 categories:
   - 安全相关
 description: JARBAS-Jenkins 靶机
+draft: false
 ---
 ## 环境
 

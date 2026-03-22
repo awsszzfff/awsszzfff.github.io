@@ -8,6 +8,7 @@ categories:
   - 程序设计
   - Python
 description: Python 中的队列
+draft: false
 ---
 ```python
 import queue

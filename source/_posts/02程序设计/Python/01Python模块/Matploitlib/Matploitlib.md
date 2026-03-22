@@ -6,6 +6,7 @@ tags:
 categories:
   - Python
   - 程序设计
+draft: false
 ---
 ```python
 pip install matplotlib

@@ -7,6 +7,7 @@ tags:
 categories:
   - 计算机基础
 description: Git基础
+draft: false
 ---
 ## 配置 Git
 

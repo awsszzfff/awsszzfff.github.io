@@ -7,6 +7,7 @@ tags:
 categories:
   - 安全相关
 description: sick0s1.1 靶机
+draft: false
 ---
 > - kali: 192.168.181.129
 > - sick0s1.1: 192.168.181.0/24 ...

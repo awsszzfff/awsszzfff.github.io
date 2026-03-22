@@ -7,6 +7,7 @@ tags:
 categories:
   - 杂记
 description: 多环境go配置
+draft: false
 ---
 
 https://github.com/voidint/g

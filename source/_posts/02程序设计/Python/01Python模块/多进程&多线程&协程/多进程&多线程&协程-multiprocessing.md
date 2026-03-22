@@ -7,6 +7,7 @@ categories:
   - 程序设计
   - Python
 description: multiprocessing 多进程
+draft: false
 ---
 ```python
 # 多进程

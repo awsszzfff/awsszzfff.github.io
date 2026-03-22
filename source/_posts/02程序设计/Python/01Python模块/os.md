@@ -5,6 +5,7 @@ tags:
   - Others
 categories:
   - Others
+draft: false
 ---
 操作本地文件夹及文件、执行本地命令、路径拼接
 

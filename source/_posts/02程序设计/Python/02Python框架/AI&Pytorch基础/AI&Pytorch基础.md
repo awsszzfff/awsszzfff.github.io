@@ -8,6 +8,7 @@ categories:
   - 程序设计
   - Python
 description: AI&Pytorch基础
+draft: false
 ---
 > 机器学习的基本训练过程：计算一个函数关于一个变量在某一取值下的导数，从而基于梯度对参数进行优化；
 

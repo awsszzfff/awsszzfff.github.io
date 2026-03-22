@@ -7,6 +7,7 @@ tags:
 categories:
   - 杂记
 description: jupyter_notebook基础操作
+draft: false
 ---
 启动 JupyterLab：
 

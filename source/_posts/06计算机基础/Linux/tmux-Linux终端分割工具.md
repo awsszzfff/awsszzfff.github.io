@@ -8,6 +8,7 @@ tags:
 categories:
   - 计算机基础
 description: tmux-Linux终端分割工具
+draft: false
 ---
 ## 常用操作
 
@@ -53,4 +54,7 @@ ctrl b + d 退出当前的工作空间
 tmux a 进入刚才的工作空间
 tmux ls 查看当前存在的工作空间
 tmux attach -t + i 进入i 的工作空间
+exit
+tmux kill-session
+tmux kill-session -t xxx
 

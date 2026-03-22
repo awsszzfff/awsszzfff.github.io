@@ -8,6 +8,7 @@ categories:
   - 程序设计
   - AI
 description: MCP基本介绍
+draft: false
 ---
 > https://modelcontextprotocol.io/introduction
 

@@ -7,6 +7,7 @@ tags:
 categories:
   - 安全相关
 description: vulhub-Prime_Series_Level-1
+draft: false
 ---
 ## 环境
 
