@@ -1,0 +1,138 @@
+---
+title: FastJson
+date: 2026-01-13
+updated: 2026-01-13
+tags:
+  - 服务组件框架漏洞
+categories:
+  - 安全相关
+description: FastJson各版本漏洞
+published: false
+---
+> 历史漏洞 https://avd.aliyun.com/search?q=fastjson
+
+> https://xz.aliyun.com/news/14309
+> https://mp.weixin.qq.com/s/t8sjv0Zg8_KMjuW4t-bE-w
+
+- 1.2.24
+	- 没有任何过滤器
+	- 典型攻击类 `TemplatesImpl`、`JdbcRowSetImpl`
+- 1.2.25
+	- 引入 `checkAutoType` 机制，假如黑名单和白名单
+	- `AutoType` 机制开启
+		- 先检查白名单，白名单中的类直接加载
+		- 若不在白名单，继续检查黑名单，若不在黑名单，正常加载
+	- `AutoType` 机制关闭
+		- 先检查黑名单，若类在黑名单则抛出异常
+		- 再检查白名单，若不在白名单则抛出异常
+- 1.2.42
+	- 假如对 `L;` 的加测，发现 `L;` 去除
+	- 黑名单和白名单类名隐去，使用 hash 比对
+- 1.2.43
+	- 假如对 `LL;;` 的检测，发现则去除
+	- 通过引入对 `[` 字符的检测进行进一步防护
+- 1.2.45
+	- 黑名单机制问题：黑名单无法穷尽所有恶意类
+- 1.2.47
+	- 开启 `AutoType` 且版本在 33 到 47 之间
+		- 若类不在白名单，则继续检查黑名单
+		- 若类不在黑名单且不在 mappings 中，则正常加载
+		- 关键问题在于如何往 mappings 中添加恶意类
+	- 未开启 `AutoType` 且版本在 24 到 32 之间，也存在漏洞
+- 1.2.68
+	- 引入 `expectedClass` 机制，增加了防护，但仍存在逻辑漏洞
+		- 特别针对 `Throwable` 类的防护不足
+
+## 序列化与反序列化
+
+> 序列化与反序列化方法：
+> 
+> - 序列化方法：
+> 	- `JSON.toJSONString()`，返回字符串；
+> 	- `JSON.toJSONBytes()`，返回 byte 数组；
+> - 反序列化方法：
+> 	- `JSON.parseObject()`，返回 `JsonObject`；
+> 	- `JSON.parse()`，返回 `Object`；
+> 	- `JSON.parseArray()`，返回 `JSONArray`；
+> 	- 将 JSON 对象转换为 java 对象：`JSON.toJavaObject()`；
+> 	- 将 JSON 对象写入 write 流：`JSON.writeJSONString()`；
+> - 常用：
+> 	- `JSON.toJSONString()`、 `JSON.parse()`、 `JSON.parseObject()`
+> - 在通过 `parse`、`parseObject` 进行反序列化时，会调用类的 `set`、`get` 方法
+> - 在通过 `parse` 或 `parseObject` 指定类型进行反序列化时，会利用序列化数据中的 `@type` 值创建对应类的实例。
+
+## 不出网问题
+
+> https://xz.aliyun.com/news/11938
+> https://github.com/safe6Sec/Fastjson
+
+对一些协议、端口、内外网限制。（JNDI 作为一种服务接口，若目标无法访问，则就无法触发）
+
+可通过延时进行判断是否存在漏洞，加载本地不存在的 JNDI 测试进行延时判断。
+
+> 将要执行命令的文件转换为特定的格式，触发反序列化本地执行。
+
+> 即 RCE 不出网链都是建立在将要执行的命令文件转成 BCEL、BYTE、HEX 等格式用到不同的依赖进行调用执行。
+
+### 利用 BCEL 进行本地类加载
+
+Java 源码通过编译后得到的字节码，JVM 通过解释或编译这些字节码来运行程序
+
+> BCEL 字节码检测器是一个通过 Java 字节码操作库，用来分析、修改和创建 Java 类文件的字节码。通常程序运行后字节码是不动的，但 BCEL 运行在程序运行的过程中，或在文件层面，直接对字节码进行操作：
+> 
+> - 分析： 查看一个类有哪些方法、字段，逻辑是什么。
+> - 修改： 在现有的方法里插入一段你自己的代码（比如监控代码、后门代码等）。
+> - 创建： 凭空生成一个新的 `.class` 文件，而不需要写 `.java` 源码。
+
+BCEL 提供一个特殊类加载器 ClassLoader，可以识别 `$$BCEL$$` 开头的长字符串。
+
+通过将恶意代码编译为字节码，使用 BCEL 将字节码转换为特殊的字符串，服务器在内存中还原并执行恶意代码，从而导致 RCE。
+
+```json
+{
+   "@type": "org.apache.tomcat.dbcp.dbcp2.BasicDataSource",
+   "driverClassLoader": {
+        "@type": "com.sun.org.apache.bcel.internal.util.ClassLoader"
+   },
+   "driverClassName": "$$BCEL$$xxxx"
+}
+
+```
+
+### TemplatesImpl 链
+
+触发 `JSON.parseObject(payload, Feature.SupportNonPublicField);`
+
+```json
+{
+    "@type": "com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl",
+    "_bytecodes": ["字节码"],
+    '_name': 'a.b',
+    '_tfactory': {},
+    "_outputProperties": {},
+    "_name": "b",
+    "_version": "1.0",
+    "allowedProtocols": "all"
+}
+```
+
+### c3p0 链
+
+```json
+{
+    "@type": "java.lang.Class",
+    "val": "com.mchange.v2.c3p0.WrapperConnectionPoolDataSource"
+},
+"f": {
+    "@type": "com.mchange.v2.c3p0.WrapperConnectionPoolDataSource",
+    "userOverridesAsString": "HexAsciiSerializedMap:;HEX值"
+}
+```
+
+> 版本差异：
+> 
+> - <= 1.2.47 可利用 JDK 自带的链可实现 RCE；
+> - 1.2.47 - 1.2.80 利用链为依赖包或本地代码；（依赖包还需要开启 autoType）
+
+> 常见总结 https://mp.weixin.qq.com/s/yMQPyzYa9YSD-pq2dWEZrA?scene=1
+
