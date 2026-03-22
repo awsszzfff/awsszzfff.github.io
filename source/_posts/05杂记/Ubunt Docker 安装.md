@@ -5,7 +5,7 @@ tags:
 categories:
   - Others
 title: "Ubunt Docker 安装"
-draft: false
+published: true
 ---
 
 > https://wiki.bafangwy.com/doc/639/

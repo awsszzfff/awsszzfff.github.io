@@ -7,7 +7,7 @@ tags:
 categories:
   - 安全相关
 description: vulhub-GoldenEye-v1
-draft: false
+published: true
 ---
 # 环境
 

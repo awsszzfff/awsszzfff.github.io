@@ -8,7 +8,7 @@ categories:
   - 程序设计
   - Python
 description: Python基础
-draft: false
+published: true
 ---
 > 官方文档 https://docs.python.org/zh-cn/3/index.html
 

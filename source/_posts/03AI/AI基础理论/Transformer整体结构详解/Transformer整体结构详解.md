@@ -7,7 +7,7 @@ tags:
 categories:
   - AI
 description: Transformer整体结构详解
-draft: false
+published: true
 ---
 ![[attachments/20250529.png]]
 

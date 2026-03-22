@@ -7,7 +7,7 @@ tags:
 categories:
   - 杂记
 description: conda对python的一些操作基础
-draft: false
+published: true
 ---
 （base 为在 anaconda shell 中）
 查看 cond 中存在的 python 环境（带 `*` 的表示当前环境）

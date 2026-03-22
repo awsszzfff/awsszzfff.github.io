@@ -5,7 +5,7 @@ tags:
 categories:
   - Others
 title: "Dataview基础操作"
-draft: false
+published: true
 ---
 ## 基本操作
 

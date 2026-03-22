@@ -7,7 +7,7 @@ tags:
 categories:
   - 安全相关
 description: SQL 注入基础
-draft: false
+published: true
 ---
 # SQL 注入基础
 

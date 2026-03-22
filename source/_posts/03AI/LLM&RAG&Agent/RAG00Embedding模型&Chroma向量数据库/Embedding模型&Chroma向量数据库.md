@@ -7,7 +7,7 @@ tags:
 categories:
   - AI
 description: Embedding模型&Chroma向量数据库
-draft: false
+published: true
 ---
 ## 向量表征
 

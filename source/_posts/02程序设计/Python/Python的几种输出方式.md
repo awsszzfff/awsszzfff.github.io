@@ -8,7 +8,7 @@ categories:
   - 程序设计杂记
   - Python
 description: Python的几种输出方式
-draft: false
+published: true
 ---
 ```python
 print("%d %d"%(a,b))

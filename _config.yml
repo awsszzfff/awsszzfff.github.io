@@ -92,6 +92,25 @@ pagination_dir: page
 include:
 exclude:
 ignore:
+  - source/_posts/.obsidian/**
+  - source/_posts/.trash/**
+  - source/_posts/.00Dataview/**
+  - source/_posts/00Dataview/**
+  - source/_posts/00templates/**
+  - source/_posts/07生活和其他/**
+  - source/_posts/09上课/**
+  - source/_posts/Clippings/**
+  - source/_posts/Excalidraw/**
+  - source/_posts/Other/**
+  - source/_posts/Work/**
+  - source/_posts/白板/**
+  - source/_posts/转载/**
+  - source/_posts/面试/**
+  - source/_posts/文献阅读old/**
+  - source/_posts/.obsidian.zip.bak
+  - source/_posts/final_processing_summary.md
+  - source/_posts/plugins.zip.bak
+  - source/_posts/Welcome.md
 
 # Extensions
 ## Plugins: https://hexo.io/plugins/

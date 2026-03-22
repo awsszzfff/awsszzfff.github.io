@@ -7,7 +7,7 @@ tags:
 categories:
   - 安全相关
 description: JS逆向
-draft: false
+published: true
 ---
 过滤器筛选数据包，分析调用堆栈（从下向上的顺序），寻找 js 加解密的点。
 

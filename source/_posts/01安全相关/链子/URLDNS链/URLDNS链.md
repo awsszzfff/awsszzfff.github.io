@@ -7,7 +7,7 @@ tags:
 categories:
   - 链子
 description: URLDNS链
-draft: false
+published: true
 ---
 根据已知 Payload，进行正向分析
 

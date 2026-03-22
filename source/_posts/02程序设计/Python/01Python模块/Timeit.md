@@ -5,5 +5,5 @@ tags:
   - Others
 categories:
   - Others
-draft: false
+published: true
 ---

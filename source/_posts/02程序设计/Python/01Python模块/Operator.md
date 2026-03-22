@@ -5,7 +5,7 @@ tags:
 categories:
   - Others
 title: "Operator"
-draft: false
+published: true
 ---
 add
 mul

@@ -7,7 +7,7 @@ tags:
 categories:
   - 程序设计
 description: 前端 DOM 树
-draft: false
+published: true
 ---
 DOM（Document Object Model）即文档对象模型，是 HTML 和 XML 文档的编程接口。
 

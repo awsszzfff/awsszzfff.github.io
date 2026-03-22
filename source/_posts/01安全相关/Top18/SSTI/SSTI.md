@@ -7,7 +7,7 @@ tags:
 categories:
   - 安全相关
 description: SSTI 服务器模板注入
-draft: false
+published: true
 ---
 SSTI（Server Side Template Injection) 服务器模板注入， 服务端接收了用户的输入，将其作为 Web 应用模板内容的一部分，在进行目标编译渲染的过程中，执行了用户插入的恶意内容。
 

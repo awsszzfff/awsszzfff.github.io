@@ -7,7 +7,7 @@ tags:
 categories:
   - 安全相关
 description: Web安全开发基础-PHP
-draft: false
+published: true
 ---
 ## PHP 超级全局变量
 

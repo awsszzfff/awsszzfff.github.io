@@ -7,7 +7,7 @@ tags:
 categories:
   - 杂记
 description: Kali 安装 Docker Docker-compose
-draft: false
+published: true
 ---
 
 https://wiki.bafangwy.com/doc/642/

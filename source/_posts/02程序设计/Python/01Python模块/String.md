@@ -5,7 +5,7 @@ tags:
   - Others
 categories:
   - Others
-draft: false
+published: true
 ---
 digits
 ascii_letters

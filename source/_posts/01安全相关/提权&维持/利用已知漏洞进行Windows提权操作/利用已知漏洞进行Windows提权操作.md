@@ -7,7 +7,7 @@ tags:
 categories:
   - 安全相关
 description: 利用已知漏洞进行Windows提权操作
-draft: false
+published: true
 ---
 土豆家族提权 https://mp.weixin.qq.com/s/OW4ybuqtErh_ovkTWLSr8w
 

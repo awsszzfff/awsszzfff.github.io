@@ -7,7 +7,7 @@ tags:
 categories:
   - 杂记
 description: CtenOS版本说明
-draft: false
+published: true
 ---
 ![[attachments/20250312114946.png]]
 

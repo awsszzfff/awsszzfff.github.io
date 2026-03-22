@@ -7,7 +7,7 @@ tags:
 categories:
   - 杂记
 description: 安装配置Pytorch
-draft: false
+published: true
 ---
 【这里是在安装anaconda之后进行pytorch的安装配置】
 

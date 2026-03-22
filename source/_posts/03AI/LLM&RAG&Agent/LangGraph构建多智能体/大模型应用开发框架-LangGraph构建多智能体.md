@@ -8,7 +8,7 @@ categories:
   - 程序设计
   - AI
 description: 大模型应用开发框架-LangGraph构建多智能体
-draft: false
+published: true
 ---
 ## 案例基本流程
 

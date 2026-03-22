@@ -7,7 +7,7 @@ tags:
 categories:
   - 安全相关
 description: PHP反序列化
-draft: false
+published: true
 ---
 序列化：对象转换为字节流（数组或字符串等格式）；方便对象在内存、文件、数据或网络之间传递；
 

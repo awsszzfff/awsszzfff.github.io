@@ -7,7 +7,7 @@ tags:
 categories:
   - AI
 description: 马尔可夫链(Markov Chains)&隐马尔可夫模型(HMM)介绍
-draft: false
+published: true
 ---
 # 马尔可夫链(Markov Chains)
 

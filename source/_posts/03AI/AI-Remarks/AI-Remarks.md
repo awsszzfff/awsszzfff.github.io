@@ -7,7 +7,7 @@ tags:
 categories:
   - AI
 description: AI-Remarks
-draft: false
+published: true
 ---
 信息熵越高，乱码概率越高；（通过信息熵来判断一个东西的概率）。
 

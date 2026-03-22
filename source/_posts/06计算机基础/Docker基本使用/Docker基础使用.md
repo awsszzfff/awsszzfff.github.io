@@ -7,7 +7,7 @@ tags:
 categories:
   - 计算机基础
 description: Docker基础使用
-draft: false
+published: true
 ---
 ## 安装配置
 

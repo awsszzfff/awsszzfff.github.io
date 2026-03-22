@@ -8,7 +8,7 @@ categories:
   - 程序设计
   - Python
 description: threading 多线程
-draft: false
+published: true
 ---
 和多进程的操作基本相同[[多进程&多线程&协程-multiprocessing]]
 

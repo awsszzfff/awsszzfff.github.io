@@ -5,7 +5,7 @@ tags:
   - Others
 categories:
   - Others
-draft: false
+published: true
 ---
 【特征提取，特征处理】
 

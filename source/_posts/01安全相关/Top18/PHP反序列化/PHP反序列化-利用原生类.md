@@ -7,7 +7,7 @@ tags:
 categories:
   - 安全相关
 description: PHP反序列化-利用原生类
-draft: false
+published: true
 ---
 > 原生自带类导致的 PHP 反序列化漏洞：
 > 

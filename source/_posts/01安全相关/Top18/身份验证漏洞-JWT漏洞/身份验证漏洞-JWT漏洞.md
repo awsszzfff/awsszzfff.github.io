@@ -7,7 +7,7 @@ tags:
 categories:
   - 安全相关
 description: 身份验证漏洞-JWT漏洞
-draft: false
+published: true
 ---
 # JWT 漏洞
 ## JWT

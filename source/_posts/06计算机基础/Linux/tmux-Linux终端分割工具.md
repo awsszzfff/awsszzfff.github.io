@@ -8,7 +8,7 @@ tags:
 categories:
   - 计算机基础
 description: tmux-Linux终端分割工具
-draft: false
+published: true
 ---
 ## 常用操作
 

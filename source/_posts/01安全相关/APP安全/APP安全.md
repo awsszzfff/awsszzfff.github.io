@@ -7,7 +7,7 @@ tags:
 categories:
   - 安全相关
 description: APP安全
-draft: false
+published: true
 ---
 APP 证书安装
 

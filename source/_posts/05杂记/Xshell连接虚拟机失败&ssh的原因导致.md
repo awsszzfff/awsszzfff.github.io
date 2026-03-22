@@ -5,7 +5,7 @@ tags:
   - Others
 categories:
   - Others
-draft: false
+published: true
 ---
 `ps -e | grep ssh`（检测是否安装 ssh 服务）
 

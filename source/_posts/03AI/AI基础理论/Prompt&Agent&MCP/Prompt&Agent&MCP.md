@@ -7,7 +7,7 @@ tags:
 categories:
   - AI
 description: Prompt&Agent&MCP基本概念的介绍
-draft: false
+published: true
 ---
 ## Prompt
 

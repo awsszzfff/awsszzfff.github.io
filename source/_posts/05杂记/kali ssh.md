@@ -7,7 +7,7 @@ tags:
 categories:
   - 杂记
 description: kali ssh
-draft: false
+published: true
 ---
 `systemctl enable ssh`或`systemctl start ssh`
 

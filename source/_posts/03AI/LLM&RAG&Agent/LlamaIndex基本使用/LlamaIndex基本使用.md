@@ -8,7 +8,7 @@ categories:
   - 程序设计
   - AI
 description: LlamaIndex基本使用
-draft: false
+published: true
 ---
 LlamaIndex 开发 RAG 的大模型应用框架。
 

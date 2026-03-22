@@ -7,7 +7,7 @@ tags:
 categories:
   - AI
 description: RAG及优化策略&LangChain本地知识库
-draft: false
+published: true
 ---
 ## RAG（Retrieval-Augmented Generation）
 

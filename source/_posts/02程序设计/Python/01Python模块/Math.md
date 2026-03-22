@@ -5,6 +5,6 @@ tags:
   - Others
 categories:
   - Others
-draft: false
+published: true
 ---
 factorial() 求阶乘

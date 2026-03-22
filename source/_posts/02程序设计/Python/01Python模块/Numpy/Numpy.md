@@ -5,7 +5,7 @@ tags:
   - Others
 categories:
   - Others
-draft: false
+published: true
 ---
 科学运算基础库，主要是数组矩阵的运算
 

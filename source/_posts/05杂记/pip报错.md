@@ -5,7 +5,7 @@ tags:
 categories:
   - Others
 title: "pip报错"
-draft: false
+published: true
 ---
 # pip 命令报错 Fatal error in launcher: Unable to create process using ... ???? ???????
 

@@ -7,7 +7,7 @@ tags:
 categories:
   - 安全相关
 description: JAVA安全基础漏洞
-draft: false
+published: true
 ---
 ## SQL 注入
 
