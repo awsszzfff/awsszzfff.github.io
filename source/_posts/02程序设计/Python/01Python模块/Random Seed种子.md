@@ -1,10 +1,11 @@
 ---
 date: 2001-01-01
 tags:
-  - Others
+  - Python模块
 categories:
-  - Others
-title: "Random Seed种子"
+  - 程序设计
+  - Python
+title: Random Seed种子
 published: true
 ---
 Random seed（随机种子） 是在生成随机数时使用的起始点。它用于控制随机数生成器产生随机数的序列。设置了随机种子后，每次生成的随机数序列将是确定性的，这意味着可以在不同的运行中获得相同的随机数序列，从而使实验可复现。

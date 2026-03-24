@@ -1,10 +1,11 @@
 ---
-title: "pickle"
+title: pickle
 date: 2025-07-26
 tags:
-  - Others
+  - Python模块
 categories:
-  - Others
+  - 程序设计
+  - Python
 published: true
 ---
 ```python

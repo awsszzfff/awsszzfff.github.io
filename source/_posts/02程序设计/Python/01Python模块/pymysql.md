@@ -6,7 +6,8 @@ tags:
   - Python模块
 categories:
   - 程序设计
-description: None
+  - Python
+description: pymysql
 published: true
 ---
 基础

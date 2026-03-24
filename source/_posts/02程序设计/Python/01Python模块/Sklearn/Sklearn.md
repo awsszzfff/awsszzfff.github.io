@@ -1,10 +1,11 @@
 ---
-title: "Sklearn"
+title: Sklearn
 date: 2025-02-11
 tags:
-  - Others
+  - Python模块
 categories:
-  - Others
+  - 程序设计
+  - Python
 published: true
 ---
 【特征提取，特征处理】

@@ -1,11 +1,12 @@
 ---
-title: "sys"
+title: sys
 date: 2025-07-26
 tags:
-  - Others
+  - Python模块
 categories:
-  - Others
-published: true
+  - 程序设计
+  - Python
+published: false
 ---
 ```python
 import sys

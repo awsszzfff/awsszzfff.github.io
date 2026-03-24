@@ -1,10 +1,11 @@
 ---
-title: "Numpy"
+title: Numpy
 date: 2025-02-11
 tags:
-  - Others
+  - Python模块
 categories:
-  - Others
+  - 程序设计
+  - Python
 published: true
 ---
 科学运算基础库，主要是数组矩阵的运算

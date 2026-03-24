@@ -1,11 +1,12 @@
 ---
-title: "sql"
+title: sql
 date: 2025-08-17
 tags:
-  - Others
+  - Python模块
 categories:
-  - Others
-published: true
+  - 程序设计
+  - Python
+published: false
 ---
 ```python
 pymysql.connect(...)

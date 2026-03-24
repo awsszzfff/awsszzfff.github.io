@@ -1,11 +1,12 @@
 ---
-title: "Socket"
+title: Socket
 date: 2025-08-07
 tags:
-  - Others
+  - Python模块
 categories:
-  - Others
-description: None
+  - 程序设计
+  - Python
+description: Socket
 published: true
 ---
 ## 简单的通信示例

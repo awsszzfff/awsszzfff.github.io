@@ -1,10 +1,11 @@
 ---
-title: "Time"
+title: Time
 date: 2025-07-15
 tags:
-  - Others
+  - Python模块
 categories:
-  - Others
+  - 程序设计
+  - Python
 published: true
 ---
 > 官方文档： https://docs.python.org/zh-cn/3.12/library/time.html

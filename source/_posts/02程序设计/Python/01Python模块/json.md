@@ -1,10 +1,11 @@
 ---
-title: "json"
+title: json
 date: 2025-07-15
 tags:
-  - Others
+  - Python模块
 categories:
-  - Others
+  - 程序设计
+  - Python
 published: true
 ---
 > 官方文档 https://docs.python.org/zh-cn/3/library/json.html

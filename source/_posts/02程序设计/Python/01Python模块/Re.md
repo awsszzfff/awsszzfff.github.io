@@ -1,10 +1,11 @@
 ---
-title: "Re"
+title: Re
 date: 2025-07-15
 tags:
-  - Others
+  - Python模块
 categories:
-  - Others
+  - 程序设计
+  - Python
 published: true
 ---
 ```python

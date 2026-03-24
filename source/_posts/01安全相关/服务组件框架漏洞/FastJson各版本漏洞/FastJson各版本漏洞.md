@@ -7,7 +7,7 @@ tags:
 categories:
   - 安全相关
 description: FastJson各版本漏洞
-published: false
+published: true
 ---
 > 历史漏洞 https://avd.aliyun.com/search?q=fastjson
 

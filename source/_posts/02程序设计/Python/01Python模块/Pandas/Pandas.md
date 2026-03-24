@@ -1,10 +1,11 @@
 ---
-title: "Pandas"
+title: Pandas
 date: 2025-02-10
 tags:
-  - Others
+  - Python模块
 categories:
-  - Others
+  - 程序设计
+  - Python
 published: true
 ---
 数据读入、清洗、准备、图表呈现等

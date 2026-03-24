@@ -1,11 +1,12 @@
 ---
 date: 2001-01-01
 tags:
-  - Others
+  - Python模块
 categories:
-  - Others
-title: "Operator"
-published: true
+  - 程序设计
+  - Python
+title: Operator
+published: false
 ---
 add
 mul

@@ -1,11 +1,12 @@
 ---
-title: "OpenCV"
+title: OpenCV
 date: 2025-07-15
 tags:
-  - Others
+  - Python模块
 categories:
-  - Others
-published: true
+  - 程序设计
+  - Python
+published: false
 ---
 OpenCV
 

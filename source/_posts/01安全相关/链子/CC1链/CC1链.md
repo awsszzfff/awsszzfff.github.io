@@ -7,7 +7,7 @@ tags:
 categories:
   - 链子
 description: CC1链
-published: false
+published: true
 ---
 JDK < 8u71，commons-collections:3.2.1
 
@@ -175,7 +175,7 @@ AnnotationInvocationHandler::readObject()
 	->InvokerTransformer::transform()
 ```
 
-### 反向分析
+### 反向
 
 > - 目标 - 命令执行
 > 	- `Runtime.exec("calc.exe")`
@@ -196,6 +196,8 @@ AnnotationInvocationHandler::readObject()
 > 	- 当反序列化 `AnnotationInvocationHandler` 实例时，会自动调用其 `readObject` 方法
 
 ## LazyMap
+
+根据已知 Payload，进行正向分析
 
 循环中后面会调用 value 的某些方法，但这里的 value 是我们传入的 mapProxy 对象
 
@@ -337,7 +339,7 @@ AnnotationInvocationHandler::readObject()
 	->InvokerTransformer::transform()
 ```
 
-### 反向分析
+### 反向
 
 > - ...
 > - 谁调用了 `ChainedTransformer.transform()`
