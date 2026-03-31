@@ -9,6 +9,29 @@ categories:
 description: JAVA安全基础漏洞
 published: true
 ---
+[[../Web安全开发基础/Web安全开发基础-JAVA/Web安全开发基础-JAVA|Web安全开发基础-JAVA]]
+
+## 命令/代码注入
+
+```java
+// ProcessBuilder
+new ProcessBuilder(command).start()
+
+// Runtime
+Runtime.getRuntime().exec(cmd)
+
+// ProcessImpl（抽象类）
+// 通过反射来间接调用ProcessImpl来达到执行命令
+
+// ScriptEngineManager方式（脚本引擎代码注入）java8之后移除
+// 通过加载远程js文件来执行代码
+// 构造远程恶意js
+
+// Apache Groovy
+GroovyShell shell = new GroovyShell();
+shell.evaluate(cmd);
+```
+
 ## SQL 注入
 
 - 使用 `Statement` 对象，传入参数拼接到 SQL 语句执行，存在漏洞；
@@ -131,6 +154,8 @@ Thymeleaf、Velocity、FreeMarker
 - 原生类的反序列化（`ObjectInputStream.readObject()`、`SnakeYaml`、`XMLDecoder` 等）
 - 第三方组件的反序列化（Fastjson、Jackson、Xstream 等）
 
+> java 序列化的数据一般会以标记(ac ed 00 05)开头，base64 编码的特征为 rO0AB
+
 ### 以 URLDNS 链为例
 
 `ObjectInputStream.readObject()` 本身只是“入口”，真正执行逻辑的是被反序列化对象自己的 `readObject` 方法。
@@ -190,6 +215,18 @@ else
 	- jdk 版本不同的 jndi 注入
 	- 中间件不同的 jndi 注入
 	- jar 包依赖不同的 jndi 注入
+
+> - JDK 6u45、7u21 之后：
+> 
+> java.rmi.server.useCodebaseOnly 的默认值被设置为 true。当该值为 true 时，将禁用自动加载远程类文件，仅从 CLASSPATH 和当前 JVM 的 java.rmi.server.codebase 指定路径加载类文件。使用这个属性来防止客户端 JVM 从其他 Codebase 地址上动态加载类，增加 RMI ClassLoader 安全性。
+> 
+> - JDK 6u141、7u131、8u121 之后：
+> 
+> 增加了 com.sun.jndi.rmi.object.trustURLCodebase 选项，默认为 false，禁止 RMI 和 CORBA 协议使用远程 codebase 的选项，因此 RMI 和 CORBA 在以上的 JDK 版本上已经无法触发该漏洞，但依然可以通过指定 URI 为 LDAP 协议来进行 JNDI 注入攻击。
+> 
+> - JDK 6u211、7u201、8u191 之后：
+> 
+> 增加了 com.sun.jndi.ldap.object.trustURLCodebase 选项，默认为 false，禁止 LDAP 协议使用远程 codebase 的选项，把 LDAP 协议的攻击途径也给禁了。
 
 ---
 
@@ -336,6 +373,8 @@ TemplatesImpl::getOutputProperties() -> newTransformer() -> getTransletInstance(
 
 ## 内存马
 
+> https://github.com/W01fh4cker/LearnJavaMemshellFromZero
+
 无文件的 webshell，一种存在于内存当中的后门。
 
 基本原理：在 web 组件或应用程序中，注册一层访问路由，访问者通过这层路由，来执行控制器中的代码。动态地在内存中注册一个新的服务组件，一旦注册成功，该组件就会像正常的系统功能一样，拦截并处理发往服务器的请求。
@@ -346,17 +385,31 @@ TemplatesImpl::getOutputProperties() -> newTransformer() -> getTransletInstance(
 > 
 > https://cloud.tencent.com/developer/article/2130045
 
-### Lisent
+除通过上传脚本来植入内存马外，还可以借助已知漏洞：如反序列化，SSTI 注入，RCE 等执行 Java 反射逻辑，注入内存马
+
+> https://www.cnblogs.com/nongchaoer/p/15561936.html 
+> https://github.com/W01fh4cker/LearnJavaMemshellFromZero 
+> https://www.bilibili.com/video/BV1E84y1w77R/
+
+### Servlet
+
+客户端请求的核心组件，通过动态注册 Servlet 来实现的内存攻击。通过程序化地向 Web 容器（如 Tomcat）在运行时注册恶意的 Servlet 对象，使得该 Servlet 能够在没有实际文件存在的情况下执行恶意程序。
+https://cloud.tencent.com/developer/article/2130045
+https://mp.weixin.qq.com/s/kfN6uU3A-jR72fyK8epnGw
+
+#### Lisent
 
 关键在于让 web 应用中的 web.xml 正确配置 java 监听器对应的类，在执行/访问指定路由的时候触发监听器，监听器内部写入命令执行等木马内容，从而触发。利用反射机制，编写代码手动调用 web.xml 和 java 类对应的映射关系从而实现这一点。
 
 相当于利用反射机制添加一个服务。
 
-### Filter
+
+
+#### Filter
 
 基本同上
 
-### Servlet
+#### Servlet
 
 编写代码在进行 get/post 请求时触发。
 
@@ -372,3 +425,27 @@ TemplatesImpl::getOutputProperties() -> newTransformer() -> getTransletInstance(
 远程读取、写入本地、包含文件、诱导执行
 
 后缀检测、关键字检测
+
+### SpringMVC
+
+> https://mp.weixin.qq.com/s/Jpvw4iYJRZA6NzXySYlcwA
+
+interceptor
+
+拦截器
+
+Controller
+
+控制器
+
+### Agent
+
+Java Agent 一种可以在 JVM 启动时或运行时附加的工具，可以拦截并修改类字节码，通常用于实现 AOP（面相切面编程）、性能监控、日志记录等功能。
+
+Java Agent 的两种加载方式：
+
+- Premain：在 JVM 启动时通过命令行参数 `-javaagent:path/to/xx.jar` 来指定（即通过指定参数 xx.jar 文件可修改目标 jar 文件的功能）
+- Agentmain：在 JVM 已经启动后，通过 Attach API 动态地附加到正在运行的 JVM 进程上
+
+
+

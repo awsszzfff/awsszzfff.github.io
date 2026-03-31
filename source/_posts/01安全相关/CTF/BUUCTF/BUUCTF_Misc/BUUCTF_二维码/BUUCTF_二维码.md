@@ -11,8 +11,7 @@ published: false
 
 下载题目是个二维码，先用 **QR Research** 进行扫描看看是什么，结果显示 secret is here ，这应该是一个提示，但好像也没什么用~
 
-![1](attachments/1.png)
-
+![在这里插入图片描述](attachments/15as6d1fas2d316as5df1.png)
 
 尝试用记事本打开，观察一下有没有可用的信息，在其中发现了存在`.txt`文件隐藏（这里也可以拖进 010 或 WinHex 中查看，但本道题都发现的是这两个点）。
 

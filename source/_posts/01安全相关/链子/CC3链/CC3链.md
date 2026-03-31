@@ -7,7 +7,7 @@ tags:
 categories:
   - 链子
 description: CC3链
-published: false
+published: true
 ---
 ```xml
 <dependency>
@@ -126,15 +126,34 @@ public class CC3Exp {
 }
 ```
 
+前半部分 `readObject` -> `LazyMap::get` 和 CC1 LazyMap 一样。
 
+这里的 `iParamTypes` 是 `{Templates.class}`，`iArgs` 是 `{templates}`
 
+![[attachments/20260328160129.png]]
 
+`TrAXFilter` 的构造方法接收一个 `Templates` 类型的参数，并且构造方法内部直接调用了参数的 `newTransformer()`
 
+![[attachments/20260328160507.png]]
 
+![[attachments/20260328160548.png]]
 
+![[attachments/20260328160633.png]]
 
-利用 `TemplatesImpl` 动态加载并执行恶意的 Java 字节码
+使用自定义类加载器加载恶意字节码
 
+![[attachments/20260328160727.png]]
+
+当 `_class[0].newInstance()` 被调用时，会执行通过 Javassist 插入的恶意代码
+
+```java
+// 恶意类的构造函数
+public EvilClass() {
+    java.lang.Runtime.getRuntime().exec("calc.exe");
+}
+```
+
+利用 `TemplatesImpl` 动态加载并执行恶意的 Java 字节码。
 
 ```
 ois.readObject() <=> ObjectInputStream.readObject()

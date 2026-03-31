@@ -11,6 +11,8 @@ published: true
 ---
 [[SQL 注入基础]]
 
+闭合符号（引号、括号）->逻辑符号（与或非）->逻辑语句（数学符号 `><+-*/`）->注释符号（注释）
+
 # SQL 注入补充
 
 - 基础利用点：
@@ -42,7 +44,7 @@ published: true
 
 - 利用不同的数据类型进行数据的传输（eg：xml、jison、加密编码等）；
 
-- 请求头的不同参数（IP、UA、COOKIE、Referer等）；
+- 请求头的不同参数（IP、UA、COOKIE、Referer 等）；
 	eg：不同请求头的应用**场景**
 	- UA（User-Agent）：对 UA 设备指定显示方案；对 UA 设备进行信息记录；（如网页对手机和电脑页面所显示不同）；
 	- XFF（X-Forwarded-For）：限制 IP 访问功能；记录 IP 访问日志；
@@ -51,7 +53,7 @@ published: true
 
 - 数据库用户不同，可操作的数据库和文件读写权限不同；
 
-示例：`show variables like "secure%"`查看变量`secure_file_priv` 开关，用于限制文件的读取和写入；
+示例：`show variables like "secure%"` 查看变量 `secure_file_priv` 开关，用于限制文件的读取和写入；
 
 - 绕过条件：需要存在可执行 SQL 的地方（后台 SQL 命令行，phpmyadmin 等）执行命令；（eg：获取网站后台/数据库账号密码 mysql 数据库下的 user 表中；）再修改原配置来写入文件后门；
 
@@ -65,27 +67,27 @@ select '<?php @eval($_POST[x]);?>'
 
 # 常用的基本函数
 
-- `group_concat()`将多行合并成一行；
-- `length()`计算字符串长度;
-- `substr(string，start，length)`和`mid(a,b,c)`一样，字符串截取，注：mysql 中的 start 是从 1 开始的；
-- `count()`统计数据表中包含的记录行的总数；
-- `limit offset, row_count`：`offset`从结果集的第几行开始`row_count`返回的行数；
-- `sleep()`使程序执行指定时间，单位为秒；
+- `group_concat()` 将多行合并成一行；
+- `length()` 计算字符串长度;
+- `substr(string，start，length)` 和 `mid(a,b,c)` 一样，字符串截取，注：mysql 中的 start 是从 1 开始的；
+- `count()` 统计数据表中包含的记录行的总数；
+- `limit offset, row_count`：`offset` 从结果集的第几行开始 `row_count` 返回的行数；
+- `sleep()` 使程序执行指定时间，单位为秒；
 - `if(expr1,expr2,expr3)`：如果 1 成立，执行 2，否则执行 3 ；
-- `concat(str1,str2,str3,...)`把字符串无缝拼接起来；
-- `load_file(filename)`读取一个文件并将其内容作为字符串返回；
-- `like 'ro%'`判断 ro 或 ro... 是否成立；
-- `regexp '^aaaa[a-z]'`匹配 aaaa 及 aaaa... 等；
-- `left(a,b)`从左侧截取 a 的前 b 位；
-- `ord=ascii`：`ascii(x)=97`判断 x 的 ascii 码是否等于 97；
+- `concat(str1,str2,str3,...)` 把字符串无缝拼接起来；
+- `load_file(filename)` 读取一个文件并将其内容作为字符串返回；
+- `like 'ro%'` 判断 ro 或 ro... 是否成立；
+- `regexp '^aaaa[a-z]'` 匹配 aaaa 及 aaaa... 等；
+- `left(a,b)` 从左侧截取 a 的前 b 位；
+- `ord=ascii`：`ascii(x)=97` 判断 x 的 ascii 码是否等于 97；
 
 - `updatexml(XML_document,Xpath_string,new_value)`：xml 文档名称，xpath 格式的字符串（若不是，则报错），替换查找到符合条件的数据；`updatexml(1,concat(0x7e,(select database()),0x7e),1)`
 - `extractvalue(xml_frag,xpath_expr)`：目标 xml 文档，xpath 路径法表示的查找路径；`extractvalue(1,concat(0x7e,(select database()),0x7e))`
-- `floor()`、`rand()`、`group by`配合进行报错注入；
+- `floor()`、`rand()`、`group by` 配合进行报错注入；
 
 > - mysql5.1.5 开始提供两个用于 XML 查询和修改的函数，通过 XML 函数进行报错，来进行注入；
 > - Xpath 定位必须是有效的，否则会发生错误，利用这一特性爆出想要的数据；
-> - 注：必须在 xpath 那里传入特殊字符，mysql 才会报错，特殊字符可使用`~`的 16 进制`0x7e`来表示；xpath 只会报错 32 个字符；
+> - 注：必须在 xpath 那里传入特殊字符，mysql 才会报错，特殊字符可使用 `~` 的 16 进制 `0x7e` 来表示；xpath 只会报错 32 个字符；
 
 > https://www.jianshu.com/p/bc35f8dd4f7c
 > 

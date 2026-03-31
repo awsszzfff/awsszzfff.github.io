@@ -11,6 +11,78 @@ description: Python的几种输出方式
 published: true
 ---
 ```python
+# 多行输入，每行两个整数
+import sys  
+  
+for line in sys.stdin:  
+    a, b = line.split(' ')  
+    print(int(a) + int(b))  
+    print()
+
+3 4
+11 40	
+
+7
+51
+```
+
+```python
+# 多组数据，每组第一行为n，之后输入n行两个整数
+while 1:  
+    try:  
+        N = int(input())  
+        for i in range(N):  
+            l = list(map(int, input().split()))  
+            print(sum(l))  
+    except:  
+        break
+
+2
+2 4
+9 21
+
+6
+30
+```
+
+```python
+# 若干行输入，每行输入两个整数，遇到特定条件终止
+while True:  
+    s = input().split()  
+    a, b = int(s[0]), int(s[1])  
+    if not a or not b:  
+        break  
+    print(a + b)
+
+2 4
+11 19
+0 0
+
+6
+30
+```
+
+```python
+# 若⼲⾏输⼊，遇到0终⽌，每⾏第⼀个数为N，表示本⾏后⾯有N个数
+import sys  
+  
+for line in sys.stdin:  
+    nums = line.split()  
+    nums = list(map(int, nums))  
+    n = nums[0]  
+    if not n:  
+        break  
+    print(sum(nums[-n:]))
+    
+4 1 2 3 4
+5 1 2 3 4 5
+0 
+
+10
+15
+```
+
+```python
 print("%d %d"%(a,b))
 print("{0} {1}".format(a,b))
 print(f"{a = }，{b = }")

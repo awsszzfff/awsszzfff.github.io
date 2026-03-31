@@ -314,7 +314,7 @@ package.json
 
 变异的 XSS；
 
-![[attachments/1.png]]
+![[attachments/20250315467895.png]]
 
 场景：
 

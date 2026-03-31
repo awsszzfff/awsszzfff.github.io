@@ -13,17 +13,17 @@ published: true
 
 跨站请求伪造
 
-![[attachments/1.png]]
+![[attachments/202505123456.png]]
 
-![[attachments/1-1.png]]
+![[attachments/202544448888.png]]
 
 ## 基本场景
 
 用户 A 通过网上银行给用户 B 支付，同时 A 访问了攻击者 C 的网站，该网站模拟网上银行支付数据操作给 C 进行支付，此时导致 A 以自己的身份触发了支付请求 -> C；
 
-![[attachments/1-2.png]]
+![[attachments/202566669999.png]]
 
-![[attachments/1-3.png]]
+![[attachments/202545678912.png]]
 
 示例：
 
