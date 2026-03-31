@@ -68,3 +68,9 @@ JWT 由三部分构成`[[header][pyload][signature]]`：
 > 
 > https://blog.csdn.net/uuzeray/article/details/142681561
 
+- kid 为空，后端将 kid 的内容当做文件进行读取导致的问题；
+- 远程公钥加载，未设置白名单；
+- 使用弱口令/默认（开发直接用 AI 写的代码，没替换里面的内容）秘钥
+- alg 标签标记为空/none;
+- signature 未验证签名有效性；
+- `.well-known/jwks.json` 公钥泄露，后端完全信任客户端传入的算法声明，未进行强制固定验签算法，篡改算法（非对称改对称，直接公钥加解密）；
