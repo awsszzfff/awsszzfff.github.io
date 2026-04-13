@@ -19,13 +19,16 @@ published: true
 > 
 > https://drun1baby.top/2023/04/11/PHP-%E5%8E%9F%E7%94%9F%E7%B1%BB%E5%AD%A6%E4%B9%A0/
 
+一些 PHP 原生类中的魔术方法可能被恶意利用
+
 ### Error/Exception 进行 XSS
 
 Error 适用 PHP 7；Exception 适用 PHP 5 和 7 版本；
 
-Error/Exception 内置一个`__toString()`方法。
+Error/Exception 内置一个 `__toString()` 方法。
 
 示例：
+
 
 ```php
 <?php
@@ -37,7 +40,7 @@ echo $a;
 
 该示例代码中仅有一个反序列化函数，但是没有其对应的类相关的内容；此时需要寻找关于 PHP 原生类来触发反序列化所产生的漏洞问题。
 
-主要是由于其中`echo $a`将反序列化后的对象作为一个字符串进行输出，从而触发`__toString`方法；
+主要是由于其中 `echo $a` 将反序列化后的对象作为一个字符串进行输出，从而触发 `__toString` 方法；
 
 ```php
 <?php

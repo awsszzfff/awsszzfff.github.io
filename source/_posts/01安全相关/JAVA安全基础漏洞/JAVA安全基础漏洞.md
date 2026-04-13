@@ -116,6 +116,24 @@ RestTemplate
 
 如果一个 Web 应用允许用户输入字符串，并直接把这个字符串丢进 `parser.parseExpression()` 里去执行，攻击者就可以构造特殊的字符串来执行系统命令 `T(java.lang.Runtime).getRuntime().exec('calc')`。
 
+SpEL 表达式示例：
+
+```java
+// 解析一个简单的算术表达式
+ExpressionParser parser = new SpelExpressionParser();
+Integer result = parser.parseExpression("1 + 1").getValue(Integer.class);
+System.out.println(result); // 输出 2
+
+// 调用方法
+String str = parser.parseExpression("'Hello World'.substring(0, 5)").getValue(String.class);
+System.out.println(str); // 输出 Hello
+
+// 访问静态方法
+// T(类型) 用来引用 Java 类，可以调用其静态方法
+String cmd = parser.parseExpression("T(java.lang.Runtime).getRuntime().exec('calc')").getValue(String.class);
+// 如果执行了，就会弹计算器（RCE）
+```
+
 ## SSTI
 
 > https://www.cnblogs.com/bmjoker/p/13508538.html
@@ -123,6 +141,23 @@ RestTemplate
 Thymeleaf、Velocity、FreeMarker
 
 模版文件参数可控
+
+示例：
+
+```java
+@GetMapping("/greet")
+public String greet(@RequestParam String name) {
+    // 极度危险：直接把用户输入拼接到模版里
+    String template = "<h1>Hello, " + name + "!</h1>";
+    TemplateEngine engine = ...;
+    return engine.process(template, context);
+}
+```
+
+正常请求： `/greet?name=Alice` → `<h1>Hello, Alice!</h1>`
+
+恶意请求（针对 FreeMarker）： `/greet?name=<#assign ex="freemarker.template.utility.Execute"?new()>${ex("calc")}`  
+→ 服务器会执行 `calc` 命令（弹出计算器）。
 
 ## Swagger UI API 框架接口泄露
 
@@ -194,10 +229,11 @@ else
 
 ![[attachments/20260113-1.png]]
 
-
 > - JNDI 支持的服务主要有：DNS、LDAP、CORBA、RMI 等。
 > - RMI：远程方法调用注册表
 > - LDAP：轻量级目录访问协议
+
+经典 JNDI：RMI 服务端直接返回一个绑定好的恶意对象
 
 - RMI 限制：
 
@@ -227,6 +263,16 @@ else
 > - JDK 6u211、7u201、8u191 之后：
 > 
 > 增加了 com.sun.jndi.ldap.object.trustURLCodebase 选项，默认为 false，禁止 LDAP 协议使用远程 codebase 的选项，把 LDAP 协议的攻击途径也给禁了。
+
+- 8u121，默认关闭 RMI 远程类加载，LDAP 仍能绕过；
+- 8u191，彻底封死 RMI、LDAP 的 trustURLCodebase 默认关闭；
+- 8u201，彻底禁用 LDAP 远程类加载，常规 JNDI 利用链基本全完；
+- 11+，默认禁止一切 JNDI 远程代码加载。
+
+### 判断是否注入成功
+
+- 流量：服务器主动外联的端口、防火墙、流量设备中的流量；
+- 系统行为：弹计算器、反弹 shell、计算器、异常进程、内存马、DNSLog
 
 ---
 
@@ -397,13 +443,17 @@ TemplatesImpl::getOutputProperties() -> newTransformer() -> getTransletInstance(
 https://cloud.tencent.com/developer/article/2130045
 https://mp.weixin.qq.com/s/kfN6uU3A-jR72fyK8epnGw
 
-#### Lisent
+#### Listener
 
 关键在于让 web 应用中的 web.xml 正确配置 java 监听器对应的类，在执行/访问指定路由的时候触发监听器，监听器内部写入命令执行等木马内容，从而触发。利用反射机制，编写代码手动调用 web.xml 和 java 类对应的映射关系从而实现这一点。
 
 相当于利用反射机制添加一个服务。
 
+正常：写 Listener 组件，注册 web.xml，执行时自动调用。
 
+注入：从 Request -> 找到上下文 Context -> 从上下文反射调用方法；路由伪装，（Listener 全局监听）
+
+servlet 2.4 规范 8 个 Listener，三个分类
 
 #### Filter
 

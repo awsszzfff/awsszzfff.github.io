@@ -42,7 +42,7 @@ published: true
 
 # 需要注意的点
 
-- 利用不同的数据类型进行数据的传输（eg：xml、jison、加密编码等）；
+- 利用不同的数据类型进行数据的传输（eg：xml、json、加密编码等）；
 
 - 请求头的不同参数（IP、UA、COOKIE、Referer 等）；
 	eg：不同请求头的应用**场景**

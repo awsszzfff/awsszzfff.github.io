@@ -3,9 +3,9 @@ title: Linux提权
 date: 2026-03-06
 updated: 2026-03-06
 tags:
-  - Others
+  - 安全基础
 categories:
-  - Others
+  - 安全相关
 description: Linux提权
 published: true
 ---

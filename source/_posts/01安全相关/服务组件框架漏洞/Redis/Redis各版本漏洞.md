@@ -1,12 +1,12 @@
 ---
-title: "Redis"
+title: Redis
 date: 2025-09-21
 tags:
-  - Others
+  - 服务组件框架漏洞
 categories:
-  - Others
-description: None
-published: false
+  - 安全相关
+description: Redis各版本漏洞
+published: true
 ---
 默认端口：6379
 

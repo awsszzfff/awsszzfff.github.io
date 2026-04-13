@@ -47,6 +47,8 @@ class Solution:
 
 ### [49. 字母异位词分组](https://leetcode.cn/problems/group-anagrams/)
 
+排序后作为键，s 作为值
+
 ```python
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
@@ -58,6 +60,8 @@ class Solution:
 ```
 
 ### [128. 最长连续序列](https://leetcode.cn/problems/longest-consecutive-sequence/)
+
+找起点
 
 ```python
 class Solution:
@@ -81,8 +85,33 @@ class Solution:
 
 ### [283. 移动零](https://leetcode.cn/problems/move-zeroes/description/)
 
-```python
+遇到非 0 则交换，left right 都从下标 0 开始，若都非零则是原地交换
 
+```python
+class Solution:
+    def moveZeroes(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        left = 0
+        for right in range(len(nums)):
+            if nums[right]:
+                nums[left], nums[right] = nums[right], nums[left]
+                left += 1
+```
+
+移除和填充
+
+```python
+class Solution:
+    def moveZeroes(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        for x in nums:
+            if x == 0:
+                nums.remove(x)
+                nums.append(0)
 ```
 
 ### [11. 盛最多水的容器](https://leetcode.cn/problems/container-with-most-water/)
@@ -348,6 +377,19 @@ class Solution:
 ### [53. 最大子数组和](https://leetcode.cn/problems/maximum-subarray/)
 
 ### [56. 合并区间](https://leetcode.cn/problems/merge-intervals/)
+
+```python
+class Solution:
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        intervals.sort(key=lambda p: p[0])
+        ans = []
+        for p in intervals:
+            if ans and ans[-1][1] >= p[0]:
+                ans[-1][1] = max(ans[-1][1], p[1])
+            else:
+                ans.append(p)
+        return ans
+```
 
 ### [189. 轮转数组](https://leetcode.cn/problems/rotate-array/)
 
@@ -746,13 +788,93 @@ class Solution:
 
 ### [200. 岛屿数量](https://leetcode.cn/problems/number-of-islands/)
 
+DFS
+
+```python
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        m, n = len(grid), len(grid[0])
+
+        def dfs(i, j):
+            # 保证不越界
+            if i < 0 or i >= m or j < 0 or j >= n or grid[i][j] != '1':
+                return
+            grid[i][j] = '2'    # 标记当前位置已经被访问过
+            # dfs访问上下左右
+            dfs(i + 1, j)
+            dfs(i, j + 1)
+            dfs(i - 1, j)
+            dfs(i, j - 1)
+
+        ans = 0
+        for i, row in enumerate(grid):
+            for j, c in enumerate(row):
+                if c == '1':    # 需要新的岛屿
+                    dfs(i, j)   # dfs当前岛屿
+                    ans += 1
+        return ans
+```
+
+BFS
+
+```python
+
+```
+
 ### [994. 腐烂的橘子](https://leetcode.cn/problems/rotting-oranges/)
+
+```python
+class Solution:
+    def orangesRotting(self, grid: List[List[int]]) -> int:
+        m, n = len(grid), len(grid[0])
+        fresh = 0
+        q = []
+        for i, row in enumerate(grid):
+            for j, x in enumerate(row):
+                if x == 1:
+                    fresh += 1  # 统计新鲜橘子个数
+                elif x == 2:
+                    q.append((i, j))  # 一开始就腐烂的橘子
+
+        ans = 0
+        while q and fresh:
+            ans += 1  # 经过一分钟
+            tmp = q
+            q = []
+            for x, y in tmp:  # 已经腐烂的橘子
+                for i, j in (x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1):  # 四方向
+                    if 0 <= i < m and 0 <= j < n and grid[i][j] == 1:  # 新鲜橘子
+                        fresh -= 1
+                        grid[i][j] = 2  # 变成腐烂橘子
+                        q.append((i, j))
+
+        return -1 if fresh else ans
+```
 
 ### [207. 课程表](https://leetcode.cn/problems/course-schedule/)
 
+```python
+
+```
+
 ### [208. 实现 Trie (前缀树)](https://leetcode.cn/problems/implement-trie-prefix-tree/)
 
+```python
+
+```
+
 ## 回溯
+
+本质即是 DFS，以图的邻接表存储进行 DFS 为例：
+
+```python
+def dfs(adj_list, u, visited):
+	visited[u] = True
+	print(u, end=" ")
+	for v in adj_list[u]:
+		if not visited[v]:
+			dfs(adj_list, i, visited)
+```
 
 > for 循环是对每个数作为开头的遍历，dfs 递归是对当前数和剩余数组合的搜索，pop 弹出使当前数可以分别和剩余数进行组合。
 
@@ -882,9 +1004,84 @@ class Solution:
 
 ### [39. 组合总和](https://leetcode.cn/problems/combination-sum/)
 
+```python
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        candidates.sort()
+        ans = []
+        path = []
+
+        def dfs(i, diff):
+            if diff == 0:
+                ans.append(path.copy())
+                return
+            
+            if i == len(candidates) or diff < candidates[i]:
+                return
+
+            dfs(i + 1, diff)
+
+            path.append(candidates[i])
+            dfs(i, diff - candidates[i])
+            path.pop()
+
+        dfs(0, target)
+        return ans
+```
+
+```python
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        candidates.sort()
+        ans = []
+        path = []
+
+        def dfs(i, diff):
+            if diff == 0:
+                ans.append(path.copy())
+                return
+            
+            for j in range(i, len(candidates)):
+                if candidates[j] > diff:
+                    break
+                path.append(candidates[j])
+                dfs(j, diff - candidates[j])
+                path.pop()
+
+        dfs(0, target)
+        return ans
+```
+
 ### [22. 括号生成](https://leetcode.cn/problems/generate-parentheses/)
 
+```python
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+        m = 2 * n
+        ans = []
+        path = []
+
+        def dfs(i, left_count):
+            if i == m:
+                ans.append("".join(path))
+                return
+            if left_count < n:
+                path.append('(')
+                dfs(i + 1, left_count + 1)
+                path.pop()
+            if i - left_count < left_count:
+                path.append(')')
+                dfs(i + 1, left_count)
+                path.pop()
+        dfs(0, 0)
+        return ans
+```
+
 ### [79. 单词搜索](https://leetcode.cn/problems/word-search/)
+
+```python
+
+```
 
 ### [131. 分割回文串](https://leetcode.cn/problems/palindrome-partitioning/)
 
@@ -990,7 +1187,15 @@ class Solution:
 
 ### [35. 搜索插入位置](https://leetcode.cn/problems/search-insert-position/)
 
+```python
+
+```
+
 ### [74. 搜索二维矩阵](https://leetcode.cn/problems/search-a-2d-matrix/)
+
+```python
+
+```
 
 ### [34. 在排序数组中查找元素的第一个和最后一个位置](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/)
 
@@ -1193,6 +1398,35 @@ class Solution:
 
 ### [394. 字符串解码](https://leetcode.cn/problems/decode-string/)
 
+```python
+class Solution:
+    def decodeString(self, s: str) -> str:
+        stk = []
+        for ch in s:
+            # 不是']'就入栈,遇到']'再解码
+            if ch != ']':
+                stk.append(ch)
+                continue
+
+            # 解码step 1: 提取本段字符串
+            sub = ""
+            while stk[-1] != '[':
+                sub = stk.pop() + sub
+            
+            stk.pop()  # 移出'['
+            
+            # 解码step 2: 提取本段数字
+            k, base = 0, 1
+            while stk and stk[-1].isdigit():
+                k += int(stk.pop()) * base
+                base *= 10
+
+            # 本段解码后再次入栈
+            stk.append(sub * k)
+
+        return "".join(stk)
+```
+
 ### [739. 每日温度](https://leetcode.cn/problems/daily-temperatures/)
 
 > 去掉无用数据从而保证栈中数据有序
@@ -1251,7 +1485,36 @@ class Solution:
 
 ### [70. 爬楼梯](https://leetcode.cn/problems/climbing-stairs/)
 
+```python
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        cache = [-1] * (n + 1)
+        def dfs(i):
+            if i <= 1:
+                return 1
+            if cache[i] != -1:
+                return cache[i]
+            cache[i] = dfs(i - 1) + dfs(i - 2)
+            return cache[i]
+        return dfs(n)
+        
+```
+
+```python
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        dp = [0] * (n + 1)
+        dp[0] = dp[1] = 1
+        for i in range(2, n + 1):
+            dp[i] = dp[i - 1] + dp[i - 2]
+        return dp[n]
+```
+
 ### [118. 杨辉三角](https://leetcode.cn/problems/pascals-triangle/)
+
+```python
+
+```
 
 ### [198. 打家劫舍](https://leetcode.cn/problems/house-robber/)
 
@@ -1297,6 +1560,10 @@ class Solution:
 ```
 
 ### [279. 完全平方数](https://leetcode.cn/problems/perfect-squares/)
+
+```python
+
+```
 
 ### [322. 零钱兑换](https://leetcode.cn/problems/coin-change/)
 

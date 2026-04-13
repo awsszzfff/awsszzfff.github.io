@@ -9,6 +9,7 @@ categories:
 description: xml 外部实体注入
 published: true
 ---
+
 XXE（XML External Entity Injection），xml 外部实体注入漏洞；其发生在应用程序解析 XML 输入时，没禁止外部实体的加载，导致用户可以控制外部加载的文件，造成文件读取、命令执行、内网扫描、攻击内网等危害；
 
 ## 探测位置
@@ -205,7 +206,7 @@ libxml_disable_entity_loader(true);
 Java
 
 ```java
-DocumentBuilderFactory dbf =DocumentBuilderFactory.newInstance();
+DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 dbf.setExpandEntityReferences(false);
 .setFeature("http://apache.org/xml/features/disallow-doctype-decl",true);
 .setFeature("http://xml.org/sax/features/external-general-entities",false)

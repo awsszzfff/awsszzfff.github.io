@@ -277,7 +277,7 @@ header("Content-Security-Policy:default-src 'self';script-src http://192.168.1.4
 
 2. http-only
 
-可以再设置 cookie 时使用该标记；当 cookie 被标记为 HttpOnly 时，JS 无法访问该 cookie ，只能通过 HTTP(S) 来传输；
+可以在设置 cookie 时使用该标记；当 cookie 被标记为 HttpOnly 时，JS 无法访问该 cookie ，只能通过 HTTP(S) 来传输；
 
 > 参考学习：
 > 

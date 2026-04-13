@@ -14,11 +14,13 @@ published: true
 > https://xz.aliyun.com/news/14309
 > https://mp.weixin.qq.com/s/t8sjv0Zg8_KMjuW4t-bE-w
 
+使用 AutoType，序列化时用 `@type` 显示指定反序列化的 Java 类，支持多态类型（接口、抽象类、父类引用指向子类对象等）
+
 - 1.2.24
 	- 没有任何过滤器
 	- 典型攻击类 `TemplatesImpl`、`JdbcRowSetImpl`
 - 1.2.25
-	- 引入 `checkAutoType` 机制，假如黑名单和白名单
+	- 引入 `checkAutoType` 机制，加入黑名单和白名单
 	- `AutoType` 机制开启
 		- 先检查白名单，白名单中的类直接加载
 		- 若不在白名单，继续检查黑名单，若不在黑名单，正常加载
@@ -73,6 +75,13 @@ published: true
 > 将要执行命令的文件转换为特定的格式，触发反序列化本地执行。
 
 > 即 RCE 不出网链都是建立在将要执行的命令文件转成 BCEL、BYTE、HEX 等格式用到不同的依赖进行调用执行。
+
+### 常用 Gadget 链
+
+- `JdbcRowSetImpl`，JNDI 引用，RMI/LDAP 远程加载恶意类执行；
+- `TemplatesImpl`，加载恶意字节码，本地不出网执行；
+- `CC`，链子；
+- `MVEL`，解析表达式，直接执行命令。
 
 ### 利用 BCEL 进行本地类加载
 

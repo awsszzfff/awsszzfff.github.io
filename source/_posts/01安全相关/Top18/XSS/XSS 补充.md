@@ -21,12 +21,12 @@ published: true
 
 ### 常见的事件处理程序
 
-|   事件处理程序    |         HTML标记         |         触发时机         |
+|   事件处理程序    |         HTML 标记         |         触发时机         |
 | :---------: | :--------------------: | :------------------: |
 |   onAbort   |         \<img>         |    图像加载过程给中断了时触发     |
 |   onBlur    |      \<body>和窗体元素      |  窗体和窗体元素在失去键盘焦点时触发   |
 |  onChange   |          窗体元素          |    用户修改了窗体元素的值后触发    |
-|   onClick   |          所有元素          | 用户单击了类似按钮这样的窗体元素后 触发 |
+|   onClick   |          所有元素          | 用户单击了类似按钮这样的窗体元素后触发 |
 |   onError   |         \<img>         |    加载图像过程中发生错误时触发    |
 |   onFocus   |        \<body>         |   窗体或窗体元素得到键盘焦点时触发   |
 |   onLoad    | \<body>\<img>\<object> |   文档、图像或对象完成加载时触发    |
@@ -43,7 +43,7 @@ published: true
 
 - SVG
 
-SVG（Scalable Vector Graphics）一种基于XML的二维矢量图格式，该图像在改变尺寸的情况下图像质量不会有所损失。
+SVG（Scalable Vector Graphics）一种基于 XML 的二维矢量图格式，该图像在改变尺寸的情况下图像质量不会有所损失。
 
 可通过向其中插入 JS 代码来实现 XSS；
 
@@ -74,14 +74,14 @@ var m=_root.m;
 flash.external.ExternalInterface.call(m);
 ```
 
-在访问含有该文件的网页时，给予参数`?m=alert(/xss/)`即可触发；
+在访问含有该文件的网页时，给予参数 `?m=alert(/xss/)` 即可触发；
 
 该文件 XSS 漏洞的测试思路：
 
 1. 反编译 swf 文件；
 2. 查找触发危险函数；
 
-常见的可触发xss的危险函数有：getURL，navigateToURL，ExternalInterface.call，htmlText，loadMovie 等等；
+常见的可触发 xss 的危险函数有：getURL，navigateToURL，ExternalInterface.call，htmlText，loadMovie 等等；
 
 3. 寻找可控参数访问触发；
 
@@ -131,7 +131,7 @@ function sendMessage() {
 
 即存储型 XSS ，不过是存储在当前浏览器上；
 
-一些 Web 应用使用 localStorage 在用户浏览器中存储数据键值对，这些数据可以在浏览器关闭后仍然保留，并且在同一域名下的不同页面之间共享。当应用程序从 localStorage 中读取数据并将其显示在页面上时，如果没有对数据进行充分的验证和过滤，攻击者就有可能通过修改localStorage 中的数据来注入恶意脚本实现 XSS 。
+一些 Web 应用使用 localStorage 在用户浏览器中存储数据键值对，这些数据可以在浏览器关闭后仍然保留，并且在同一域名下的不同页面之间共享。当应用程序从 localStorage 中读取数据并将其显示在页面上时，如果没有对数据进行充分的验证和过滤，攻击者就有可能通过修改 localStorage 中的数据来注入恶意脚本实现 XSS 。
 
 测试点：
 
@@ -144,11 +144,11 @@ function sendMessage() {
 
 主要由第三方库、框架、浏览器及其插件部分版本所存在的一些 XSS 漏洞；
 
-一些示例：测试`<img src="x" onerror="alert('XSS')" />`；
+一些示例：测试 `<img src="x" onerror="alert('XSS')" />`；
 
 - vue-XSS
 
-```vue file:App.vue:
+```vue file:App.vue
 <template>
   <div>
     <h1>XSS 漏洞演示</h1>
@@ -184,7 +184,7 @@ export default {
 </style>
 ```
 
-在第 6 行，使用 文本插值`{{}}`代替 v-html 即可避免；
+在第 6 行，使用文本插值 `{{}}` 代替 v-html 即可避免；
 
 - React-XSS
 
@@ -216,7 +216,7 @@ function App() {
 export default App;
 ```
 
-第 20 行，直接使用 `{displayedInput}`来显示则可避免；
+第 20 行，直接使用 `{displayedInput}` 来显示则可避免；
 
 - Electron-XSS
 
@@ -338,7 +338,7 @@ eg：
 
 MICROSOFT EDGE uXSS CVE-2021-34506；Edge 浏览器翻译功能导致 JS 语句被调用执行；
 
-（在当前浏览器上 登录 Facebook 并用其搜索 XSS Payload 正常过滤，无法触发，但当用该浏览器的翻译功能时导致 Payload 触发。（浏览器底层的解析问题所导致的吧~））
+（在当前浏览器上登录 Facebook 并用其搜索 XSS Payload 正常过滤，无法触发，但当用该浏览器的翻译功能时导致 Payload 触发。（浏览器底层的解析问题所导致的吧~））
 
 > 参考学习：
 > 
