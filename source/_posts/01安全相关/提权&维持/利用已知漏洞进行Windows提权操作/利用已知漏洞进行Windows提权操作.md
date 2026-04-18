@@ -11,6 +11,10 @@ published: true
 ---
 土豆家族提权 https://mp.weixin.qq.com/s/OW4ybuqtErh_ovkTWLSr8w
 
+![[attachments/20260418163045.png]]
+
+核心 NTLM 认证，欺骗运行在高权限的账户进行 NTLM 认证，作为中间人对认证过程进行劫持和重放，最后调用本地认证接口使高权限账户的 NTLM 认证获取一个高权限 token，只要当前进程拥有 SeImpersonatePrivilege 权限即可进行令牌模仿，即可取得对应权限。
+
 ## msf 提权基本使用流程
 
 后门被执行，msf 监听得到基于当前反弹 shell 的 Session，搜索当前系统存在的内核可提权漏洞，以及对应可用 exp 从而利用当前获取的 Session 来提权。
@@ -84,7 +88,7 @@ inject PID	# cs	将恶意代码写入指定PID进程内存中，并强行执行
 # MSF或CS进行令牌窃取
 
 # MSF
-use incognito	# 加载一个专门用来玩弄令牌的插件
+use incognito	# 加载一个专门用来窃取和使用令牌的插件
 list_tokens -u	# 列出当前系统所有可用的令牌，Windows 为了效率，会把很多用户的令牌缓存在内存里。通常会发现列表里有 NT AUTHORITY\SYSTEM
 impersonate_token "NT AUTHORITY\SYSTEM"	# 调用WindowsAPI，将当前shell身份切换为SYSTEM
 

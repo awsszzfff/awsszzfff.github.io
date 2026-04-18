@@ -114,11 +114,21 @@ RestTemplate
 
 ## SpEL 表达式注入
 
+用于在运行时动态访问对象属性和执行逻辑
+
 如果一个 Web 应用允许用户输入字符串，并直接把这个字符串丢进 `parser.parseExpression()` 里去执行，攻击者就可以构造特殊的字符串来执行系统命令 `T(java.lang.Runtime).getRuntime().exec('calc')`。
 
 SpEL 表达式示例：
 
 ```java
+// 硬编码：编译时写死
+String name = user.getName();
+
+// 表达式：运行时动态解析
+String expression = "user.name";
+Object result = expressionParser.parse(expression).getValue(context);
+
+
 // 解析一个简单的算术表达式
 ExpressionParser parser = new SpelExpressionParser();
 Integer result = parser.parseExpression("1 + 1").getValue(Integer.class);
